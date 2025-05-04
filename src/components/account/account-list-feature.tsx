@@ -1,9 +1,8 @@
 'use client'
 
-import { WalletButton } from '../solana/solana-provider'
-
 import { redirect } from 'next/navigation'
 import { useWalletUi } from '@wallet-ui/react'
+import { WalletButton } from '@/providers/solana-provider'
 
 export default function AccountListFeature() {
   const { account } = useWalletUi()
