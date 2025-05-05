@@ -4,7 +4,6 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Menu, X } from 'lucide-react'
-import { ThemeSelect } from '@/components/theme-select'
 import { ClusterButton, WalletButton } from '@/providers/solana-provider'
 
 export function AppHeader({ links = [] }: { links: { label: string; path: string }[] }) {
@@ -45,7 +44,6 @@ export function AppHeader({ links = [] }: { links: { label: string; path: string
         <div className="hidden md:flex items-center gap-4">
           <WalletButton size="sm" />
           <ClusterButton size="sm" />
-          <ThemeSelect />
         </div>
 
         {showMenu && (
@@ -67,7 +65,6 @@ export function AppHeader({ links = [] }: { links: { label: string; path: string
               <div className="flex flex-col gap-4">
                 <WalletButton />
                 <ClusterButton />
-                <ThemeSelect />
               </div>
             </div>
           </div>
