@@ -79,15 +79,6 @@ export default function LoginPage() {
             //   ease: 'easeInOut',
             //   delay: 0.5,
             // }}
-            animate={{
-              rotate: [0, 360], // Full rotation
-            }}
-            transition={{
-              repeat: Infinity,
-              repeatType: 'loop',
-              duration: 1, // Adjust speed (lower is faster)
-              ease: 'linear', // Constant speed like a wheel
-            }}
           >
             <Image src={SolanaCoin} alt="Floating Solana Coin" width={100} height={100} className="object-contain" />
           </motion.div>
@@ -168,7 +159,7 @@ export default function LoginPage() {
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.8 }}
         >
-          <Button onClick={handleConnectWallet} disabled={isConnecting}>
+          <Button onClick={handleConnectWallet} loading={isConnecting} className="min-h-12 px-4 py-3 w-full">
             Connect Wallet
           </Button>
         </motion.div>

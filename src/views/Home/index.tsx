@@ -20,7 +20,12 @@ export default function HomePage() {
   }
 
   return (
-    <motion.div className="flex flex-col min-h-screen pb-20" variants={container} initial="hidden" animate="show">
+    <motion.div
+      className="flex flex-col min-h-screen pb-20 container bg-[#F2F2F2]"
+      variants={container}
+      initial="hidden"
+      animate="show"
+    >
       <Header name="Shola" />
 
       <SavingsAndWallet />
