@@ -65,9 +65,7 @@ interface GroupProp {
 function GroupedActivity({ group, label }: GroupProp) {
   return (
     <div className="flex flex-col gap-3">
-      <div className="mb-2 px-2">
-        <p className="text-[10px] font-normal text-[#767676]">{label}</p>
-      </div>
+      <h4 className="text-[10px] font-normal text-[#767676] mb-2">{label}</h4>
       {group.map((activity, index) => (
         <Fragment key={index}>
           <motion.div
