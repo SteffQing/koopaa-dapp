@@ -69,19 +69,19 @@ export default function RecentActivities() {
 
   return (
     <motion.div
-      className="mb-20"
+      className="mb-20 bg-[#FCFCFC] rounded-[8px] px-3 py-4 flex flex-col gap-3"
       initial={{ y: 20, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ delay: 0.5 }}
     >
-      <div className="flex items-center justify-between mb-3">
+      <div className="flex items-center justify-between">
         <h2 className="font-semibold">Recent Activities</h2>
-        <button className="text-[#ff6b00] text-sm font-medium flex items-center">
+        <button className="text-[#ff6600] text-xs font-medium flex items-center">
           See all <ChevronRight size={16} />
         </button>
       </div>
 
-      <div className="bg-white rounded-xl p-2">
+      <div className="rounded-xl">
         <div className="mb-2 px-2">
           <p className="text-xs font-medium text-gray-500">Today</p>
         </div>

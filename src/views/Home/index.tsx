@@ -2,11 +2,12 @@
 
 import { motion } from 'framer-motion'
 import QuickAccess from './quick-access'
-import RecentActivities from './recent-activities'
+// import RecentActivities from './recent-activities'
 import Header from '../Navigation/header'
 import SavingsAndWallet from '@/components/savings-and-wallet'
 import SquadDisplay from '@/components/squads'
 import ActionItems from '@/components/action-items'
+import RecentActivities from '@/components/activities'
 
 export default function HomePage() {
   const container = {

@@ -6,6 +6,7 @@ import Image from 'next/image'
 import MyGroups from '@/assets/quick-access/my-groups.png'
 import Solo from '@/assets/quick-access/solo.png'
 import PublicGroup from '@/assets/quick-access/public-group.png'
+import PrivateGroup from '@/assets/quick-access/private-group.png'
 
 import Bolt from '@/assets/svgs/bolt.svg'
 const items = [
@@ -23,6 +24,11 @@ const items = [
     title: 'Create public group',
     image: PublicGroup,
     color: '#FEC1BE',
+  },
+  {
+    title: 'Create private group',
+    image: PrivateGroup,
+    color: '#C2BBFF',
   },
 ]
 export default function QuickAccess() {
@@ -74,18 +80,15 @@ export default function QuickAccess() {
           {items.map((item, index) => (
             <motion.div
               key={index}
-              className="rounded-[8px] flex-shrink-0 w-[140px] flex flex-col items-center justify-center"
+              className="rounded-[8px] flex-shrink-0 flex flex-col items-center justify-center overflow-hidden"
               initial={{ y: 20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ delay: 0.1 * index + 0.4 }}
-              whileHover={{ y: -3, boxShadow: '0 4px 10px rgba(0,0,0,0.1)' }}
-              whileTap={{ y: 0, boxShadow: 'none' }}
               style={{ background: item.color, border: `1px solid ${item.color}` }}
             >
-              <div className="mb-2">
-                <Image src={item.image} alt={item.title} width={120} height={120} className="w-[120px]" />
-              </div>
-              <p className="text-[10px] text-[#121212] font-medium text-center px-1">{item.title}</p>
+              <Image src={item.image} alt={item.title} width={120} height={89} className="w-[120px] h-[89px]" />
+
+              <p className="text-[10px] w-full text-start text-[#121212] font-medium px-2 py-3">{item.title}</p>
             </motion.div>
           ))}
         </div>
