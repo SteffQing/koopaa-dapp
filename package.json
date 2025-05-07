@@ -5,7 +5,7 @@
   "scripts": {
     "build": "next build",
     "ci": "npm run build && npm run lint && npm run format:check",
-    "postinstall": "prisma generate",
+    "postinstall": "npx prisma generate",
     "dev": "next dev --turbopack",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
