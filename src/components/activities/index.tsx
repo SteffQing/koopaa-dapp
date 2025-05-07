@@ -36,7 +36,7 @@ const labelMap: Record<string, string> = {
 }
 
 export default function RecentActivities() {
-  const activities = groupActivitiesByTimeframe(staticActivities)
+  // const activities = groupActivitiesByTimeframe(staticActivities)
   return (
     <motion.div
       className="mb-20 bg-[#FCFCFC] rounded-[8px] px-3 py-4 flex flex-col gap-3"
@@ -51,8 +51,12 @@ export default function RecentActivities() {
         </button>
       </div>
 
-      {Object.entries(activities).map(([label, group]) =>
-        group.length > 0 ? <GroupedActivity key={label} label={labelMap[label]} group={group} /> : null,
+      {staticActivities.length > 0 ? (
+        Object.entries(groupActivitiesByTimeframe(staticActivities)).map(([label, group]) =>
+          group.length > 0 ? <GroupedActivity key={label} label={labelMap[label]} group={group} /> : null,
+        )
+      ) : (
+        <p className="text-[#767676] text-sm font-normal text-center">No recent activities</p>
       )}
     </motion.div>
   )

@@ -76,3 +76,7 @@ html {
 .touch-pan-x {
   touch-action: pan-x;
 }
+
+.box-shadow {
+  box-shadow: 0px 4px 14px 0px #00000040;
+}

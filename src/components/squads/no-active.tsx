@@ -4,12 +4,12 @@ import { Avatar } from '../avatar'
 export default function NoActiveSquad() {
   return (
     <motion.div
-      className=" rounded-xl p-6 flex flex-col items-center"
+      className="rounded-xl p-6 flex flex-col items-center"
       initial={{ scale: 0.95, opacity: 0 }}
       animate={{ scale: 1, opacity: 1 }}
       transition={{ delay: 0.5 }}
     >
-      <div className="bg-[#FCFCFC] rounded-full p-7 mb-4">
+      <div className="bg-[#FCFCFC] rounded-full p-7 mb-4 box-shadow">
         <motion.div
           className="relative w-16 h-16"
           initial={{ rotate: 0 }}

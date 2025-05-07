@@ -1,22 +1,27 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { Home, Wallet, Users, User } from 'lucide-react'
 import { useState } from 'react'
+
+import Home from '@/assets/svgs/navigation/home.svg'
+import Savings from '@/assets/svgs/navigation/savings.svg'
+import Squads from '@/assets/svgs/squad.svg'
+import Account from '@/assets/svgs/navigation/account.svg'
+import { cn } from '@/lib/utils'
+
+const tabs = [
+  { name: 'Home', icon: Home },
+  { name: 'Savings', icon: Savings },
+  { name: 'Squads', icon: Squads },
+  { name: 'Account', icon: Account },
+]
 
 export default function BottomNavbar() {
   const [activeTab, setActiveTab] = useState('Home')
 
-  const tabs = [
-    { name: 'Home', icon: Home, color: '#ff6b00' },
-    { name: 'Savings', icon: Wallet, color: '#666' },
-    { name: 'Squads', icon: Users, color: '#666' },
-    { name: 'Account', icon: User, color: '#666' },
-  ]
-
   return (
     <motion.div
-      className="fixed bottom-0 left-0 right-0 bg-white border-t flex justify-around items-center py-2 max-w-[400px] mx-auto"
+      className="fixed bottom-6 left-1/2 transform -translate-x-1/2 bg-[#F2F2F2] flex gap-6 items-center mx-auto px-6 py-3 border border-[#CBD5E1] rounded-3xl"
       initial={{ y: 100 }}
       animate={{ y: 0 }}
       transition={{ delay: 0.7, type: 'spring', stiffness: 500, damping: 30 }}
@@ -24,25 +29,21 @@ export default function BottomNavbar() {
       {tabs.map((tab) => (
         <motion.button
           key={tab.name}
-          className="flex flex-col items-center py-1 px-4"
+          className="flex flex-col items-center gap-[5px]"
           onClick={() => setActiveTab(tab.name)}
           whileHover={{ y: -2 }}
           whileTap={{ y: 0 }}
         >
-          <tab.icon size={20} color={activeTab === tab.name ? tab.color : '#666'} />
+          <tab.icon
+            className={cn(activeTab === tab.name ? 'text-[#ff6600]' : 'text-[#767676]')}
+            width={24}
+            height={24}
+          />
           <span
-            className={`text-xs mt-1 ${activeTab === tab.name ? `text-[${tab.color}] font-medium` : 'text-gray-600'}`}
+            className={cn('text-[#767676] text-xs font-normal', activeTab === tab.name && 'text-[#ff6600] font-medium')}
           >
             {tab.name}
           </span>
-
-          {activeTab === tab.name && (
-            <motion.div
-              className="absolute bottom-0 w-6 h-1 bg-[#ff6b00] rounded-t-full"
-              layoutId="activeTab"
-              transition={{ type: 'spring', stiffness: 500, damping: 30 }}
-            />
-          )}
         </motion.button>
       ))}
     </motion.div>

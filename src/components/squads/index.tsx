@@ -18,7 +18,7 @@ export default function SquadDisplay() {
     >
       <div className="mb-3 flex gap-2 items-center">
         <h2 className="font-semibold text-left">KooPaa Squad</h2>
-        <Squad className="w-6 h-6" />
+        <Squad className="w-6 h-6 text-[#ff6600]" />
       </div>
 
       {hasActiveSquad ? (
