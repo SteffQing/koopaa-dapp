@@ -1,6 +1,6 @@
 generator client {
   provider = "prisma-client-js"
-  output   = "../src/lib/prisma-client"
+  output   = "../prisma-client"
 }
 
 datasource db {
@@ -11,8 +11,30 @@ datasource db {
 }
 
 model User {
-  id       String  @id @default(cuid())
-  username String?
-  address  String  @unique
-  avatar   Int     @default(1)
+  id         String     @id @default(cuid())
+  username   String?
+  address    String     @unique
+  avatar     Int        @default(1)
+  activities Activity[]
+}
+
+model Activity {
+  id         String       @id @default(cuid())
+  title      String
+  amount     Int?
+  type       ActivityType
+  created_at DateTime     @default(now())
+  User       User         @relation(fields: [userId], references: [id])
+  userId     String
+}
+
+enum ActivityType {
+  credit
+  debit
+  transfer
+  create
+}
+
+model Waitlist {
+  email String @id
 }

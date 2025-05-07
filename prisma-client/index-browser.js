@@ -127,6 +127,19 @@ exports.Prisma.UserScalarFieldEnum = {
   avatar: 'avatar'
 };
 
+exports.Prisma.ActivityScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  amount: 'amount',
+  type: 'type',
+  created_at: 'created_at',
+  userId: 'userId'
+};
+
+exports.Prisma.WaitlistScalarFieldEnum = {
+  email: 'email'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -141,10 +154,17 @@ exports.Prisma.NullsOrder = {
   first: 'first',
   last: 'last'
 };
-
+exports.ActivityType = exports.$Enums.ActivityType = {
+  credit: 'credit',
+  debit: 'debit',
+  transfer: 'transfer',
+  create: 'create'
+};
 
 exports.Prisma.ModelName = {
-  User: 'User'
+  User: 'User',
+  Activity: 'Activity',
+  Waitlist: 'Waitlist'
 };
 
 /**

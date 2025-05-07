@@ -48,6 +48,7 @@
     "eslint": "^9.25.1",
     "eslint-config-next": "15.3.1",
     "prettier": "^3.5.3",
+    "prisma": "^6.7.0",
     "tailwindcss": "^4.1.4",
     "typescript": "^5.8.3",
     "ws": "^8.18.1"

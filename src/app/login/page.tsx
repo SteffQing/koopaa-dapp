@@ -2,7 +2,6 @@
 
 import { motion } from 'framer-motion'
 import Image from 'next/image'
-import { Wallet } from 'lucide-react'
 import { useState } from 'react'
 import { toast } from 'sonner'
 

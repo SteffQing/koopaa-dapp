@@ -3,6 +3,7 @@
 import { motion, useMotionValue, useSpring, useAnimationControls } from 'framer-motion'
 import { useState, useRef, useEffect } from 'react'
 import Card from './card'
+import { SavingsType } from './types'
 
 export type Tab = 'Savings' | 'Wallet'
 const tabs: [Tab, Tab] = ['Savings', 'Wallet']
@@ -116,7 +117,12 @@ export default function SavingsAndWallet() {
                     style={{ opacity }}
                     transition={{ opacity: { duration: 0.3 } }}
                   >
-                    <Card tab={activeTab} currency={data.currency} amount={data.amount} type={data.type as any} />
+                    <Card
+                      tab={activeTab}
+                      currency={data.currency}
+                      amount={data.amount}
+                      type={data.type as SavingsType}
+                    />
                   </motion.div>
                 )
               })}
