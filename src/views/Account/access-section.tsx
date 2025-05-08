@@ -15,7 +15,7 @@ export const AccessSection = ({ item }: VariantProps) => {
     <motion.div variants={item}>
       <h2 className="font-medium text-sm text-[#333333] mb-3">Access</h2>
 
-      <div className="bg-[#FCFCFC] rounded-[8px] overflow-hidden box-shadow">
+      <div className="bg-[#FCFCFC] rounded-[8px] overflow-hidden box-shado">
         <div className="px-3">
           <div className="flex justify-between items-center py-3 border-b border-[#E6E6E6]">
             <span className="font-normal text-[#121212] text-xs">Allow notification</span>
