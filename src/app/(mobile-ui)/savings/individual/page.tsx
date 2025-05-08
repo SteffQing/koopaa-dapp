@@ -43,7 +43,7 @@ export default function IndividualSavingsPage() {
 
       {/* Floating Action Button */}
       <motion.div
-        className="fixed bottom-15 right-4"
+        className="fixed bottom-15 right-4 z-50"
         initial={{ scale: 0, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         transition={{ delay: 0.6, type: 'spring' }}
