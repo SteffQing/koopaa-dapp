@@ -37,14 +37,14 @@ const avatarColors: Record<number, string> = {
   9: '#ABFFFC',
 }
 
-const Avatar = ({ number = 1 }) => {
+const Avatar = ({ number = 1, size = 40 }) => {
   const src = avatarImage[number] || Avatar1
   const bgColor = avatarColors[number] || '#ddd'
 
   return (
     <div
       className="rounded-full overflow-hidden flex items-center justify-center border-2 border-[#FCFCFC]"
-      style={{ backgroundColor: bgColor, width: 40, height: 40 }}
+      style={{ backgroundColor: bgColor, width: size, height: size }}
     >
       <Image src={src} alt={`Avatar ${number}`} />
     </div>

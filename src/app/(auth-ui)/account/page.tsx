@@ -1,3 +1,6 @@
-export default function AccountPage() {
-  return <section>Hello from Account page</section>
+import AccountPage from '@/views/Account'
+import React from 'react'
+
+export default function Account() {
+  return <AccountPage />
 }
