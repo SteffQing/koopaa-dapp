@@ -22,7 +22,7 @@ export default function AjoSavingsPage() {
       <motion.div variants={item} className="mb-6 mt-3">
         <h2 className="font-medium text-sm text-[#333333] mb-3">Your Active Groups</h2>
 
-        <div className="space-y-4">
+        <div className="flex flex-col gap-3">
           {staticJoinedGroups.map((group) => (
             <GroupCard group={group} key={group.id} />
           ))}

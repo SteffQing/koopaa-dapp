@@ -16,47 +16,41 @@ export default function GroupMembersPage({ params }: { params: Promise<{ id: str
       position: '1st',
       collectionDate: '21 May 2025',
       status: 'next',
-      avatar: '/placeholder.svg?height=40&width=40',
     },
     {
       id: 2,
       name: 'Khalid Momoh',
-      position: '1st',
+      position: '2nd',
       collectionDate: '04 June 2025',
       status: 'outstanding',
-      avatar: '/placeholder.svg?height=40&width=40',
     },
     {
       id: 3,
       name: 'Fathia Balogun',
-      position: '1st',
+      position: '3rd',
       collectionDate: '18 June 2025',
       status: 'outstanding',
-      avatar: '/placeholder.svg?height=40&width=40',
     },
     {
       id: 4,
       name: 'Adeleke David',
-      position: '1st',
+      position: '4th',
       collectionDate: '02 July 2025',
       status: 'outstanding',
-      avatar: '/placeholder.svg?height=40&width=40',
     },
     {
       id: 5,
       name: 'You',
-      position: '1st',
+      position: '5th',
       collectionDate: '16 July 2025',
       status: 'outstanding',
-      avatar: '/placeholder.svg?height=40&width=40',
     },
     {
       id: 6,
       name: 'Simon Kingsley',
-      position: '1st',
+      position: '6th',
       collectionDate: '03 August 2025',
       status: 'outstanding',
-      avatar: '/placeholder.svg?height=40&width=40',
     },
   ]
 
@@ -67,7 +61,7 @@ export default function GroupMembersPage({ params }: { params: Promise<{ id: str
 
   return (
     <Container>
-      <NavHeader path={`/savings/ajo/${id}/details`} header="Group members" />
+      <NavHeader path={`/savings/ajo/${id}`} header="Group members" />
 
       <div className="space-y-4">
         {members.map((member) => (

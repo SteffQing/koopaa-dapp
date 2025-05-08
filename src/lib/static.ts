@@ -72,7 +72,7 @@ export const staticJoinedGroups = [
     created_at: new Date('2025-04-15T15:30:00Z'),
     duration: 6,
     minimum_members: 4,
-    group_cover: 2,
+    group_cover: 4,
   },
   {
     name: 'Wedding Fund',
@@ -82,6 +82,6 @@ export const staticJoinedGroups = [
     created_at: new Date('2025-03-20T08:15:00Z'),
     duration: 9,
     minimum_members: 2,
-    group_cover: 3,
+    group_cover: 4,
   },
 ]
