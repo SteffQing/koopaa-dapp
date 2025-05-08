@@ -5,6 +5,7 @@ import Image from 'next/image'
 import NavHeader from '@/views/Navigation/nav-header'
 import Container from '@/components/container'
 import { use } from 'react'
+import { Avatar } from '@/components/avatar'
 
 export default function GroupMembersPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params)
@@ -79,13 +80,7 @@ export default function GroupMembersPage({ params }: { params: Promise<{ id: str
           >
             <div className="flex items-center justify-between mb-2">
               <div className="flex items-center gap-3">
-                <Image
-                  src={member.avatar || '/placeholder.svg'}
-                  alt={member.name}
-                  width={40}
-                  height={40}
-                  className="rounded-full bg-teal-100"
-                />
+                <Avatar number={member.id} />
                 <div>
                   <div className="flex items-center">
                     <p className="font-medium">{member.name}</p>

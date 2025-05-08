@@ -8,16 +8,6 @@ import GroupCard from '@/views/Savings/group/card'
 import { staticJoinedGroups } from '@/lib/static'
 
 export default function AjoSavingsPage() {
-  const container = {
-    hidden: { opacity: 0 },
-    show: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1,
-      },
-    },
-  }
-
   const item = {
     hidden: { opacity: 0, y: 20 },
     show: { opacity: 1, y: 0 },
@@ -34,7 +24,7 @@ export default function AjoSavingsPage() {
 
         <div className="space-y-4">
           {staticJoinedGroups.map((group) => (
-            <GroupCard group={group} />
+            <GroupCard group={group} key={group.id} />
           ))}
         </div>
       </motion.div>
