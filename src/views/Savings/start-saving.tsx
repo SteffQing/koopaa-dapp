@@ -25,7 +25,7 @@ const savingOptions = [
     title: 'Defi Yield savings',
     description: 'Achieve your goals with this saving method',
     color: 'bg-[#F3BD9A]',
-    path: '/savings/dca',
+    path: '/savings/ajo',
     image: Vault,
   },
 ]
@@ -41,7 +41,7 @@ export default function StartSaving() {
     >
       <h2 className="font-medium text-[#121212] text-sm mb-3">Start Saving</h2>
 
-      <section className="flex flex-col gap-3">
+      <section className="flex flex-col gap-4">
         {savingOptions.map((option, index) => (
           <Link key={index} href={option.path}>
             <motion.div

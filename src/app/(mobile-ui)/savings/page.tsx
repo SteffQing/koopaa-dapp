@@ -17,9 +17,9 @@ export default function SavingsPage() {
     { type: 'ajo', amount: 8111.09, currency: 'USDC' as const },
   ]
   const savingsAction = [
-    { text: 'Start Saving', handler: () => router.push('') },
-    { text: 'Start Saving', handler: () => router.push('') },
-    { text: 'Start Saving', handler: () => router.push('') },
+    { text: 'Start Saving', handler: () => router.push('/savings/ajo') },
+    { text: 'Start Saving', handler: () => router.push('/savings/individual') },
+    { text: 'Start Saving', handler: () => router.push('/savings/ajo') },
   ]
 
   return (

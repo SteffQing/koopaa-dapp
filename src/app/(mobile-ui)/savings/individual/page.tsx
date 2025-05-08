@@ -7,6 +7,7 @@ import { Plus } from 'lucide-react'
 import NavHeader from '@/views/Navigation/nav-header'
 import Container from '@/components/container'
 import Card from '@/components/savings-and-wallet/card'
+import EmptyVault from '@/assets/empty-vault.png'
 
 export default function IndividualSavingsPage() {
   const item = {
@@ -33,7 +34,7 @@ export default function IndividualSavingsPage() {
           transition={{ delay: 0.4, type: 'spring' }}
           className="mb-6"
         >
-          <Image src="/placeholder.svg?height=150&width=150" alt="Empty vault" width={150} height={150} />
+          <Image src={EmptyVault} alt="Empty vault" width={150} height={150} />
         </motion.div>
         <p className="text-gray-500 max-w-xs">
           You haven&#39;t created any solo saving goal. Click on the plus button to get started
@@ -42,7 +43,7 @@ export default function IndividualSavingsPage() {
 
       {/* Floating Action Button */}
       <motion.div
-        className="fixed bottom-6 right-6"
+        className="fixed bottom-15 right-4"
         initial={{ scale: 0, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         transition={{ delay: 0.6, type: 'spring' }}
