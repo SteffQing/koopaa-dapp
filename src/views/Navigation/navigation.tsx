@@ -1,7 +1,8 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { useState } from 'react'
+import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 
 import Home from '@/assets/svgs/navigation/home.svg'
 import Savings from '@/assets/svgs/navigation/savings.svg'
@@ -10,14 +11,26 @@ import Account from '@/assets/svgs/navigation/account.svg'
 import { cn } from '@/lib/utils'
 
 const tabs = [
-  { name: 'Home', icon: Home },
-  { name: 'Savings', icon: Savings },
-  { name: 'Squads', icon: Squads },
-  { name: 'Account', icon: Account },
+  { name: 'Home', icon: Home, path: '/' },
+  { name: 'Savings', icon: Savings, path: '/savings' },
+  { name: 'Squads', icon: Squads, path: '/squads' },
+  { name: 'Account', icon: Account, path: '/account' },
 ]
 
+function useActiveTab() {
+  const pathname = usePathname()
+  
+  // Find the tab that matches the current path
+  const activeTab = tabs.find(tab => 
+    pathname === tab.path || 
+    (tab.path !== '/' && pathname.startsWith(tab.path))
+  )
+  
+  return activeTab?.name || 'Home'
+}
+
 export default function BottomNavbar() {
-  const [activeTab, setActiveTab] = useState('Home')
+  const activeTab = useActiveTab()
 
   return (
     <motion.div
@@ -27,24 +40,27 @@ export default function BottomNavbar() {
       transition={{ delay: 0.7, type: 'spring', stiffness: 500, damping: 30 }}
     >
       {tabs.map((tab) => (
-        <motion.button
-          key={tab.name}
-          className="flex flex-col items-center gap-[5px]"
-          onClick={() => setActiveTab(tab.name)}
-          whileHover={{ y: -2 }}
-          whileTap={{ y: 0 }}
-        >
-          <tab.icon
-            className={cn(activeTab === tab.name ? 'text-[#ff6600]' : 'text-[#767676]')}
-            width={24}
-            height={24}
-          />
-          <span
-            className={cn('text-[#767676] text-xs font-normal', activeTab === tab.name && 'text-[#ff6600] font-medium')}
+        <Link href={tab.path} key={tab.name} passHref legacyBehavior>
+          <motion.a
+            className="flex flex-col items-center gap-[5px]"
+            whileHover={{ y: -2 }}
+            whileTap={{ y: 0 }}
           >
-            {tab.name}
-          </span>
-        </motion.button>
+            <tab.icon
+              className={cn(activeTab === tab.name ? 'text-[#ff6600]' : 'text-[#767676]')}
+              width={24}
+              height={24}
+            />
+            <span
+              className={cn(
+                'text-[#767676] text-xs font-normal', 
+                activeTab === tab.name && 'text-[#ff6600] font-medium'
+              )}
+            >
+              {tab.name}
+            </span>
+          </motion.a>
+        </Link>
       ))}
     </motion.div>
   )
