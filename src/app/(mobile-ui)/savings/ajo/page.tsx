@@ -3,14 +3,11 @@
 import { motion } from 'framer-motion'
 import Image from 'next/image'
 import Link from 'next/link'
-import { ChevronLeft, Eye, RefreshCw } from 'lucide-react'
-import { useState } from 'react'
 import Container from '@/components/container'
 import NavHeader from '@/views/Navigation/nav-header'
+import Card from '@/components/savings-and-wallet/card'
 
 export default function AjoSavingsPage() {
-  const [isBalanceVisible, setIsBalanceVisible] = useState(true)
-
   const container = {
     hidden: { opacity: 0 },
     show: {
@@ -54,58 +51,10 @@ export default function AjoSavingsPage() {
       <NavHeader path="/savings" header="Ajo Savings" />
 
       <motion.div className="px-4 pb-4" variants={container} initial="hidden" animate="show">
-        {/* Savings Card */}
-        <motion.div
-          variants={item}
-          className="bg-[#d6f5ff] rounded-xl p-4 mb-6"
-          whileHover={{ y: -5, boxShadow: '0 10px 20px rgba(0,0,0,0.1)' }}
-        >
-          <div className="flex items-center gap-2 mb-2">
-            <p className="text-gray-700 font-medium">Ajo Savings</p>
-            <button onClick={() => setIsBalanceVisible(!isBalanceVisible)}>
-              <Eye size={18} className="text-gray-600" />
-            </button>
-          </div>
+        <Card amount={2304} tab="Savings" type="ajo" currency="USDC" />
 
-          <div className="mb-4">
-            <div className="flex items-baseline">
-              <span className="text-sm mr-1">USDC</span>
-              <motion.span
-                className="text-3xl font-bold"
-                key={isBalanceVisible.toString()}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.3 }}
-              >
-                {isBalanceVisible ? (
-                  <>
-                    20,456<span className="text-xl">.76</span>
-                  </>
-                ) : (
-                  '****'
-                )}
-              </motion.span>
-            </div>
-            <div className="flex justify-end">
-              <div className="bg-white rounded-full px-2 py-1 flex items-center gap-1 text-xs">
-                <span>USDC</span>
-                <RefreshCw size={12} />
-              </div>
-            </div>
-          </div>
-
-          <motion.button
-            className="w-full bg-black text-white py-3 rounded-lg font-medium"
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-          >
-            Start Saving
-          </motion.button>
-        </motion.div>
-
-        {/* Public Groups Available */}
         <motion.div variants={item} className="mb-6">
-          <h2 className="font-semibold text-lg mb-3">Public Groups Available</h2>
+          <h2 className="font-medium text-sm text-[#333333] mb-3">Your Active Groups</h2>
 
           <div className="space-y-4">
             {publicGroups.map((group) => (
@@ -116,7 +65,7 @@ export default function AjoSavingsPage() {
                 >
                   <div className="h-20 bg-gray-300 relative">
                     <Image
-                      src="/placeholder.svg?height=80&width=300"
+                      src="/group-cover/1.png"
                       alt="Group cover"
                       width={300}
                       height={80}
@@ -180,7 +129,7 @@ export default function AjoSavingsPage() {
         </motion.div>
 
         {/* Private Groups Savings */}
-        <motion.div variants={item} className="mb-20">
+        <motion.div variants={item}>
           <h2 className="font-semibold text-lg mb-3">Private Groups Savings</h2>
           <div className="bg-white rounded-xl p-8 flex flex-col items-center justify-center">
             <p className="text-gray-500 text-center">No private groups joined yet</p>

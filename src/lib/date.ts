@@ -13,3 +13,11 @@ export function formatActivityTime(date: Date): string {
   // Else: full date fallback (optional)
   return date.toLocaleString()
 }
+
+export function getDateHumanReadable(date: Date) {
+  return date.toLocaleDateString('en-US', {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric',
+  }) // 10-May-2025
+}

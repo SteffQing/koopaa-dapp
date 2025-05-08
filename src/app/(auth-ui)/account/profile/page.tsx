@@ -24,7 +24,7 @@ export default function ProfilePage() {
 
   return (
     <Container className="p-0! bg-[#F2F2F2]!">
-      <NavHeader path="/account" header="Profile Details" />
+      <NavHeader path="/account" header="Profile Details" className="mx-4" />
       <div className="px-4 mt-4 flex flex-col items-center gap-6">
         <Avatar size={86} />
 

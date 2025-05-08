@@ -1,3 +1,4 @@
+import { cn } from '@/lib/utils'
 import { motion } from 'framer-motion'
 import { ChevronLeft } from 'lucide-react'
 import Link from 'next/link'
@@ -5,12 +6,13 @@ import Link from 'next/link'
 type Props = {
   path?: string
   header: string
+  className?: string
 }
 
-export default function NavHeader({ path, header }: Props) {
+export default function NavHeader({ path, header, className }: Props) {
   return (
     <motion.div
-      className="my-6 relative flex justify-center mx-4"
+      className={cn('my-6 relative flex justify-center', className)}
       initial={{ y: -20, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.3 }}

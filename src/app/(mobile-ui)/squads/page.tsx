@@ -4,11 +4,8 @@ import { Avatar } from '@/components/avatar'
 import Container from '@/components/container'
 import { Button } from '@/components/ui/button'
 import { motion } from 'framer-motion'
-import { useState } from 'react'
 
 export default function SquadsPage() {
-  const [isLoading, setIsLoading] = useState(false)
-
   // Sample squad members data
   const squadMembers = [
     { id: 1, position: 'top', color: 'bg-green-400' },
