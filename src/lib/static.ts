@@ -52,3 +52,36 @@ export const staticActivities: Activity[] = [
     userId,
   },
 ]
+
+export const staticJoinedGroups = [
+  {
+    name: 'Weekend Savings',
+    id: 'grp_001',
+    period_amount: 5000,
+    member_ids: ['user_001', 'user_002', 'user_003'],
+    created_at: new Date('2025-05-01T10:00:00Z'),
+    duration: 12,
+    minimum_members: 3,
+    group_cover: 1,
+  },
+  {
+    name: 'Tech Buddies Pool',
+    id: 'grp_002',
+    period_amount: 10000,
+    member_ids: ['user_004', 'user_005', 'user_006', 'user_007'],
+    created_at: new Date('2025-04-15T15:30:00Z'),
+    duration: 6,
+    minimum_members: 4,
+    group_cover: 2,
+  },
+  {
+    name: 'Wedding Fund',
+    id: 'grp_003',
+    period_amount: 20000,
+    member_ids: ['user_008', 'user_009'],
+    created_at: new Date('2025-03-20T08:15:00Z'),
+    duration: 9,
+    minimum_members: 2,
+    group_cover: 3,
+  },
+]

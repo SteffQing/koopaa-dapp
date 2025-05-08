@@ -15,7 +15,7 @@ type Group = {
   group_cover: number
 }
 
-export default function Card({ group }: { group: Group }) {
+export default function GroupCard({ group }: { group: Group }) {
   return (
     <Link key={group.id} href={`/savings/ajo/${group.id}`}>
       <motion.div
