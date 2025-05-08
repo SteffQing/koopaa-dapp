@@ -1,7 +1,6 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import Image from 'next/image'
 import NavHeader from '@/views/Navigation/nav-header'
 import Container from '@/components/container'
 import { use } from 'react'
