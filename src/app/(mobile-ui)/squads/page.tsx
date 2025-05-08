@@ -2,6 +2,7 @@
 
 import { Avatar } from '@/components/avatar'
 import Container from '@/components/container'
+import { Button } from '@/components/ui/button'
 import { motion } from 'framer-motion'
 import { useState } from 'react'
 
@@ -105,7 +106,7 @@ export default function SquadsPage() {
       {/* Content */}
       <motion.div className="px-4 text-center" variants={container} initial="hidden" animate="show">
         <motion.h1 className="text-2xl font-bold mb-3" variants={item}>
-          Join a koopa squad
+          Join a KooPaa squad
         </motion.h1>
 
         <motion.p className="text-gray-600 mb-8" variants={item}>
@@ -113,33 +114,9 @@ export default function SquadsPage() {
         </motion.p>
 
         <motion.div className="space-y-4" variants={item}>
-          <motion.button
-            className="w-full bg-[#ff6b00] text-white py-4 px-6 rounded-lg font-medium"
-            whileHover={{ y: -2, boxShadow: '0 4px 10px rgba(255,107,0,0.3)' }}
-            whileTap={{ y: 0, boxShadow: 'none' }}
-            onClick={() => setIsLoading(true)}
-          >
-            {isLoading ? (
-              <div className="flex items-center justify-center">
-                <motion.div
-                  className="w-5 h-5 border-2 border-white border-t-transparent rounded-full mr-2"
-                  animate={{ rotate: 360 }}
-                  transition={{ repeat: Number.POSITIVE_INFINITY, duration: 1, ease: 'linear' }}
-                />
-                <span>Joining...</span>
-              </div>
-            ) : (
-              'Join a Squad'
-            )}
-          </motion.button>
+          <Button>Join a Squad</Button>
 
-          <motion.button
-            className="w-full bg-white text-gray-800 py-4 px-6 rounded-lg font-medium border border-gray-200"
-            whileHover={{ y: -2, boxShadow: '0 4px 10px rgba(0,0,0,0.1)' }}
-            whileTap={{ y: 0, boxShadow: 'none' }}
-          >
-            Create a New Squad
-          </motion.button>
+          <Button variant="outline">Create a New Squad</Button>
         </motion.div>
       </motion.div>
     </Container>

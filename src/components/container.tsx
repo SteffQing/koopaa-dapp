@@ -20,7 +20,7 @@ export default function Container({ children, className }: Props) {
 
   return (
     <motion.div
-      className={cn('flex flex-col min-h-screen pb-20 container bg-[#F2F2F2]', className)}
+      className={cn('flex flex-col min-h-screen container bg-[#F2F2F2]', className, 'pb-24!')}
       variants={container}
       initial="hidden"
       animate="show"

@@ -13,6 +13,10 @@ interface CardProps {
   tab: Tab
   currency: Currency
   type?: SavingsType
+  action?: {
+    text: string
+    handler: () => void
+  }
 }
 
 const bgMap = {
@@ -27,7 +31,7 @@ const titleMap = {
   ajo: 'Ajo Savings',
 }
 
-export default function Card({ amount, tab, currency, type = 'total' }: CardProps) {
+export default function Card({ amount, tab, currency, action, type = 'total' }: CardProps) {
   const [isVisible, setIsVisible] = useState(true)
   const isSavings = tab === 'Savings'
 
@@ -63,23 +67,34 @@ export default function Card({ amount, tab, currency, type = 'total' }: CardProp
           <Refresh className="cursor-pointer" />
         </div>
       </div>
-      <div className="grid grid-cols-2 gap-3 pb-1">
+      {action ? (
         <motion.button
-          className="bg-white py-3 rounded-lg flex items-center justify-center gap-2 font-medium"
+          className="bg-black w-full text-white py-3 rounded-lg flex items-center justify-center gap-2 font-medium"
           whileHover={{ y: -2, boxShadow: '0 4px 6px rgba(0,0,0,0.1)' }}
           whileTap={{ y: 0, boxShadow: 'none' }}
+          onClick={action.handler}
         >
-          {isSavings ? 'Top Up' : 'Fund Wallet'} <ArrowDown />
+          {action.text}
         </motion.button>
+      ) : (
+        <div className="grid grid-cols-2 gap-3 pb-1">
+          <motion.button
+            className="bg-white py-3 rounded-lg flex items-center justify-center gap-2 font-medium"
+            whileHover={{ y: -2, boxShadow: '0 4px 6px rgba(0,0,0,0.1)' }}
+            whileTap={{ y: 0, boxShadow: 'none' }}
+          >
+            {isSavings ? 'Top Up' : 'Fund Wallet'} <ArrowDown />
+          </motion.button>
 
-        <motion.button
-          className="bg-black text-white py-3 rounded-lg flex items-center justify-center gap-2 font-medium"
-          whileHover={{ y: -2, boxShadow: '0 4px 6px rgba(0,0,0,0.1)' }}
-          whileTap={{ y: 0, boxShadow: 'none' }}
-        >
-          Withdraw <ArrowUp />
-        </motion.button>
-      </div>
+          <motion.button
+            className="bg-black text-white py-3 rounded-lg flex items-center justify-center gap-2 font-medium"
+            whileHover={{ y: -2, boxShadow: '0 4px 6px rgba(0,0,0,0.1)' }}
+            whileTap={{ y: 0, boxShadow: 'none' }}
+          >
+            Withdraw <ArrowUp />
+          </motion.button>
+        </div>
+      )}
     </motion.div>
   )
 }

@@ -39,7 +39,7 @@ export default function RecentActivities() {
   // const activities = groupActivitiesByTimeframe(staticActivities)
   return (
     <motion.div
-      className="mb-20 bg-[#FCFCFC] rounded-[8px] px-3 py-4 flex flex-col gap-3"
+      className="bg-[#FCFCFC] rounded-[8px] px-3 py-4 flex flex-col gap-3"
       initial={{ y: 20, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ delay: 0.5 }}

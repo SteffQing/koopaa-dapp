@@ -158,7 +158,7 @@ export default function LoginPage() {
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.8 }}
         >
-          <Button onClick={handleConnectWallet} loading={isConnecting} className="min-h-12 px-4 py-3 w-full">
+          <Button onClick={handleConnectWallet} loading={isConnecting}>
             Connect Wallet
           </Button>
         </motion.div>
