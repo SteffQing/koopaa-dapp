@@ -4,6 +4,7 @@ import type React from 'react'
 import { useModal } from '@/providers/modal-provider'
 import { Avatar } from '../avatar'
 import { Button } from '../ui/button'
+import { useRouter } from 'next/navigation'
 
 interface InvitationModalProps {
   inviter: string
@@ -11,12 +12,9 @@ interface InvitationModalProps {
   groupType: string
 }
 
-export const InvitationModal: React.FC<InvitationModalProps> = ({
-  inviter = 'EmolaShola',
-  groupName = 'Friends',
-  groupType = 'koopa squad',
-}) => {
+export const InvitationModal: React.FC<InvitationModalProps> = ({ inviter, groupName, groupType }) => {
   const { hideModal } = useModal()
+  const router = useRouter()
 
   const handleAccept = () => {
     // Handle accept invitation
@@ -26,6 +24,7 @@ export const InvitationModal: React.FC<InvitationModalProps> = ({
   const handleDecline = () => {
     // Handle decline invitation
     hideModal()
+    router.replace('/')
   }
 
   return (

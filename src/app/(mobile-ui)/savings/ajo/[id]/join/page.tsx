@@ -3,14 +3,28 @@
 import { motion } from 'framer-motion'
 import Image from 'next/image'
 import { Info } from 'lucide-react'
-import { use, useState } from 'react'
+import { use, useEffect, useState } from 'react'
 import { toast } from 'sonner'
 import NavHeader from '@/views/Navigation/nav-header'
 import Container from '@/components/container'
+import { useModal } from '@/providers/modal-provider'
+import { InvitationModal } from '@/components/modal/invite'
 
 export default function JoinAjoGroupPage({ params }: { params: Promise<{ id: string }> }) {
   const [isAgreed, setIsAgreed] = useState(false)
   const { id } = use(params)
+
+  const { showModal } = useModal()
+
+  const openInvitationModal = () => {
+    showModal(<InvitationModal inviter="EmolaShola" groupName="Friends" groupType="koopa squad" />, {
+      position: 'center',
+    })
+  }
+
+  useEffect(() => {
+    openInvitationModal()
+  }, [])
 
   const groupData = {
     id,
