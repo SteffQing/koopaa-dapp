@@ -36,7 +36,7 @@ export default function CreateSavingGoalPage() {
 
   return (
     <Container>
-      <NavHeader path="/savings/individual" header="" />
+      <NavHeader path="/savings/individual" header="Individual Savings" />
 
       <motion.h1 variants={item} className="text-2xl font-bold text-[#ff6b00] mb-1">
         Let&#39;s create a saving goal <span className="text-2xl">🎯</span>

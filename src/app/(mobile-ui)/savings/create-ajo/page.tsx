@@ -36,7 +36,7 @@ export default function CreateAjoGroupPage() {
 
   return (
     <Container>
-      <NavHeader path="/savings" header="" />
+      <NavHeader path="/savings" header="Ajo Savings" />
 
       <motion.h1 variants={item} className="text-2xl font-bold text-[#ff6b00] mb-1">
         Let&#39;s create a public ajo group <span className="text-2xl">😉</span>
