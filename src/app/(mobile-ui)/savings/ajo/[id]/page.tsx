@@ -236,7 +236,7 @@ export default function AjoGroupPage({ params }: { params: Promise<{ id: string 
             <div className="flex items-center justify-between">
               <div className="flex -space-x-2">
                 {Array.from({ length: groupData.memberCount }).map((_, idx) => (
-                  <Avatar number={idx + 1} size={24} />
+                  <Avatar number={idx + 1} size={24} key={idx} />
                 ))}
               </div>
               <div className="flex items-center">

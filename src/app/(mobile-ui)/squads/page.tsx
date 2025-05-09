@@ -113,7 +113,7 @@ export default function SquadsPage() {
         </motion.p>
 
         <motion.div className="space-y-4" variants={item}>
-          <Button asChild>
+          <Button>
             <Link href="/squads/join-squad">Join a Squad</Link>
           </Button>
 

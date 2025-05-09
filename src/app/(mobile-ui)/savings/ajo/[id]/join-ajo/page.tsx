@@ -19,6 +19,7 @@ export default function JoinAjoGroupPage({ params }: { params: Promise<{ id: str
   const openInvitationModal = () => {
     showModal(<InvitationModal inviter="EmolaShola" groupName="Friends" groupType="koopa squad" />, {
       position: 'center',
+      showCloseButton: false,
     })
   }
 

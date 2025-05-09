@@ -19,13 +19,10 @@ const tabs = [
 
 function useActiveTab() {
   const pathname = usePathname()
-  
+
   // Find the tab that matches the current path
-  const activeTab = tabs.find(tab => 
-    pathname === tab.path || 
-    (tab.path !== '/' && pathname.startsWith(tab.path))
-  )
-  
+  const activeTab = tabs.find((tab) => pathname === tab.path || (tab.path !== '/' && pathname.startsWith(tab.path)))
+
   return activeTab?.name || 'Home'
 }
 
@@ -40,12 +37,8 @@ export default function BottomNavbar() {
       transition={{ delay: 0.7, type: 'spring', stiffness: 500, damping: 30 }}
     >
       {tabs.map((tab) => (
-        <Link href={tab.path} key={tab.name} passHref legacyBehavior>
-          <motion.a
-            className="flex flex-col items-center gap-[5px]"
-            whileHover={{ y: -2 }}
-            whileTap={{ y: 0 }}
-          >
+        <Link href={tab.path} key={tab.name}>
+          <motion.span className="flex flex-col items-center gap-[5px]" whileHover={{ y: -2 }} whileTap={{ y: 0 }}>
             <tab.icon
               className={cn(activeTab === tab.name ? 'text-[#ff6600]' : 'text-[#767676]')}
               width={24}
@@ -53,13 +46,13 @@ export default function BottomNavbar() {
             />
             <span
               className={cn(
-                'text-[#767676] text-xs font-normal', 
-                activeTab === tab.name && 'text-[#ff6600] font-medium'
+                'text-[#767676] text-xs font-normal',
+                activeTab === tab.name && 'text-[#ff6600] font-medium',
               )}
             >
               {tab.name}
             </span>
-          </motion.a>
+          </motion.span>
         </Link>
       ))}
     </motion.div>

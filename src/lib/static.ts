@@ -85,3 +85,10 @@ export const staticJoinedGroups = [
     group_cover: 4,
   },
 ]
+
+export const availableSquads = [
+  { name: 'Dubai Tech Trip', members: [1, 3, 5], goal: 3000, tag: 'lifestyle' },
+  { name: 'Business 2025', members: [1, 3, 5, 4], goal: 1000, tag: 'finance' },
+  { name: 'House Project', members: [3, 4, 2, 6, 1, 5, 8, 9], goal: 2000, tag: 'real estate' },
+  { name: "Zainab's Birthday", members: [3, 4, 2, 6, 1, 5, 8], goal: 1000, tag: 'friends' },
+]
