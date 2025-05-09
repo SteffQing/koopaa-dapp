@@ -64,15 +64,13 @@ export default function GroupCard({ group }: { group: Group }) {
                   {group.member_ids.map((id, idx) => (
                     <Avatar size={24} number={idx} key={id} />
                   ))}
-
-                  <Avatar size={24} number={2} />
                 </div>
                 <p className="text-sm ml-2">+{group.member_ids.length} member</p>
               </div>
             </div>
             <div>
               <p className="text-sm text-gray-500">Remaining</p>
-              <p className="font-semibold">{group.member_ids.length - group.minimum_members} members</p>
+              <p className="font-semibold">{group.minimum_members - group.member_ids.length} members</p>
             </div>
           </div>
         </div>
