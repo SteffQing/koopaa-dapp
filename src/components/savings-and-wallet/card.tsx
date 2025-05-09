@@ -7,6 +7,8 @@ import Refresh from '@/assets/svgs/refresh.svg'
 import ArrowUp from '@/assets/svgs/arrow-up.svg'
 import ArrowDown from '@/assets/svgs/arrow-down.svg'
 import { Currency, SavingsType, Tab } from './types'
+import { useModal } from '@/providers/modal-provider'
+import { FundWalletModal } from '../modal/fund-wallet'
 
 interface CardProps {
   amount: number
@@ -34,7 +36,11 @@ const titleMap = {
 export default function Card({ amount, tab, currency, action, type = 'total' }: CardProps) {
   const [isVisible, setIsVisible] = useState(true)
   const isSavings = tab === 'Savings'
+  const { showModal } = useModal()
 
+  const openFundWalletModal = () => {
+    showModal(<FundWalletModal />, { position: 'center' })
+  }
   return (
     <motion.div
       style={{ backgroundImage: `url(${bgMap[type]})` }}
@@ -82,6 +88,7 @@ export default function Card({ amount, tab, currency, action, type = 'total' }: 
             className="bg-white py-3 rounded-lg flex items-center justify-center gap-2 font-medium"
             whileHover={{ y: -2, boxShadow: '0 4px 6px rgba(0,0,0,0.1)' }}
             whileTap={{ y: 0, boxShadow: 'none' }}
+            onClick={openFundWalletModal}
           >
             {isSavings ? 'Top Up' : 'Fund Wallet'} <ArrowDown />
           </motion.button>

@@ -15,9 +15,8 @@ export function formatActivityTime(date: Date): string {
 }
 
 export function getDateHumanReadable(date: Date) {
-  return date.toLocaleDateString('en-US', {
-    month: 'short',
-    day: 'numeric',
-    year: 'numeric',
-  }) // 10-May-2025
+  const day = date.getDate().toString().padStart(2, '0')
+  const month = date.toLocaleString('en-US', { month: 'short' })
+  const year = date.getFullYear()
+  return `${day}-${month}-${year}` // 10-May-2025
 }

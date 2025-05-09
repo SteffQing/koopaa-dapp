@@ -68,7 +68,7 @@ export const staticJoinedGroups = [
     name: 'Tech Buddies Pool',
     id: 'grp_002',
     period_amount: 10000,
-    member_ids: ['user_004', 'user_005', 'user_006', 'user_007'],
+    member_ids: ['user_004', 'user_005'],
     created_at: new Date('2025-04-15T15:30:00Z'),
     duration: 6,
     minimum_members: 4,

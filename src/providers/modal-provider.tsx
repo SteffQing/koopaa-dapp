@@ -40,6 +40,7 @@ export const ModalProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   const [isOpen, setIsOpen] = useState(false)
   const [options, setOptions] = useState<ModalOptions>(defaultOptions)
   const backdropRef = useRef<HTMLDivElement>(null)
+  const containerRef = useRef<HTMLDivElement>(null)
 
   const showModal = (content: React.ReactNode, customOptions?: ModalOptions) => {
     setModalContent(content)
@@ -60,6 +61,7 @@ export const ModalProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       document.body.style.overflow = '' // Re-enable scrolling
     }, 300)
   }
+
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
@@ -93,41 +95,53 @@ export const ModalProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
   return (
     <ModalContext.Provider value={{ showModal, hideModal, isOpen }}>
-      {children}
-      <AnimatePresence>
-        {isOpen && (
-          <motion.div
-            ref={backdropRef}
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            onClick={handleBackdropClick}
-          >
+      <div ref={containerRef} className="relative max-w-[400px] w-full mx-auto">
+        {children}
+        <AnimatePresence>
+          {isOpen && (
             <motion.div
-              className={`relative max-w-md w-full mx-auto rounded-2xl bg-white overflow-hidden ${
-                options.position === 'bottom' ? 'mt-auto mb-0' : ''
-              }`}
-              variants={modalVariants[options.position || 'center']}
-              initial="hidden"
-              animate="visible"
-              exit="exit"
-              onClick={(e) => e.stopPropagation()}
+              ref={backdropRef}
+              className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm max-w-[400px] mx-auto"
+              style={{
+                width: containerRef.current ? containerRef.current.offsetWidth : '100%',
+                height: '100%',
+                top: 0,
+                left: '50%',
+                transform: 'translateX(-50%)',
+              }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={handleBackdropClick}
             >
-              {options.showCloseButton && (
-                <button
-                  onClick={hideModal}
-                  className="absolute right-4 top-4 z-10 p-1 rounded-full hover:bg-gray-100 transition-colors"
-                  aria-label="Close modal"
-                >
-                  <X size={24} />
-                </button>
-              )}
-              {modalContent}
+              <motion.div
+                className={`relative w-full mx-auto rounded-2xl bg-white overflow-hidden ${
+                  options.position === 'bottom' ? 'mt-auto mb-0' : ''
+                }`}
+                style={{
+                  maxWidth: containerRef.current ? containerRef.current.offsetWidth - 32 : 'calc(100% - 32px)',
+                }}
+                variants={modalVariants[options.position || 'center']}
+                initial="hidden"
+                animate="visible"
+                exit="exit"
+                onClick={(e) => e.stopPropagation()}
+              >
+                {options.showCloseButton && (
+                  <button
+                    onClick={hideModal}
+                    className="absolute right-4 top-4 z-10 p-1 rounded-full hover:bg-gray-100 transition-colors"
+                    aria-label="Close modal"
+                  >
+                    <X size={24} />
+                  </button>
+                )}
+                {modalContent}
+              </motion.div>
             </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+          )}
+        </AnimatePresence>
+      </div>
     </ModalContext.Provider>
   )
 }

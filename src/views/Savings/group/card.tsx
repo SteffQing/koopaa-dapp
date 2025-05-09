@@ -61,10 +61,11 @@ export default function GroupCard({ group }: { group: Group }) {
               <p className="text-sm text-gray-500">Members</p>
               <div className="flex items-center">
                 <div className="flex -space-x-2">
-                  <Avatar size={24} number={1} />
+                  {group.member_ids.map((_, idx) => (
+                    <Avatar size={24} number={idx} />
+                  ))}
+
                   <Avatar size={24} number={2} />
-                  <div className="w-6 h-6 rounded-full bg-green-200 border border-white"></div>
-                  <div className="w-6 h-6 rounded-full bg-blue-200 border border-white"></div>
                 </div>
                 <p className="text-sm ml-2">+{group.member_ids.length} member</p>
               </div>
