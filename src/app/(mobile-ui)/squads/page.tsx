@@ -4,6 +4,8 @@ import { Avatar } from '@/components/avatar'
 import Container from '@/components/container'
 import { Button } from '@/components/ui/button'
 import { motion } from 'framer-motion'
+import Link from 'next/link'
+import { toast } from 'sonner'
 
 export default function SquadsPage() {
   // Sample squad members data
@@ -111,9 +113,13 @@ export default function SquadsPage() {
         </motion.p>
 
         <motion.div className="space-y-4" variants={item}>
-          <Button>Join a Squad</Button>
+          <Button asChild>
+            <Link href="/squads/join-squad">Join a Squad</Link>
+          </Button>
 
-          <Button variant="outline">Create a New Squad</Button>
+          <Button variant="outline" onClick={() => toast.info('Coming soon')}>
+            Create a New Squad
+          </Button>
         </motion.div>
       </motion.div>
     </Container>

@@ -118,9 +118,6 @@ export const ModalProvider: React.FC<{ children: React.ReactNode }> = ({ childre
                 className={`relative w-full mx-auto rounded-2xl bg-white overflow-hidden ${
                   options.position === 'bottom' ? 'mt-auto mb-0' : ''
                 }`}
-                // style={{
-                //   maxWidth: containerRef.current ? containerRef.current.offsetWidth - 32 : 'calc(100% - 32px)',
-                // }}
                 variants={modalVariants[options.position || 'center']}
                 initial="hidden"
                 animate="visible"

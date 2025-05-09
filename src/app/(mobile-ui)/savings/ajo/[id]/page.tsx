@@ -8,6 +8,7 @@ import { use, useState } from 'react'
 import { toast } from 'sonner'
 import NavHeader from '@/views/Navigation/nav-header'
 import Container from '@/components/container'
+import { Avatar } from '@/components/avatar'
 
 export default function AjoGroupPage({ params }: { params: Promise<{ id: string }> }) {
   const [isBalanceVisible, setIsBalanceVisible] = useState(true)
@@ -234,8 +235,9 @@ export default function AjoGroupPage({ params }: { params: Promise<{ id: string 
             <p className="text-sm text-gray-500 mb-1">Group Members</p>
             <div className="flex items-center justify-between">
               <div className="flex -space-x-2">
-                <div className="w-6 h-6 rounded-full bg-green-200 border border-white"></div>
-                <div className="w-6 h-6 rounded-full bg-blue-200 border border-white"></div>
+                {Array.from({ length: groupData.memberCount }).map((_, idx) => (
+                  <Avatar number={idx + 1} size={24} />
+                ))}
               </div>
               <div className="flex items-center">
                 <span className="text-sm mr-1">+{groupData.memberCount}</span>
