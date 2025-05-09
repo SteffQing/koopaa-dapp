@@ -23,6 +23,7 @@ export default function JoinAjoGroupPage({ params }: { params: Promise<{ id: str
     })
   }
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     openInvitationModal()
   }, [])
