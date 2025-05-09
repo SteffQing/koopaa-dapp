@@ -14,11 +14,19 @@ import PiggyBank from '@/assets/coins/piggybank.png'
 import Sol from '@/assets/coins/sol.svg'
 import Koopaa0 from '@/assets/koopaa_0.svg'
 import { Button } from '@/components/ui/button'
+import { useModal } from '@/providers/modal-provider'
+import { ConnectWalletModal } from '@/components/modal/connect-wallet'
 
 export default function LoginPage() {
   const [isConnecting, setIsConnecting] = useState(false)
+  const { showModal } = useModal()
+
+  const openConnectWalletModal = () => {
+    showModal(<ConnectWalletModal />, { position: 'center' })
+  }
 
   const handleConnectWallet = () => {
+    openConnectWalletModal()
     setIsConnecting(true)
     // Simulate wallet connection
     setTimeout(() => {
