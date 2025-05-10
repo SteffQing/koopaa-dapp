@@ -21,7 +21,7 @@ export default function CreateAjoGroupPage() {
 
     try {
       // Simulate API call
-      console.log('Form data:', data)
+      console.log('Form data:', data, isSubmitting)
       await new Promise((resolve) => setTimeout(resolve, 1500))
 
       toast.success('Group created successfully!')
