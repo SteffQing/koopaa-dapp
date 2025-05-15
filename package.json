@@ -13,6 +13,7 @@
     "start": "next start"
   },
   "dependencies": {
+    "@coral-xyz/anchor": "^0.31.1",
     "@hookform/resolvers": "^5.0.1",
     "@prisma/client": "^6.7.0",
     "@radix-ui/react-dialog": "^1.1.11",
@@ -22,6 +23,10 @@
     "@svgr/core": "^8.1.0",
     "@svgr/webpack": "^8.1.0",
     "@tanstack/react-query": "^5.74.7",
+    "@solana/spl-token": "0.4.13",
+    "@solana/wallet-adapter-base": "0.9.26",
+    "@solana/wallet-adapter-react": "0.15.38",
+    "@solana/wallet-adapter-react-ui": "0.9.38",
     "@wallet-ui/react": "1.1.0-canary-20250415034938",
     "@wallet-ui/tailwind": "1.1.0-canary-20250415034938",
     "class-variance-authority": "^0.7.1",
@@ -38,6 +43,7 @@
     "react-error-boundary": "^5.0.0",
     "react-hook-form": "^7.56.3",
     "sonner": "^2.0.3",
+    "@solana/web3.js": "1.98.2",
     "tailwind-merge": "^3.2.0",
     "tw-animate-css": "^1.2.8",
     "zod": "^3.24.4"

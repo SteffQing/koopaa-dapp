@@ -127,6 +127,12 @@ exports.Prisma.UserScalarFieldEnum = {
   avatar: 'avatar'
 };
 
+exports.Prisma.GroupScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  created_at: 'created_at'
+};
+
 exports.Prisma.ActivityScalarFieldEnum = {
   id: 'id',
   title: 'title',
@@ -163,6 +169,7 @@ exports.ActivityType = exports.$Enums.ActivityType = {
 
 exports.Prisma.ModelName = {
   User: 'User',
+  Group: 'Group',
   Activity: 'Activity',
   Waitlist: 'Waitlist'
 };
