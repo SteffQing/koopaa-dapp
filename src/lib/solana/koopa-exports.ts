@@ -8,7 +8,7 @@ import type { Koopa } from './types/koopa'
 export { Koopa, KoopaIDL }
 
 // The correct program ID
-export const KOOPAA_PROGRAM_ID = new PublicKey('Ao3XasHpFWzZbu5Xza3wUk7JVV3itNxcGv7XmuiT7ZXQ')
+export const KOOPAA_PROGRAM_ID = new PublicKey('33NAzyKNuayyqKNW6QMXbNT69CikAhCUhPbgwZn1LR3o')
 
 // This is a helper function to get the Basic Anchor program.
 export function getKoopaProgram(provider: AnchorProvider, address?: PublicKey): Program<Koopa> {
