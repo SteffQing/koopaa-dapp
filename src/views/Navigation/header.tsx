@@ -17,6 +17,18 @@ export default function Header({ name, loading }: HeaderProps) {
     return "Good evening";
   };
 
+  const parseName = () => {
+    if (loading) return "";
+    else {
+      if (name) {
+        const firstName = name.split(" ")[0];
+        return firstName.length > 10
+          ? `${firstName.slice(0, 7)}...`
+          : firstName;
+      } else return "Anon";
+    }
+  };
+
   return (
     <header className="sticky top-4 z-20 mt-4">
       <motion.div
@@ -32,7 +44,7 @@ export default function Header({ name, loading }: HeaderProps) {
           </motion.div>
           <div>
             <h2 className="font-medium text-[#121212] text-base flex items-center gap-1">
-              {getGreeting()}, {!loading && name ? name : "Anon"} 😊
+              {getGreeting()}, {parseName()} 😊
             </h2>
             <p className="text-xs font-normal text-[#767676]">
               How is your day going
