@@ -1,14 +1,11 @@
 "use client";
 
 import type React from "react";
-import { motion } from "framer-motion";
-import { ChevronRight, Copy, AlertCircle } from "lucide-react";
+import { Copy, AlertCircle } from "lucide-react";
 import { toast } from "sonner";
-import { useModal } from "@/providers/modal-provider";
 import { useWallet } from "@solana/wallet-adapter-react";
 
 export const FundWalletModal: React.FC = () => {
-  const { hideModal } = useModal();
   const { publicKey } = useWallet();
 
   const copyWalletAddress = () => {

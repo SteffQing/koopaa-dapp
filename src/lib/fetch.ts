@@ -1,5 +1,3 @@
-import { clearSession } from "./session";
-
 type HttpMethod = "GET" | "POST" | "PUT" | "DELETE" | "PATCH";
 
 type ParamsType = null | number | boolean | string | undefined;

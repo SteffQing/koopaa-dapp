@@ -12,7 +12,7 @@ import { EditField } from "./EditField";
 import { Skeleton } from "@/components/skeletons";
 
 export default function ProfilePage() {
-  const { user, loading, updateUserProfile, pending } = useAuthUser();
+  const { user, loading, updateUserProfile } = useAuthUser();
 
   const copyWalletAddress = () => {
     if (user?.address) {
