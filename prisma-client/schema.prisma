@@ -15,6 +15,7 @@ model User {
   username   String?
   address    String     @unique
   avatar     Int        @default(1)
+  email      String?    @unique
   activities Activity[]
 }
 

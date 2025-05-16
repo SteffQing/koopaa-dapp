@@ -20,7 +20,7 @@ export default function HomePage() {
       <Header name={user?.username} />
 
       <SavingsAndWallet />
-      <ActionItems />
+      <ActionItems user={user} />
       <QuickAccess />
       <SquadDisplay />
       <RecentActivities data={activities} loading={loading} />
