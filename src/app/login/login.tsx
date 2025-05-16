@@ -30,6 +30,8 @@ const LoginHandler = () => {
 
       if (error) {
         toast.error(error);
+        setIsConnecting(false);
+        setIsCreatingSession(false);
         throw new Error(error);
       }
 

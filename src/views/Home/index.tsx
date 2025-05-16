@@ -9,11 +9,12 @@ import RecentActivities from "@/components/activities";
 import Container from "@/components/container";
 
 import { useAuthUser } from "@/hooks/useUser";
-import { useGetActivities } from "@/hooks/db/useActivities";
+import { staticActivities } from "@/lib/static";
+// import { useGetActivities } from "@/hooks/db/useActivities";
 
 export default function HomePage() {
   const { user, loading: pending } = useAuthUser();
-  const { activities, loading } = useGetActivities();
+  // const { activities, loading } = useGetActivities();
 
   return (
     <Container>
@@ -23,7 +24,7 @@ export default function HomePage() {
       <ActionItems user={user} loading={pending} />
       <QuickAccess />
       <SquadDisplay />
-      <RecentActivities data={activities} loading={loading} />
+      <RecentActivities data={staticActivities} loading={false} />
     </Container>
   );
 }

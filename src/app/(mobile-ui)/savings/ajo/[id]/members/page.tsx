@@ -5,6 +5,7 @@ import NavHeader from "@/views/Navigation/nav-header";
 import Container from "@/components/container";
 import { use } from "react";
 import { Avatar } from "@/components/avatar";
+import { staticMembers } from "@/lib/static";
 
 export default function GroupMembersPage({
   params,
@@ -12,51 +13,6 @@ export default function GroupMembersPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = use(params);
-  const members = [
-    {
-      id: 1,
-      name: "Emola Shola",
-      isAdmin: true,
-      position: "1st",
-      collectionDate: "21 May 2025",
-      status: "next",
-    },
-    {
-      id: 2,
-      name: "Khalid Momoh",
-      position: "2nd",
-      collectionDate: "18 June 2025",
-      status: "outstanding",
-    },
-    {
-      id: 3,
-      name: "Fathia Balogun",
-      position: "3rd",
-      collectionDate: "18 July 2025",
-      status: "outstanding",
-    },
-    {
-      id: 4,
-      name: "Adeleke David",
-      position: "4th",
-      collectionDate: "17 August 2025",
-      status: "outstanding",
-    },
-    {
-      id: 1,
-      name: "You",
-      position: "5th",
-      collectionDate: "16 September 2025",
-      status: "outstanding",
-    },
-    {
-      id: 6,
-      name: "Simon Kingsley",
-      position: "6th",
-      collectionDate: "16 October 2025",
-      status: "outstanding",
-    },
-  ];
 
   const item = {
     hidden: { opacity: 0, y: 10 },
@@ -68,7 +24,7 @@ export default function GroupMembersPage({
       <NavHeader path={`/savings/ajo/${id}`} header="Group members" />
 
       <div className="space-y-4">
-        {members.map((member, idx) => (
+        {staticMembers.map((member, idx) => (
           <motion.div
             key={idx}
             variants={item}

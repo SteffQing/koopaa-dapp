@@ -50,13 +50,13 @@ export default function RecentActivities({
     >
       <div className="flex items-center justify-between">
         <h2 className="font-semibold">Recent Activities</h2>
-        <button className="text-[#ff6600] text-xs font-medium flex items-center">
+        {/* <button className="text-[#ff6600] text-xs font-medium flex items-center">
           {data && data.length > 0 && (
-            <Link href="/">
+            <Link href="#" className="flex">
               See all <ChevronRight size={16} />
             </Link>
           )}
-        </button>
+        </button> */}
       </div>
 
       {loading || !data ? (

@@ -25,7 +25,7 @@ export default function GroupSavingsCard({ data }: Props) {
   const [isBalanceVisible, setIsBalanceVisible] = useState(true);
   const targetAmount = data.contributionAmount * data.numParticipants;
   const round = Math.ceil(data.payoutInterval / data.contributionInterval);
-  const progress = Math.min((round / data.mccr) * 100, 55);
+  const progress = Math.min((round / data.mccr) * 100, 50);
 
   const handleTopUp = () => {
     toast.success("Top up initiated");

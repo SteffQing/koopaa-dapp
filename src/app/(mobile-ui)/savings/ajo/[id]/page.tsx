@@ -9,6 +9,12 @@ import NavHeader from "@/views/Navigation/nav-header";
 import Container from "@/components/container";
 import { Avatar } from "@/components/avatar";
 import GroupSavingsCard from "./Card";
+import {
+  staticActivities,
+  staticCardData,
+  staticGroupData,
+} from "@/lib/static";
+import RecentActivities from "@/components/activities";
 
 export default function AjoGroupPage({
   params,
@@ -17,36 +23,6 @@ export default function AjoGroupPage({
 }) {
   const { id } = use(params);
 
-  const data = {
-    contributionAmount: 50,
-    contributionRounds: 4,
-    contributionInterval: 7,
-    numParticipants: 6,
-    mccr: 2,
-    payoutRound: 3,
-    payoutInterval: 30,
-    currentRound: 1,
-  };
-
-  const groupData = {
-    id,
-    name: "Funmi asoebi",
-    openSlots: 4,
-    nextContribution: "1st",
-    collectionDate: "22nd May, 2025",
-    startDate: "08 - May - 2025",
-    endDate: "08 - August - 2025",
-    savingFrequency: "$50.00 weekly",
-    daysLeft: 30,
-    groupType: "Public group",
-    memberCount: 3,
-    hasTransactions: false,
-    amountSaved: 50,
-    savingsDuration: "5 Months",
-    progress: 1,
-    coverImage: 1,
-  };
-
   const item = {
     hidden: { opacity: 0, y: 10 },
     show: { opacity: 1, y: 0 },
@@ -54,19 +30,19 @@ export default function AjoGroupPage({
 
   return (
     <Container>
-      <NavHeader path="/savings" header={groupData.name} />
+      <NavHeader path="/savings" header={staticGroupData.name} />
 
       <motion.div variants={item} className="mb-4 rounded-xl overflow-hidden">
         <Image
-          src={`/group-cover/${groupData.coverImage}.png`}
-          alt={groupData.name}
+          src={`/group-cover/${staticGroupData.coverImage}.png`}
+          alt={staticGroupData.name}
           width={400}
           height={200}
           className="w-full h-40 object-cover"
         />
       </motion.div>
 
-      <GroupSavingsCard data={data} />
+      <GroupSavingsCard data={staticCardData} />
 
       {/* Warning */}
       <motion.div variants={item} className="bg-orange-100 rounded-xl p-4 mb-6">
@@ -89,9 +65,11 @@ export default function AjoGroupPage({
             </svg>
           </div>
           <div>
-            <p className="font-medium text-[#ff6b00]">Fund your wallet now</p>
+            <p className="font-medium text-[#ff6b00]">
+              Pay your contribution now
+            </p>
             <p className="text-sm text-gray-600">
-              You have insufficient funds for this goal
+              You are set back by 1 contribution round. Endeavour to pay!
             </p>
           </div>
         </div>
@@ -101,41 +79,45 @@ export default function AjoGroupPage({
       <motion.div variants={item} className="grid grid-cols-2 gap-4 mb-4">
         <div className="bg-white rounded-xl p-4">
           <p className="text-sm text-gray-500 mb-1">Start Date</p>
-          <p className="font-medium">{groupData.startDate}</p>
+          <p className="font-medium">{staticGroupData.startDate}</p>
         </div>
         {/* <div className="bg-white rounded-xl p-4">
           <p className="text-sm text-gray-500 mb-1">End Date</p>
-          <p className="font-medium">{groupData.endDate}</p>
+          <p className="font-medium">{staticGroupData.endDate}</p>
         </div> */}
       </motion.div>
 
       <motion.div variants={item} className="grid grid-cols-2 gap-4 mb-4">
         <div className="bg-white rounded-xl p-4">
           <p className="text-sm text-gray-500 mb-1">Saving Frequency</p>
-          <p className="font-medium">{groupData.savingFrequency}</p>
+          <p className="font-medium">{staticGroupData.savingFrequency}</p>
         </div>
         <div className="bg-white rounded-xl p-4">
           <p className="text-sm text-gray-500 mb-1">Payout interval</p>
-          <p className="font-medium">{groupData.daysLeft} days</p>
+          <p className="font-medium">{staticGroupData.daysLeft} days</p>
         </div>
       </motion.div>
 
       <motion.div variants={item} className="grid grid-cols-2 gap-4 mb-6">
         <div className="bg-white rounded-xl p-4">
           <p className="text-sm text-gray-500 mb-1">Group Type</p>
-          <p className="font-medium">{groupData.groupType}</p>
+          <p className="font-medium">{staticGroupData.groupType}</p>
         </div>
         <Link href={`/savings/ajo/${id}/members`}>
           <div className="bg-white rounded-xl p-4 h-full flex flex-col justify-between">
             <p className="text-sm text-gray-500 mb-1">Group Members</p>
             <div className="flex items-center justify-between">
               <div className="flex -space-x-2">
-                {Array.from({ length: groupData.memberCount }).map((_, idx) => (
-                  <Avatar number={idx + 1} size={24} key={idx} />
-                ))}
+                {Array.from({ length: staticGroupData.memberCount }).map(
+                  (_, idx) => (
+                    <Avatar number={idx + 1} size={24} key={idx} />
+                  )
+                )}
               </div>
               <div className="flex items-center">
-                <span className="text-sm mr-1">+{groupData.memberCount}</span>
+                <span className="text-sm mr-1">
+                  +{staticGroupData.memberCount}
+                </span>
                 <ChevronRight size={16} className="text-gray-400" />
               </div>
             </div>
@@ -151,24 +133,15 @@ export default function AjoGroupPage({
           </div>
           <div>
             <p className="text-sm text-gray-600">Your next saving date is</p>
-            <p className="font-medium">{groupData.collectionDate}</p>
+            <p className="font-medium">{staticGroupData.collectionDate}</p>
           </div>
         </div>
       </motion.div>
 
-      {/* Recent Activities */}
-      <motion.div variants={item} className="mb-20">
-        <div className="flex items-center justify-between mb-3">
-          <h2 className="font-semibold">Recent Activities</h2>
-          <button className="text-[#ff6b00] text-sm font-medium flex items-center">
-            See all <ChevronRight size={16} />
-          </button>
-        </div>
-
-        <div className="bg-white rounded-xl p-6 flex flex-col items-center justify-center">
-          <p className="text-gray-500">Coming soon</p>
-        </div>
-      </motion.div>
+      <RecentActivities
+        data={staticActivities.slice(1, -1).reverse()}
+        loading={false}
+      />
     </Container>
   );
 }
