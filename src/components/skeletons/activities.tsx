@@ -1,4 +1,4 @@
-function SkeletonActivity({ count = 3 }: { count?: number }) {
+export function SkeletonActivity({ count = 3 }: { count?: number }) {
   return (
     <div className="flex flex-col gap-3 animate-pulse">
       {[...Array(count)].map((_, i) => (

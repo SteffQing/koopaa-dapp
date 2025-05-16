@@ -1,26 +1,38 @@
-'use client'
+"use client";
 
-import { motion } from 'framer-motion'
-import { useState } from 'react'
-import Card from './card'
-import SavingsCard from './savings-card'
-import { SavingsData } from './types'
+import { motion } from "framer-motion";
+import { useState } from "react";
+import Card from "./card";
+import SavingsCard from "./savings-card";
+import { SavingsData, Tab } from "./types";
+import useUSDCBalance from "@/hooks/blockchain/useGetBalance";
+import { useGetUserAjoSavings } from "@/hooks/blockchain/koopaa/useUserAjoGroups";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
-export type Tab = 'Savings' | 'Wallet'
-const tabs: [Tab, Tab] = ['Savings', 'Wallet']
+const tabs: [Tab, Tab] = ["Savings", "Wallet"];
 
 export default function SavingsAndWallet() {
-  const [activeTab, setActiveTab] = useState<Tab>('Savings')
+  const [activeTab, setActiveTab] = useState<Tab>("Savings");
+  const { data, isLoading, refetch } = useUSDCBalance();
+  const ajoSavings = useGetUserAjoSavings();
 
-  // Sample data for different savings types
+  const router = useRouter();
+
+  const savingsAction = [
+    { text: "Start Saving", handler: () => router.push("/savings") },
+    {
+      text: "Coming Soon",
+      handler: () => toast.info("Individual Savings is coming soon"),
+    },
+    { text: "Topup Savings", handler: () => router.push("/savings/ajo") },
+  ];
+
   const savingsData: SavingsData[] = [
-    { type: 'total', amount: 20456.76, currency: 'USDC' as const },
-    { type: 'individual', amount: 12345.67, currency: 'USDC' as const },
-    { type: 'ajo', amount: 8111.09, currency: 'USDC' as const },
-  ]
-
-  // Wallet data
-  const walletData = { amount: 5678.9, currency: 'USDC' as const }
+    { type: "total", amount: ajoSavings + 0 },
+    { type: "individual", amount: 0 },
+    { type: "ajo", amount: ajoSavings },
+  ];
 
   return (
     <motion.div
@@ -34,7 +46,9 @@ export default function SavingsAndWallet() {
           <motion.button
             key={tab}
             className={`py-2 px-6 rounded-full text-sm font-medium cursor-pointer ${
-              activeTab === tab ? 'bg-[#ff6b00] text-white' : 'bg-white text-gray-600'
+              activeTab === tab
+                ? "bg-[#ff6b00] text-white"
+                : "bg-white text-gray-600"
             }`}
             onClick={() => setActiveTab(tab)}
             whileHover={{ y: -2 }}
@@ -45,11 +59,16 @@ export default function SavingsAndWallet() {
         ))}
       </div>
 
-      {activeTab === 'Savings' ? (
-        <SavingsCard savingsData={savingsData} />
+      {activeTab === "Savings" ? (
+        <SavingsCard savingsData={savingsData} action={savingsAction} />
       ) : (
-        <Card tab={activeTab} currency={walletData.currency} amount={walletData.amount} />
+        <Card
+          tab={activeTab}
+          amount={data || 0}
+          loading={isLoading}
+          onRefresh={refetch}
+        />
       )}
     </motion.div>
-  )
+  );
 }

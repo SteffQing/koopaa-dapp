@@ -1,42 +1,53 @@
-'use client'
+"use client";
 
-import type React from 'react'
-import { useState } from 'react'
-import { motion } from 'framer-motion'
-import { ChevronRight, Copy, AlertCircle } from 'lucide-react'
-import { toast } from 'sonner'
-import { useModal } from '@/providers/modal-provider'
+import type React from "react";
+import { motion } from "framer-motion";
+import { ChevronRight, Copy, AlertCircle } from "lucide-react";
+import { toast } from "sonner";
+import { useModal } from "@/providers/modal-provider";
+import { useWallet } from "@solana/wallet-adapter-react";
 
 export const FundWalletModal: React.FC = () => {
-  const { hideModal } = useModal()
-  const [walletAddress] = useState('7BKjk4ZRicqkoMoBKUu8zN4o87q6dnDTv1zU4BbHaGs')
+  const { hideModal } = useModal();
+  const { publicKey } = useWallet();
 
   const copyWalletAddress = () => {
-    navigator.clipboard.writeText(walletAddress)
-    toast.success('Wallet address copied to clipboard')
-  }
+    if (!publicKey) toast.error("No wallet seems to be connected");
+    else {
+      navigator.clipboard.writeText(publicKey.toBase58());
+      toast.success("Wallet address copied to clipboard");
+    }
+  };
 
   return (
     <div className="p-6">
-      <h2 className="text-xl font-semibold text-center mb-2">Fund your wallet</h2>
-      <p className="text-gray-500 text-center text-sm mb-6">Use any convenient method to funding your wallet below</p>
+      <h2 className="text-xl font-semibold text-center mb-2">
+        Fund your wallet
+      </h2>
+      <p className="text-gray-500 text-center text-sm mb-6">
+        Use any convenient method to funding your wallet below
+      </p>
 
       <div className="mb-6">
         <h3 className="font-medium mb-1">USDC Deposit</h3>
-        <p className="text-gray-500 text-sm mb-4">Deposit USDC to your wallet address from Dex or Cex</p>
+        <p className="text-gray-500 text-sm mb-4">
+          Deposit USDC to your wallet address from a DEX or CEX
+        </p>
 
         <div className="mb-4">
-          <label className="block text-sm text-gray-500 mb-1">Wallet address</label>
+          <label className="block text-sm text-gray-500 mb-1">
+            Wallet address
+          </label>
           <div className="flex items-center">
             <input
               type="text"
-              value={walletAddress}
+              value={publicKey?.toBase58()}
               readOnly
               className="flex-1 p-3 border border-gray-200 rounded-l-lg bg-gray-50 text-sm"
             />
             <button
               onClick={copyWalletAddress}
-              className="bg-[#ff6b00] text-white p-3 rounded-r-lg"
+              className="bg-[#ff6b00] text-white p-3 rounded-r-lg cursor-pointer"
               aria-label="Copy wallet address"
             >
               <Copy size={20} />
@@ -56,15 +67,18 @@ export const FundWalletModal: React.FC = () => {
 
         <div className="flex items-start gap-2 p-3 bg-red-50 rounded-lg text-red-600 text-sm mb-6">
           <AlertCircle size={18} className="mt-0.5 flex-shrink-0" />
-          <p>Make sure the network is SOLANA(SOL), using other network will result to lost of funds</p>
+          <p>
+            Make sure the network is SOLANA(SOL), using other network will
+            result to lost of funds
+          </p>
         </div>
 
-        <motion.div
+        {/* <motion.div
           className="bg-white border border-gray-200 rounded-xl p-4 flex items-center justify-between"
-          whileHover={{ y: -2, boxShadow: '0 4px 10px rgba(0,0,0,0.05)' }}
+          whileHover={{ y: -2, boxShadow: "0 4px 10px rgba(0,0,0,0.05)" }}
           whileTap={{ y: 0 }}
           onClick={() => {
-            hideModal()
+            hideModal();
             // Handle transfer from Sol wallet
           }}
         >
@@ -75,13 +89,14 @@ export const FundWalletModal: React.FC = () => {
             <div>
               <h3 className="font-medium">Transfer from Sol wallet</h3>
               <p className="text-gray-500 text-sm">
-                Fund your koopa wallet with funds from your connected solana wallet
+                Fund your koopa wallet with funds from your connected solana
+                wallet
               </p>
             </div>
           </div>
           <ChevronRight size={20} className="text-gray-400" />
-        </motion.div>
+        </motion.div> */}
       </div>
     </div>
-  )
-}
+  );
+};

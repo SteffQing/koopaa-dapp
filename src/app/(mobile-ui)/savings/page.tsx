@@ -1,33 +1,37 @@
-'use client'
+"use client";
 
-import Container from '@/components/container'
-import NavHeader from '@/views/Navigation/nav-header'
-import SavingsCard from '@/components/savings-and-wallet/savings-card'
-import { SavingsData } from '@/components/savings-and-wallet/types'
-import { useRouter } from 'next/navigation'
-import Savings from '@/views/Savings/savings'
-import StartSaving from '@/views/Savings/start-saving'
-import { useModal } from '@/providers/modal-provider'
-import { GroupTargetModal } from '@/components/modal/start-saving'
+import Container from "@/components/container";
+import NavHeader from "@/views/Navigation/nav-header";
+import SavingsCard from "@/components/savings-and-wallet/savings-card";
+import { SavingsData } from "@/components/savings-and-wallet/types";
+import { useRouter } from "next/navigation";
+import Savings from "@/views/Savings/savings";
+import StartSaving from "@/views/Savings/start-saving";
+import { useModal } from "@/providers/modal-provider";
+import { GroupTargetModal } from "@/components/modal/start-saving";
+import { toast } from "sonner";
 
 export default function SavingsPage() {
-  const router = useRouter()
-  const { showModal } = useModal()
+  const router = useRouter();
+  const { showModal } = useModal();
 
   const openGroupTargetModal = () => {
-    showModal(<GroupTargetModal />, { position: 'bottom' })
-  }
+    showModal(<GroupTargetModal />, { position: "bottom" });
+  };
 
   const savingsData: SavingsData[] = [
-    { type: 'total', amount: 20456.76, currency: 'USDC' as const },
-    { type: 'individual', amount: 12345.67, currency: 'USDC' as const },
-    { type: 'ajo', amount: 8111.09, currency: 'USDC' as const },
-  ]
+    { type: "total", amount: 20456.76 },
+    { type: "individual", amount: 12345.67 },
+    { type: "ajo", amount: 8111.09 },
+  ];
   const savingsAction = [
-    { text: 'Start Saving', handler: openGroupTargetModal },
-    { text: 'Start Saving', handler: () => router.push('/savings/individual') },
-    { text: 'Start Saving', handler: () => router.push('/savings/ajo') },
-  ]
+    { text: "Start Saving", handler: openGroupTargetModal },
+    {
+      text: "Coming Soon",
+      handler: () => toast.info("Individual Savings is coming soon"),
+    },
+    { text: "Topup Saving", handler: () => router.push("/savings/ajo") },
+  ];
 
   return (
     <Container>
@@ -39,5 +43,5 @@ export default function SavingsPage() {
 
       <StartSaving />
     </Container>
-  )
+  );
 }
