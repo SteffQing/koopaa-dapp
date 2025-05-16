@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { ChevronRight } from "lucide-react";
+// import { ChevronRight } from "lucide-react";
 
 import StackedCoins from "@/assets/svgs/activities/stacked-coins.svg";
 import Target from "@/assets/svgs/activities/target.svg";
@@ -12,7 +12,7 @@ import { groupActivitiesByTimeframe } from "./utils";
 import { Fragment, JSX } from "react";
 import { formatActivityTime } from "@/lib/date";
 import { cn } from "@/lib/utils";
-import Link from "next/link";
+// import Link from "next/link";
 import { SkeletonActivity } from "../skeletons/activities";
 
 const IconByType: Record<ActivityType, JSX.Element> = {
