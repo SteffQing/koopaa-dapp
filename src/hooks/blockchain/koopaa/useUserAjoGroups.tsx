@@ -89,10 +89,10 @@ export function useUserAjoGroups() {
 export function useGetUserAjoSavings() {
   const { data } = useUserAjoGroups();
   return useMemo(() => {
-    if (!data) return 0;
+    if (!data) return 200;
     return data.reduce(
       (acc, group) => acc + group.contributionAmount * group.contributionRound,
-      0
+      200
     );
   }, [data]);
 }
