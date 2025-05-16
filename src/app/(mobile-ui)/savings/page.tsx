@@ -10,20 +10,23 @@ import StartSaving from "@/views/Savings/start-saving";
 import { useModal } from "@/providers/modal-provider";
 import { GroupTargetModal } from "@/components/modal/start-saving";
 import { toast } from "sonner";
+import { useGetUserAjoSavings } from "@/hooks/blockchain/koopaa/useUserAjoGroups";
 
 export default function SavingsPage() {
   const router = useRouter();
   const { showModal } = useModal();
+  const ajoSavings = useGetUserAjoSavings();
 
   const openGroupTargetModal = () => {
     showModal(<GroupTargetModal />, { position: "bottom" });
   };
 
   const savingsData: SavingsData[] = [
-    { type: "total", amount: 20456.76 },
-    { type: "individual", amount: 12345.67 },
-    { type: "ajo", amount: 8111.09 },
+    { type: "total", amount: ajoSavings + 0 },
+    { type: "individual", amount: 0 },
+    { type: "ajo", amount: ajoSavings },
   ];
+
   const savingsAction = [
     { text: "Start Saving", handler: openGroupTargetModal },
     {

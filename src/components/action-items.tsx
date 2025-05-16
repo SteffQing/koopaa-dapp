@@ -6,7 +6,13 @@ import { User } from "../../prisma-client";
 import { useMemo } from "react";
 import { useRouter } from "next/navigation";
 
-export default function ActionItems({ user }: { user: User | null }) {
+export default function ActionItems({
+  user,
+  loading,
+}: {
+  user: User | null;
+  loading: boolean;
+}) {
   const PROGRESS = useMemo(() => {
     if (!user) return 0;
     let score = 0;
@@ -30,7 +36,7 @@ export default function ActionItems({ user }: { user: User | null }) {
     },
   ];
 
-  return PROGRESS !== items.length ? (
+  return !loading && PROGRESS !== items.length ? (
     <motion.div
       className="mb-4"
       initial={{ y: 20, opacity: 0 }}

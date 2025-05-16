@@ -12,7 +12,7 @@ import { useAuthUser } from "@/hooks/useUser";
 import { useGetActivities } from "@/hooks/db/useActivities";
 
 export default function HomePage() {
-  const { user } = useAuthUser();
+  const { user, loading: pending } = useAuthUser();
   const { activities, loading } = useGetActivities();
 
   return (
@@ -20,7 +20,7 @@ export default function HomePage() {
       <Header name={user?.username} />
 
       <SavingsAndWallet />
-      <ActionItems user={user} />
+      <ActionItems user={user} loading={pending} />
       <QuickAccess />
       <SquadDisplay />
       <RecentActivities data={activities} loading={loading} />
