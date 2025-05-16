@@ -7,11 +7,14 @@ import ContactUs from "@/assets/svgs/account/security-support/contact-us.svg";
 import LogOut from "@/assets/svgs/account/security-support/log-out.svg";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { useRouter } from "next/navigation";
+import query from "@/lib/fetch";
 
 export default function SecurityAndSupport({ item }: VariantProps) {
   const { disconnect } = useWallet();
   const router = useRouter();
-  const logout = () => disconnect().then(() => router.replace("/login"));
+  const signout = () =>
+    query.delete("auth").then(() => router.replace("/login"));
+  const logout = () => disconnect().finally(() => signout());
 
   return (
     <motion.div variants={item} className="mb-6">
