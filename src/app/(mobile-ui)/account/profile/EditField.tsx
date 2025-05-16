@@ -3,12 +3,14 @@ import { Input } from "@/components/ui/input";
 import { Check, Pencil, X } from "lucide-react";
 import { useState } from "react";
 import { motion } from "framer-motion";
+import { cn } from "@/lib/utils";
 
 interface EditFieldProps {
   label: string;
   value: string;
   onSave: (value: string) => Promise<void>;
   disabled?: boolean;
+  last?: boolean;
 }
 
 export function EditField({
@@ -16,6 +18,7 @@ export function EditField({
   value,
   onSave,
   disabled = false,
+  last = false,
 }: EditFieldProps) {
   const [isEditing, setIsEditing] = useState(false);
   const [inputValue, setInputValue] = useState(value);
@@ -45,7 +48,12 @@ export function EditField({
   };
 
   return (
-    <div className="py-4 border-b border-[#C4C4C4] flex justify-between items-center">
+    <div
+      className={cn(
+        "py-4 border-[#C4C4C4] flex justify-between items-center",
+        !last && "border-b"
+      )}
+    >
       <p className="text-[#121212] font-medium text-xs">{label}</p>
 
       {isEditing ? (

@@ -42,7 +42,7 @@ export default function AccountPage() {
           variants={item}
           className="text-center text-sm text-gray-500 mt-8 mb-20"
         >
-          @2025 koopa tech all rights reserved
+          @2025 KooPaa Tech.
         </motion.div>
       </section>
     </Container>

@@ -6,9 +6,10 @@ import Bell from "@/assets/svgs/bell.svg";
 
 interface HeaderProps {
   name: string | null | undefined;
+  loading: boolean;
 }
 
-export default function Header({ name }: HeaderProps) {
+export default function Header({ name, loading }: HeaderProps) {
   const getGreeting = () => {
     const hour = new Date().getHours();
     if (hour < 12) return "Good morning";
@@ -31,7 +32,7 @@ export default function Header({ name }: HeaderProps) {
           </motion.div>
           <div>
             <h2 className="font-medium text-[#121212] text-base flex items-center gap-1">
-              {getGreeting()}, {name ?? "Anon"} 😊
+              {getGreeting()}, {!loading && name ? name : "Anon"} 😊
             </h2>
             <p className="text-xs font-normal text-[#767676]">
               How is your day going

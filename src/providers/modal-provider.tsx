@@ -132,8 +132,10 @@ export const ModalProvider: React.FC<{ children: React.ReactNode }> = ({
               onClick={handleBackdropClick}
             >
               <motion.div
-                className={`relative w-full mx-auto rounded-2xl bg-white overflow-hidden ${
-                  options.position === "bottom" ? "mt-auto mb-0" : ""
+                className={`relative w-full mx-auto bg-white overflow-hidden ${
+                  options.position === "bottom"
+                    ? "rounded-t-2xl mt-auto mb-0"
+                    : "rounded-2xl"
                 }`}
                 variants={modalVariants[options.position || "center"]}
                 initial="hidden"

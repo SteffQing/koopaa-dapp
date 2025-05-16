@@ -2,13 +2,14 @@
 
 import { motion } from "framer-motion";
 import { Eye } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Refresh from "@/assets/svgs/refresh.svg";
 import ArrowUp from "@/assets/svgs/arrow-up.svg";
 import ArrowDown from "@/assets/svgs/arrow-down.svg";
 import { Currency, SavingsType, Tab } from "./types";
 import { useModal } from "@/providers/modal-provider";
 import { FundWalletModal } from "../modal/fund-wallet";
+import LoadingDots from "../skeletons/loading-dots";
 
 interface CardProps {
   amount: number;
@@ -63,6 +64,10 @@ export default function Card({
     }
   }
 
+  useEffect(() => {
+    setBalance(amount);
+  }, [amount]);
+
   return (
     <motion.div
       style={{ backgroundImage: `url(${bgMap[type]})` }}
@@ -94,7 +99,7 @@ export default function Card({
         >
           <span className="text-lg mr-2">{currency}</span>
           {loading ? (
-            <span className="text-sm text-gray-400">Loading...</span>
+            <LoadingDots color="#ff6600" size={8} />
           ) : isVisible ? (
             <FormattedBalance amount={balance} />
           ) : (
@@ -141,7 +146,7 @@ export default function Card({
   );
 }
 
-function FormattedBalance({ amount = 0 }) {
+export function FormattedBalance({ amount = 0 }) {
   const [whole, decimal] = amount
     .toLocaleString("en-US", {
       minimumFractionDigits: 2,

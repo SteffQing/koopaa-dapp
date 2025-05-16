@@ -17,7 +17,7 @@ export default function HomePage() {
 
   return (
     <Container>
-      <Header name={user?.username} />
+      <Header name={user?.username} loading={pending} />
 
       <SavingsAndWallet />
       <ActionItems user={user} loading={pending} />

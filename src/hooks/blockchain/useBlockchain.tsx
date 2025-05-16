@@ -7,7 +7,6 @@ import { useCallback, useMemo } from "react";
 import { useConnection, useWallet } from "@solana/wallet-adapter-react";
 import { getKoopaProgram } from "@/lib/solana/koopa-exports";
 import { getKoopaProgramId } from "@/lib/solana/koopa-exports";
-import { useCluster } from "@/components/cluster/cluster-data-access";
 import { useAnchorProvider } from "@/providers/solana-provider";
 import { useTransactionToast } from "../use-transaction-toast";
 import { CreateAjoGroupParams, GlobalState, JoinAjoGroupParams } from "./types";
@@ -15,14 +14,13 @@ import useUSDCMint from "./helpers/useUSDCMint";
 
 export default function useKoopaProgram() {
   const { connection } = useConnection();
-  const { cluster } = useCluster();
   const provider = useAnchorProvider();
   const transactionToast = useTransactionToast();
   const queryClient = useQueryClient();
   const { publicKey: userPublicKey } = useWallet();
   const USDC = useUSDCMint();
 
-  const programId = useMemo(() => getKoopaProgramId(), [cluster]);
+  const programId = getKoopaProgramId();
   const program = useMemo(
     () => getKoopaProgram(provider, programId),
     [provider, programId]

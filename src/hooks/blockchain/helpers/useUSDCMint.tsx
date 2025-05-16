@@ -9,6 +9,6 @@ export default function useUSDCMint(): PublicKey {
   return useMemo(() => {
     return cluster.network === "mainnet-beta"
       ? new PublicKey("EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v") // Mainnet
-      : new PublicKey("4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU"); // Devnet
+      : new PublicKey("Gh9ZwEmdLJ8DscKNTkTqPbNwLNNBjuSzaG9Vp2KGtKJr"); // Devnet
   }, [cluster.network]);
 }
