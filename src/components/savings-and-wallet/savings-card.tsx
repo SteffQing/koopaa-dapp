@@ -60,8 +60,6 @@ export default function SavingsCard({ savingsData, action }: SavingsProp) {
       const currentX = x.get();
       const targetIndex = Math.round(Math.abs(currentX) / cardWidth);
 
-      console.log(cardWidth, currentX, targetIndex);
-
       navigateToCard(targetIndex);
     }
   };

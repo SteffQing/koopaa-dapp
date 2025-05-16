@@ -116,7 +116,7 @@ export const ModalProvider: React.FC<{ children: React.ReactNode }> = ({
           {isOpen && (
             <motion.div
               ref={backdropRef}
-              className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm max-w-[400px] mx-auto"
+              className="fixed z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm max-w-[400px] mx-auto"
               style={{
                 width: containerRef.current
                   ? containerRef.current.offsetWidth
