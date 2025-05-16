@@ -6,13 +6,13 @@ import { motion } from 'framer-motion'
 import { cn } from '@/lib/utils'
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive cursor-pointer disabled:cursor-default",
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-[#e11d48]/20 dark:aria-invalid:ring-[#e11d48]/40 aria-invalid:border-[#e11d48] cursor-pointer disabled:cursor-default",
   {
     variants: {
       variant: {
         default: 'bg-[#ff6600] text-[#FCFCFC] shadow-xs hover:bg-[#ff6600]/90',
         destructive:
-          'bg-destructive text-white shadow-xs hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/60',
+          'bg-[#e11d48] text-white shadow-xs hover:bg-[#e11d48]/90 focus-visible:ring-[#e11d48]/20 dark:focus-visible:ring-[#e11d48]/40 dark:bg-[#e11d48]/60',
         outline: 'bg-[#F9F4F1] text-[#121212] shadow-xs hover:bg-accent hover:text-accent-foreground',
         secondary: 'bg-[#fff0e0] text-[#0b0a0a] shadow-xs hover:bg-[#fff0e0]/80',
         ghost: 'hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50',

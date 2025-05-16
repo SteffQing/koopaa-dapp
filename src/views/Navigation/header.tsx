@@ -1,20 +1,20 @@
-'use client'
+"use client";
 
-import { Avatar } from '@/components/avatar'
-import { motion } from 'framer-motion'
-import Bell from '@/assets/svgs/bell.svg'
+import { Avatar } from "@/components/avatar";
+import { motion } from "framer-motion";
+import Bell from "@/assets/svgs/bell.svg";
 
 interface HeaderProps {
-  name?: string
+  name?: string | null;
 }
 
-export default function Header({ name = 'Anon' }: HeaderProps) {
+export default function Header({ name = "Anon" }: HeaderProps) {
   const getGreeting = () => {
-    const hour = new Date().getHours()
-    if (hour < 12) return 'Good morning'
-    if (hour < 18) return 'Good afternoon'
-    return 'Good evening'
-  }
+    const hour = new Date().getHours();
+    if (hour < 12) return "Good morning";
+    if (hour < 18) return "Good afternoon";
+    return "Good evening";
+  };
 
   return (
     <header className="sticky top-4 z-20 mt-4">
@@ -23,7 +23,7 @@ export default function Header({ name = 'Anon' }: HeaderProps) {
 "
         initial={{ y: -50, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+        transition={{ type: "spring", stiffness: 300, damping: 30 }}
       >
         <div className="flex items-center gap-3">
           <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
@@ -33,7 +33,9 @@ export default function Header({ name = 'Anon' }: HeaderProps) {
             <h2 className="font-medium text-[#121212] text-base flex items-center gap-1">
               {getGreeting()}, {name} 😊
             </h2>
-            <p className="text-xs font-normal text-[#767676]">How is your day going</p>
+            <p className="text-xs font-normal text-[#767676]">
+              How is your day going
+            </p>
           </div>
         </div>
 
@@ -46,5 +48,5 @@ export default function Header({ name = 'Anon' }: HeaderProps) {
         </motion.button>
       </motion.div>
     </header>
-  )
+  );
 }

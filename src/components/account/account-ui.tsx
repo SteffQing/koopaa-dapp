@@ -18,7 +18,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { AppModal } from '@/components/app-modal'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { UiWalletAccount, useWalletUi, useWalletUiCluster } from '@wallet-ui/react'
+// import { UiWalletAccount, useWalletUi, useWalletUiCluster } from '@wallet-ui/react'
 import { address, Address, Lamports, lamportsToSol } from 'gill'
 import { ErrorBoundary } from 'next/dist/client/components/error-boundary'
 

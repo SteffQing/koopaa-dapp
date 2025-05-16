@@ -1,9 +1,10 @@
 'use client'
 
 import { motion } from 'framer-motion'
+import { useEffect } from 'react'
 import Image from 'next/image'
-import { useState } from 'react'
-import { toast } from 'sonner'
+import dynamic from 'next/dynamic'
+import { redirect } from 'next/navigation'
 
 import SolanaCoin from '@/assets/coins/solana.png'
 import USDCoin from '@/assets/coins/usdc.png'
@@ -13,29 +14,19 @@ import PiggyBank from '@/assets/coins/piggybank.png'
 
 import Sol from '@/assets/coins/sol.svg'
 import Koopaa0 from '@/assets/koopaa_0.svg'
-import { Button } from '@/components/ui/button'
-import { useModal } from '@/providers/modal-provider'
-import { ConnectWalletModal } from '@/components/modal/connect-wallet'
+
+import { useSession } from '@/hooks/useSession'
+
+const LoginHandler = dynamic(() => import("./login"), { ssr: false })
 
 export default function LoginPage() {
-  const [isConnecting, setIsConnecting] = useState(false)
-  const { showModal } = useModal()
+  const {isLoaded, isSignedIn} = useSession()
 
-  const openConnectWalletModal = () => {
-    showModal(<ConnectWalletModal />, { position: 'center' })
-  }
-
-  const handleConnectWallet = () => {
-    openConnectWalletModal()
-    setIsConnecting(true)
-    // Simulate wallet connection
-    setTimeout(() => {
-      setIsConnecting(false)
-      toast.success('Wallet connected successfully!')
-      // Here you would redirect to the home page after successful connection
-      // router.push('/home')
-    }, 1500)
-  }
+  useEffect(()=> {
+    if(isLoaded){
+      if(isSignedIn) redirect("/")
+    }
+  }, [isLoaded, isSignedIn])
 
   return (
     <motion.div
@@ -76,16 +67,7 @@ export default function LoginPage() {
 
           <motion.div
             className="absolute top-4 right-[1%] transform translate-x-1/2"
-            // animate={{
-            //   y: [0, 10, 0],
-            //   rotate: [0, -10, 0],
-            // }}
-            // transition={{
-            //   repeat: Number.POSITIVE_INFINITY,
-            //   duration: 4,
-            //   ease: 'easeInOut',
-            //   delay: 0.5,
-            // }}
+        
           >
             <Image src={SolanaCoin} alt="Floating Solana Coin" width={100} height={100} className="object-contain" />
           </motion.div>
@@ -159,17 +141,15 @@ export default function LoginPage() {
             Unlock smart, transparent and automated collective saving with your circle — powered by Solana and USDC.
           </p>
         </motion.div>
-
-        <motion.div
-          className="w-full pb-6"
-          initial={{ y: 20, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ delay: 0.8 }}
-        >
-          <Button onClick={handleConnectWallet} loading={isConnecting}>
-            Connect Wallet
-          </Button>
-        </motion.div>
+        
+    <motion.div
+      className="w-full pb-6"
+      initial={{ y: 20, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{ delay: 0.8 }}
+    >
+      <LoginHandler />
+    </motion.div>
       </div>
     </motion.div>
   )

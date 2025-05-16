@@ -5,15 +5,18 @@ import { Cluster, PublicKey, SystemProgram } from '@solana/web3.js'
 import { TOKEN_PROGRAM_ID, getAssociatedTokenAddress } from '@solana/spl-token'
 import { useCallback, useMemo } from 'react'
 import { useConnection, useWallet } from '@solana/wallet-adapter-react'
-import { useCluster } from '../cluster/cluster-data-access'
-import { useAnchorProvider } from '../provider/solana'
 import { getKoopaProgram } from '@/lib/solana/koopa-exports'
 import { getKoopaProgramId } from '@/lib/solana/koopa-exports'
+import { useCluster } from '@/components/cluster/cluster-data-access'
+import { useAnchorProvider } from '@/providers/solana-provider'
+import { useTransactionToast } from './use-transaction-toast'
 
 export default function useKoopaProgram() {
   const { connection } = useConnection()
   const { cluster } = useCluster()
   const provider = useAnchorProvider()
+  const transactionToast = useTransactionToast()
+  const queryClient = useQueryClient()
 
   const programId = useMemo(() => getKoopaProgramId(), [cluster])
   const program = useMemo(() => getKoopaProgram(provider, programId), [provider, programId])
@@ -50,11 +53,7 @@ export default function useKoopaProgram() {
         const state = await program.account.globalState.fetch(globalStatePDA)
         return {
           totalGroups: BigInt(state.totalGroups.toString()),
-          totalRevenue: BigInt(state.totalRevenue.toString()),
           activeGroups: BigInt(state.activeGroups.toString()),
-          completedGroups: BigInt(state.completedGroups.toString()),
-          admin: state.admin,
-          feePercentage: state.feePercentage,
           bumps: state.bumps,
         } as GlobalState
       } catch (error) {
@@ -215,10 +214,6 @@ export interface AjoGroup {
 
 export interface GlobalState {
   totalGroups: bigint
-  totalRevenue: bigint
   activeGroups: bigint
-  completedGroups: bigint
-  admin: PublicKey
-  feePercentage: number
   bumps: number
 }

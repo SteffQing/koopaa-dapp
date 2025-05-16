@@ -1,42 +1,44 @@
-'use client'
+"use client";
 
-import { motion } from 'framer-motion'
-import { ChevronRight } from 'lucide-react'
+import { motion } from "framer-motion";
+import { ChevronRight } from "lucide-react";
 
-import StackedCoins from '@/assets/svgs/activities/stacked-coins.svg'
-import Target from '@/assets/svgs/activities/target.svg'
-import Transfer from '@/assets/svgs/activities/transfer.svg'
-import { Activity, ActivityType } from '../../../prisma-client'
-import { groupActivitiesByTimeframe } from './utils'
-import { staticActivities } from '@/lib/static'
-import { Fragment, JSX } from 'react'
-import { formatActivityTime } from '@/lib/date'
-import { cn } from '@/lib/utils'
+import StackedCoins from "@/assets/svgs/activities/stacked-coins.svg";
+import Target from "@/assets/svgs/activities/target.svg";
+import Transfer from "@/assets/svgs/activities/transfer.svg";
+import { Activity, ActivityType } from "../../../prisma-client";
+import { groupActivitiesByTimeframe } from "./utils";
+import { Fragment, JSX } from "react";
+import { formatActivityTime } from "@/lib/date";
+import { cn } from "@/lib/utils";
+import Link from "next/link";
 
 const IconByType: Record<ActivityType, JSX.Element> = {
   create: <Target />,
   credit: <StackedCoins />,
   debit: <StackedCoins />,
   transfer: <Transfer />,
-}
+};
 
 const IconBG: Record<ActivityType, string> = {
-  create: '#CFECFE',
-  credit: '#D4FFAB',
-  debit: '#FFD1D1',
-  transfer: '#FFF0E0',
-}
+  create: "#CFECFE",
+  credit: "#D4FFAB",
+  debit: "#FFD1D1",
+  transfer: "#FFF0E0",
+};
 
 const labelMap: Record<string, string> = {
-  today: 'Today',
-  yesterday: 'Yesterday',
-  lastWeek: 'This Week',
-  lastMonth: 'This Month',
-  older: 'Older',
-}
+  today: "Today",
+  yesterday: "Yesterday",
+  lastWeek: "This Week",
+  lastMonth: "This Month",
+  older: "Older",
+};
 
-export default function RecentActivities() {
-  // const activities = groupActivitiesByTimeframe(staticActivities)
+export default function RecentActivities({
+  data,
+  loading,
+}: ComponentProps<Activity>) {
   return (
     <motion.div
       className="bg-[#FCFCFC] rounded-[8px] px-3 py-4 flex flex-col gap-3"
@@ -47,24 +49,39 @@ export default function RecentActivities() {
       <div className="flex items-center justify-between">
         <h2 className="font-semibold">Recent Activities</h2>
         <button className="text-[#ff6600] text-xs font-medium flex items-center">
-          See all <ChevronRight size={16} />
+          {data && data.length > 0 && (
+            <Link href="/">
+              See all <ChevronRight size={16} />
+            </Link>
+          )}
         </button>
       </div>
 
-      {staticActivities.length > 0 ? (
-        Object.entries(groupActivitiesByTimeframe(staticActivities)).map(([label, group]) =>
-          group.length > 0 ? <GroupedActivity key={label} label={labelMap[label]} group={group} /> : null,
+      {loading || !data ? (
+        <SkeletonActivity />
+      ) : data.length > 0 ? (
+        Object.entries(groupActivitiesByTimeframe(data)).map(
+          ([label, group]) =>
+            group.length > 0 ? (
+              <GroupedActivity
+                key={label}
+                label={labelMap[label]}
+                group={group}
+              />
+            ) : null
         )
       ) : (
-        <p className="text-[#767676] text-sm font-normal text-center">No recent activities</p>
+        <p className="text-[#767676] text-sm font-normal text-center">
+          No recent activities
+        </p>
       )}
     </motion.div>
-  )
+  );
 }
 
 interface GroupProp {
-  group: Activity[]
-  label: string
+  group: Activity[];
+  label: string;
 }
 function GroupedActivity({ group, label }: GroupProp) {
   return (
@@ -88,13 +105,25 @@ function GroupedActivity({ group, label }: GroupProp) {
                 <span className="text-lg">{IconByType[activity.type]}</span>
               </div>
               <div>
-                <p className="text-xs text-[#2E2E2E] font-medium">{activity.title}</p>
-                <p className="text-[10px] font-light text-[#767676]">{formatActivityTime(activity.created_at)}</p>
+                <p className="text-xs text-[#2E2E2E] font-medium">
+                  {activity.title}
+                </p>
+                <p className="text-[10px] font-light text-[#767676]">
+                  {formatActivityTime(activity.created_at)}
+                </p>
               </div>
             </div>
             {activity.amount && (
-              <p className={cn('text-xs font-medium', activity.type === 'debit' ? 'text-[#FF0000]' : 'text-[#121212]')}>
-                {activity.type === 'debit' && '-'}${activity.amount.toLocaleString()}
+              <p
+                className={cn(
+                  "text-xs font-medium",
+                  activity.type === "debit"
+                    ? "text-[#FF0000]"
+                    : "text-[#121212]"
+                )}
+              >
+                {activity.type === "debit" && "-"}$
+                {activity.amount.toLocaleString()}
               </p>
             )}
           </motion.div>
@@ -106,5 +135,5 @@ function GroupedActivity({ group, label }: GroupProp) {
         </Fragment>
       ))}
     </div>
-  )
+  );
 }
