@@ -56,7 +56,7 @@ export default function useGetAjoGroup(params: Partial<AjoParams>) {
 
   return useQuery({
     queryKey: ["ajo-group", pda],
-    queryFn: async () => query.get<Group>("group", { params: { id: pda } }),
+    queryFn: async () => query.get<Group>(`group/${pda}`),
     select: (group) => new AjoGroupData(data!, group.data!),
     enabled: !!pda,
   });

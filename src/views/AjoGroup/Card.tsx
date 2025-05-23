@@ -5,39 +5,37 @@ import ArrowUp from "@/assets/svgs/arrow-up.svg";
 import ArrowDown from "@/assets/svgs/arrow-down.svg";
 import { Eye, RefreshCw } from "lucide-react";
 import { FormattedBalance } from "@/components/savings-and-wallet/card";
-
-type Data = {
-  contributionAmount: number;
-  contributionRounds: number;
-  contributionInterval: number;
-  numParticipants: number;
-  mccr: number;
-  payoutRound: number;
-  payoutInterval: number;
-  currentRound: number;
-};
+import useContribute from "@/hooks/blockchain/write/useContribute";
+import usePayout from "@/hooks/blockchain/write/usePayout";
 
 type Props = {
-  data: Data;
+  progress: number;
+  payout: number;
+  contributionAmount: number;
+  yourContribution: number;
+  started: boolean;
+  name: string;
+  pda: string;
+  you: string | undefined;
+  canWithdraw: boolean;
 };
 
-export default function GroupSavingsCard({ data }: Props) {
+export default function GroupSavingsCard(props: Props) {
+  const { name, pda, contributionAmount, payout } = props;
   const [isBalanceVisible, setIsBalanceVisible] = useState(true);
-  const targetAmount = data.contributionAmount * data.numParticipants;
-  const round = Math.ceil(data.payoutInterval / data.contributionInterval);
-  const progress = Math.min((round / data.mccr) * 100, 50);
 
-  const handleTopUp = () => {
-    toast.success("Top up initiated");
-    // Here you would handle the top up process
+  const { contribute, isPending, loading } = useContribute();
+  const withdraw = usePayout();
+
+  const handleTopUp = async () => {
+    await contribute(pda, name, contributionAmount);
   };
-  const handleWithdraw = () => {
-    // if (true) {
-    //   toast.success("Withdrawal in progress");
-    //   // Trigger withdrawal flow
-    // } else {
-    toast.error("Not eligible for withdrawal yet");
-    // }
+  const handleWithdraw = async () => {
+    if (props.canWithdraw && props.you) {
+      await withdraw.reqestPayout(pda, name, payout, props.you);
+    } else {
+      toast.error("Not eligible for withdrawal yet");
+    }
   };
 
   const item = {
@@ -68,7 +66,7 @@ export default function GroupSavingsCard({ data }: Props) {
             transition={{ duration: 0.3 }}
           >
             {isBalanceVisible ? (
-              <FormattedBalance amount={targetAmount} />
+              <FormattedBalance amount={props.payout} />
             ) : (
               "****"
             )}
@@ -90,7 +88,7 @@ export default function GroupSavingsCard({ data }: Props) {
           <motion.div
             className="h-full bg-green-500 rounded-full"
             initial={{ width: 0 }}
-            animate={{ width: `${progress}%` }}
+            animate={{ width: `${props.progress}%` }}
             transition={{ delay: 0.5, duration: 0.8 }}
           />
         </div>
@@ -102,14 +100,12 @@ export default function GroupSavingsCard({ data }: Props) {
 
       <div className="flex justify-between items-center mb-4">
         <div>
-          <p className="text-sm text-gray-600">Amount you saved</p>
-          <p className="font-semibold">
-            ${data.contributionAmount * data.contributionRounds}
-          </p>
+          <p className="text-sm text-gray-600">Contribution Amount</p>
+          <p className="font-semibold">${props.contributionAmount}</p>
         </div>
         <div>
-          <p className="text-sm text-gray-600">Contribution interval</p>
-          <p className="font-semibold">{data.contributionInterval} days</p>
+          <p className="text-sm text-gray-600">Amount you saved</p>
+          <p className="font-semibold">${props.yourContribution}</p>
         </div>
       </div>
 
@@ -119,7 +115,7 @@ export default function GroupSavingsCard({ data }: Props) {
           whileHover={{ y: -2, boxShadow: "0 4px 6px rgba(0,0,0,0.1)" }}
           whileTap={{ y: 0, boxShadow: "none" }}
           onClick={handleTopUp}
-          disabled
+          disabled={!props.started || isPending || loading}
         >
           Top Up <ArrowDown />
         </motion.button>
@@ -129,7 +125,12 @@ export default function GroupSavingsCard({ data }: Props) {
           whileHover={{ y: -2, boxShadow: "0 4px 6px rgba(0,0,0,0.1)" }}
           whileTap={{ y: 0, boxShadow: "none" }}
           onClick={handleWithdraw}
-          disabled
+          disabled={
+            !props.started ||
+            props.canWithdraw ||
+            withdraw.isPending ||
+            withdraw.loading
+          }
         >
           Withdraw <ArrowUp />
         </motion.button>

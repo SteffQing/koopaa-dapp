@@ -30,12 +30,16 @@ export async function getUserFromSession(req: NextRequest) {
   return user;
 }
 
-type Handler = (req: NextRequest) => Promise<NextResponse>;
+type Handler<Args extends any[] = [NextRequest]> = (
+  ...args: Args
+) => Promise<NextResponse>;
 
-export function withErrorHandler(handler: Handler): Handler {
-  return async (req: NextRequest): Promise<NextResponse> => {
+export function withErrorHandler<Args extends any[]>(
+  handler: Handler<Args>
+): Handler<Args> {
+  return async (...args: Args): Promise<NextResponse> => {
     try {
-      return await handler(req);
+      return await handler(...args);
     } catch (error) {
       console.error(error);
       return NextResponse.json(

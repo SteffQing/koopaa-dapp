@@ -16,4 +16,15 @@ function useGetActivities() {
   return { [KEY]: data?.data, meta: data?.meta, loading: isLoading };
 }
 
-export { useGetActivities };
+function useGetUserInAjoGroupActivities(pda: string) {
+  const { user } = useAuthUser();
+  const { data, isLoading } = useQuery({
+    queryKey: [KEY, user?.address, pda],
+    queryFn: async () => query.get<Activity[]>(`group/${pda}/${KEY}`),
+    enabled: Boolean(user),
+  });
+
+  return { [KEY]: data?.data, meta: data?.meta, loading: isLoading };
+}
+
+export { useGetActivities, useGetUserInAjoGroupActivities };

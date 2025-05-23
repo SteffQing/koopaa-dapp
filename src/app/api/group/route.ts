@@ -94,13 +94,3 @@ export const PUT = withErrorHandler(async (req: NextRequest) => {
     message: `You have successfully joined ${name} Ajo Group`,
   });
 });
-
-// Get an Ajo Group
-export const GET = withErrorHandler(async (req: NextRequest) => {
-  const { id } = getSearchParams(req);
-  const group = await prisma.group.findUniqueOrThrow({ where: { pda: id } });
-
-  return NextResponse.json({
-    data: group,
-  });
-});
