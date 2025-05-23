@@ -30,11 +30,11 @@ export async function getUserFromSession(req: NextRequest) {
   return user;
 }
 
-type Handler<Args extends any[] = [NextRequest]> = (
+type Handler<Args extends unknown[] = [NextRequest]> = (
   ...args: Args
 ) => Promise<NextResponse>;
 
-export function withErrorHandler<Args extends any[]>(
+export function withErrorHandler<Args extends unknown[]>(
   handler: Handler<Args>
 ): Handler<Args> {
   return async (...args: Args): Promise<NextResponse> => {
