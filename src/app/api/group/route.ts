@@ -1,5 +1,5 @@
 import prisma from "@/lib/prisma";
-import { getSearchParams, getServerSession, withErrorHandler } from "../utils";
+import { getServerSession, withErrorHandler } from "../utils";
 import { NextRequest, NextResponse } from "next/server";
 import { createdAjoGroupSchema, joinAjoGroupSchema } from "./schema";
 
