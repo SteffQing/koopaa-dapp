@@ -1,10 +1,11 @@
 import { PublicKey } from "@solana/web3.js";
+import { BN } from "@coral-xyz/anchor";
 
 // Custom types
 export type AjoParticipant = {
   pubkey: PublicKey;
   contributionRound: number; // u16
-  refundAmount: bigint; // u64
+  refundAmount: BN; // u64
 };
 
 export type AjoGroup = {

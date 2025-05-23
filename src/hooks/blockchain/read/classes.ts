@@ -1,4 +1,6 @@
-import { Group, Tag } from "../../../../prisma-client";
+import query from "@/lib/fetch";
+import { Group, Tag, User } from "../../../../prisma-client";
+import { AjoParticipant } from "../types";
 import { OnChainAjoGroupData } from "./types";
 import { BN } from "@coral-xyz/anchor";
 
@@ -58,7 +60,18 @@ export class AjoGroupData {
 }
 
 export class AjoGroupParticipantData {
-  constructor(data: unknown) {
-    console.log(data);
+  participant: string;
+  contributionRound: number;
+  refundAmount: number;
+  constructor(data: AjoParticipant) {
+    this.participant = data.pubkey.toBase58();
+    this.contributionRound = data.contributionRound;
+    this.refundAmount = formatNumber(data.refundAmount);
+  }
+  public async getUser() {
+    const { data } = await query.get<User>("participant", {
+      params: { address: this.participant },
+    });
+    return data;
   }
 }
