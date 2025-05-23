@@ -121,17 +121,19 @@ exports.Prisma.TransactionIsolationLevel = makeStrictEnum({
 });
 
 exports.Prisma.UserScalarFieldEnum = {
-  id: 'id',
-  username: 'username',
   address: 'address',
+  username: 'username',
   avatar: 'avatar',
   email: 'email'
 };
 
 exports.Prisma.GroupScalarFieldEnum = {
-  id: 'id',
+  pda: 'pda',
   name: 'name',
-  created_at: 'created_at'
+  created_at: 'created_at',
+  description: 'description',
+  tag: 'tag',
+  cover_photo: 'cover_photo'
 };
 
 exports.Prisma.ActivityScalarFieldEnum = {
@@ -139,8 +141,10 @@ exports.Prisma.ActivityScalarFieldEnum = {
   title: 'title',
   amount: 'amount',
   type: 'type',
+  sig: 'sig',
   created_at: 'created_at',
-  userId: 'userId'
+  userId: 'userId',
+  group_pda: 'group_pda'
 };
 
 exports.Prisma.WaitlistScalarFieldEnum = {
@@ -161,6 +165,15 @@ exports.Prisma.NullsOrder = {
   first: 'first',
   last: 'last'
 };
+exports.Tag = exports.$Enums.Tag = {
+  real_estate: 'real_estate',
+  birthday: 'birthday',
+  finance: 'finance',
+  lifestyle: 'lifestyle',
+  education: 'education',
+  travel: 'travel'
+};
+
 exports.ActivityType = exports.$Enums.ActivityType = {
   credit: 'credit',
   debit: 'debit',

@@ -6,23 +6,25 @@ generator client {
 datasource db {
     provider = "postgresql"
     url      = env("DATABASE_URL")
-    // uncomment next line if you use Prisma <5.10
-    // directUrl = env("DATABASE_URL_UNPOOLED")
 }
 
 model User {
-    id         String     @id @default(cuid())
+    address    String     @id
     username   String?
-    address    String     @unique
     avatar     Int        @default(1)
     email      String?    @unique
     activities Activity[]
+    groups     Group[]
 }
 
 model Group {
-    id         String   @id
-    name       String
-    created_at DateTime @default(now())
+    pda          String   @id
+    name         String
+    created_at   DateTime @default(now())
+    description  String
+    tag          Tag
+    cover_photo  Int
+    participants User[]
 }
 
 model Activity {
@@ -30,9 +32,11 @@ model Activity {
     title      String
     amount     Int?
     type       ActivityType
+    sig        String?
     created_at DateTime     @default(now())
-    User       User         @relation(fields: [userId], references: [id])
+    User       User         @relation(fields: [userId], references: [address])
     userId     String
+    group_pda  String?
 }
 
 enum ActivityType {
@@ -44,4 +48,13 @@ enum ActivityType {
 
 model Waitlist {
     email String @id
+}
+
+enum Tag {
+    real_estate
+    birthday
+    finance
+    lifestyle
+    education
+    travel
 }

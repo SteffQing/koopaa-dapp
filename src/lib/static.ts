@@ -10,6 +10,8 @@ export const staticActivities: Activity[] = [
     amount: 1355,
     created_at: new Date("2025-04-07T20:10:00"), // 5 minutes ago
     userId,
+    sig: null,
+    group_pda: null,
   },
   {
     id: "2",
@@ -18,6 +20,8 @@ export const staticActivities: Activity[] = [
     created_at: new Date("2025-04-21T14:20:00"), // today
     userId,
     amount: null,
+    sig: null,
+    group_pda: null,
   },
   {
     id: "3",
@@ -26,6 +30,8 @@ export const staticActivities: Activity[] = [
     created_at: new Date("2025-04-21T14:20:00"), // today
     userId,
     amount: 100,
+    sig: null,
+    group_pda: null,
   },
   {
     id: "4",
@@ -34,6 +40,8 @@ export const staticActivities: Activity[] = [
     amount: 50,
     created_at: new Date("2025-04-28T01:00:00"), // today 3pm
     userId,
+    sig: null,
+    group_pda: null,
   },
   {
     id: "5",
@@ -42,6 +50,8 @@ export const staticActivities: Activity[] = [
     amount: 100,
     created_at: new Date("2025-05-07T15:00:00"), // today 3pm
     userId,
+    sig: null,
+    group_pda: null,
   },
   {
     id: "6",
@@ -50,6 +60,8 @@ export const staticActivities: Activity[] = [
     amount: 2000,
     created_at: new Date("2025-05-16T19:55:00"), // yesterday evening
     userId,
+    sig: null,
+    group_pda: null,
   },
   // {
   //   id: "6",
@@ -58,6 +70,8 @@ export const staticActivities: Activity[] = [
   //   amount: 1200,
   //   created_at: new Date("2025-05-06T10:15:00"), // yesterday morning
   //   userId,
+  // sig: null,
+  // group_pda: null,
   // },
 ];
 

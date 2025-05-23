@@ -6,7 +6,7 @@ import Card from "./card";
 import SavingsCard from "./savings-card";
 import { SavingsData, Tab } from "./types";
 import useUSDCBalance from "@/hooks/blockchain/useGetBalance";
-import { useGetUserAjoSavings } from "@/hooks/blockchain/koopaa/useUserAjoGroups";
+import { useGetUserAjoSavings } from "@/hooks/blockchain/write/useUserAjoGroups";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 

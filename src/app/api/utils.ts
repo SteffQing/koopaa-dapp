@@ -2,8 +2,9 @@ import prisma from "@/lib/prisma";
 import { getSession } from "@/lib/session";
 import { NextRequest, NextResponse } from "next/server";
 
-export function getSearchParams(searchParams: URLSearchParams) {
+export function getSearchParams(request: NextRequest) {
   const params: Record<string, string> = {};
+  const searchParams = request.nextUrl.searchParams;
 
   searchParams.forEach((value, key) => {
     if (value && value !== "undefined") {

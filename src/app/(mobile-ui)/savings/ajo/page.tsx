@@ -6,7 +6,7 @@ import NavHeader from "@/views/Navigation/nav-header";
 import Card from "@/components/savings-and-wallet/card";
 import GroupCard from "@/views/Savings/group/card";
 import { staticJoinedGroups } from "@/lib/static";
-import { useGetUserAjoSavings } from "@/hooks/blockchain/koopaa/useUserAjoGroups";
+import { useGetUserAjoSavings } from "@/hooks/blockchain/write/useUserAjoGroups";
 
 export default function AjoSavingsPage() {
   const item = {

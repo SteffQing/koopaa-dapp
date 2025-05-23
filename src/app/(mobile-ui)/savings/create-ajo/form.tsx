@@ -1,69 +1,79 @@
-'use client'
+"use client";
 
-import { useForm, Controller } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { motion } from 'framer-motion'
-import { Label } from '@/components/ui/label'
-import { Input, Textarea } from '@/components/ui/input'
-import { createAjoGroupSchema, type CreateAjoGroupFormValues } from './schema'
-import { ImageSelector } from '@/components/selector/image-selector'
-import { TagSelector } from '@/components/selector/tag-selector'
+import { useForm, Controller } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { motion } from "framer-motion";
+import { Label } from "@/components/ui/label";
+import { Input, Textarea } from "@/components/ui/input";
+import { createAjoGroupSchema, type CreateAjoGroupFormValues } from "./schema";
+import { ImageSelector } from "@/components/selector/image-selector";
+import { TagSelector } from "@/components/selector/tag-selector";
+import { Button } from "@/components/ui/button";
 
 const item = {
   hidden: { opacity: 0, y: 20 },
   show: { opacity: 1, y: 0 },
-}
+};
 
 // Cover photo options
-const coverPhotos = ['/group-cover/1.png', '/group-cover/2.png', '/group-cover/3.png', '/group-cover/4.png']
+const coverPhotos = [
+  "/group-cover/1.png",
+  "/group-cover/2.png",
+  "/group-cover/3.png",
+  "/group-cover/4.png",
+];
 
 // Tag options
 const tagOptions = [
-  { value: 'real estate', label: 'Real Estate', icon: '🏠' },
-  { value: 'birthday', label: 'Birthday', icon: '🎂' },
-  { value: 'finance', label: 'Finance', icon: '💰' },
-  { value: 'lifestyle', label: 'Lifestyle', icon: '🌴' },
-  { value: 'education', label: 'Education', icon: '📚' },
-  { value: 'travel', label: 'Travel', icon: '✈️' },
-]
+  { value: "real estate", label: "Real Estate", icon: "🏠" },
+  { value: "birthday", label: "Birthday", icon: "🎂" },
+  { value: "finance", label: "Finance", icon: "💰" },
+  { value: "lifestyle", label: "Lifestyle", icon: "🌴" },
+  { value: "education", label: "Education", icon: "📚" },
+  { value: "travel", label: "Travel", icon: "✈️" },
+];
 
 // Interval options
 const contributionIntervals = [
-  { value: 'daily', label: 'Daily' },
-  { value: 'weekly', label: 'Weekly' },
-  { value: 'monthly', label: 'Monthly' },
-]
+  { value: "1", label: "Daily" },
+  { value: "7", label: "Weekly" },
+  { value: "30", label: "Monthly" },
+];
 
 const payoutIntervals = [
-  { value: 'weekly', label: 'Weekly' },
-  { value: 'biweekly', label: 'Bi-weekly' },
-  { value: 'monthly', label: 'Monthly' },
-]
+  { value: "7", label: "Weekly" },
+  { value: "14", label: "Bi-weekly" },
+  { value: "30", label: "Monthly" },
+];
 
 interface CreateAjoGroupFormProps {
-  onSubmit: (data: CreateAjoGroupFormValues) => void
+  onSubmit: (data: CreateAjoGroupFormValues) => void;
+  loading: boolean;
 }
 
-export default function CreateAjoGroupForm({ onSubmit }: CreateAjoGroupFormProps) {
+export default function CreateAjoGroupForm({
+  onSubmit,
+  loading,
+}: CreateAjoGroupFormProps) {
   const {
     register,
     handleSubmit,
     control,
-    formState: { errors, isSubmitting },
+    formState: { errors },
   } = useForm<CreateAjoGroupFormValues>({
     resolver: zodResolver(createAjoGroupSchema),
     defaultValues: {
-      name: '',
-      description: '',
+      name: "",
+      description: "",
       security_deposit: undefined,
       max_participants: 3,
       contribution_amount: undefined,
-      contribution_interval: 'monthly',
-      payout_interval: 'monthly',
-      tag: 'lifestyle',
-      group_cover_photo: 0,
+      contribution_interval: "30",
+      payout_interval: "30",
+      tag: "lifestyle",
+      group_cover_photo: 1,
     },
-  })
+  });
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -71,8 +81,15 @@ export default function CreateAjoGroupForm({ onSubmit }: CreateAjoGroupFormProps
         <Label htmlFor="name" className="block mb-2 text-[#0F172A]">
           Group Name
         </Label>
-        <Input id="name" placeholder="name your group" {...register('name')} aria-invalid={!!errors.name} />
-        {errors.name && <p className="mt-1 text-sm text-red-500">{errors.name.message}</p>}
+        <Input
+          id="name"
+          placeholder="name your group"
+          {...register("name")}
+          aria-invalid={!!errors.name}
+        />
+        {errors.name && (
+          <p className="mt-1 text-sm text-red-500">{errors.name.message}</p>
+        )}
       </motion.div>
 
       <motion.div variants={item} className="mb-4">
@@ -82,10 +99,14 @@ export default function CreateAjoGroupForm({ onSubmit }: CreateAjoGroupFormProps
         <Textarea
           id="description"
           placeholder="add a group description"
-          {...register('description')}
+          {...register("description")}
           aria-invalid={!!errors.description}
         />
-        {errors.description && <p className="mt-1 text-sm text-red-500">{errors.description.message}</p>}
+        {errors.description && (
+          <p className="mt-1 text-sm text-red-500">
+            {errors.description.message}
+          </p>
+        )}
       </motion.div>
 
       <motion.div variants={item} className="mb-4">
@@ -93,7 +114,13 @@ export default function CreateAjoGroupForm({ onSubmit }: CreateAjoGroupFormProps
         <Controller
           name="group_cover_photo"
           control={control}
-          render={({ field }) => <ImageSelector images={coverPhotos} value={field.value} onChange={field.onChange} />}
+          render={({ field }) => (
+            <ImageSelector
+              images={coverPhotos}
+              value={field.value}
+              onChange={field.onChange}
+            />
+          )}
         />
       </motion.div>
 
@@ -102,13 +129,24 @@ export default function CreateAjoGroupForm({ onSubmit }: CreateAjoGroupFormProps
         <Controller
           name="tag"
           control={control}
-          render={({ field }) => <TagSelector tags={tagOptions} value={field.value} onChange={field.onChange} />}
+          render={({ field }) => (
+            <TagSelector
+              tags={tagOptions}
+              value={field.value}
+              onChange={field.onChange}
+            />
+          )}
         />
-        {errors.tag && <p className="mt-1 text-sm text-red-500">{errors.tag.message}</p>}
+        {errors.tag && (
+          <p className="mt-1 text-sm text-red-500">{errors.tag.message}</p>
+        )}
       </motion.div>
 
       <motion.div variants={item} className="mb-4">
-        <Label htmlFor="contribution_amount" className="block mb-2 text-[#0F172A]">
+        <Label
+          htmlFor="contribution_amount"
+          className="block mb-2 text-[#0F172A]"
+        >
           Contribution Amount
         </Label>
         <Input
@@ -116,11 +154,13 @@ export default function CreateAjoGroupForm({ onSubmit }: CreateAjoGroupFormProps
           id="contribution_amount"
           placeholder="enter amount"
           className="no-spinner"
-          {...register('contribution_amount', { valueAsNumber: true })}
+          {...register("contribution_amount", { valueAsNumber: true })}
           aria-invalid={!!errors.contribution_amount}
         />
         {errors.contribution_amount && (
-          <p className="mt-1 text-sm text-red-500">{errors.contribution_amount.message}</p>
+          <p className="mt-1 text-sm text-red-500">
+            {errors.contribution_amount.message}
+          </p>
         )}
       </motion.div>
 
@@ -133,10 +173,14 @@ export default function CreateAjoGroupForm({ onSubmit }: CreateAjoGroupFormProps
           id="security_deposit"
           placeholder="enter security deposit amount"
           className="no-spinner"
-          {...register('security_deposit', { valueAsNumber: true })}
+          {...register("security_deposit", { valueAsNumber: true })}
           aria-invalid={!!errors.security_deposit}
         />
-        {errors.security_deposit && <p className="mt-1 text-sm text-red-500">{errors.security_deposit.message}</p>}
+        {errors.security_deposit && (
+          <p className="mt-1 text-sm text-red-500">
+            {errors.security_deposit.message}
+          </p>
+        )}
       </motion.div>
 
       <motion.div variants={item} className="mb-4">
@@ -149,14 +193,20 @@ export default function CreateAjoGroupForm({ onSubmit }: CreateAjoGroupFormProps
           placeholder="minimum of 3"
           min={3}
           className="no-spinner"
-          {...register('max_participants', { valueAsNumber: true })}
+          {...register("max_participants", { valueAsNumber: true })}
           aria-invalid={!!errors.max_participants}
         />
-        {errors.max_participants && <p className="mt-1 text-sm text-red-500">{errors.max_participants.message}</p>}
+        {errors.max_participants && (
+          <p className="mt-1 text-sm text-red-500">
+            {errors.max_participants.message}
+          </p>
+        )}
       </motion.div>
 
       <motion.div variants={item} className="mb-4">
-        <Label className="block text-[#0F172A] mb-2">Contribution Interval</Label>
+        <Label className="block text-[#0F172A] mb-2">
+          Contribution Interval
+        </Label>
         <div className="grid grid-cols-3 gap-3">
           <Controller
             name="contribution_interval"
@@ -168,7 +218,9 @@ export default function CreateAjoGroupForm({ onSubmit }: CreateAjoGroupFormProps
                     key={interval.value}
                     type="button"
                     className={`p-4 rounded-lg border ${
-                      field.value === interval.value ? 'border-[#ff6600] bg-orange-50' : 'border-gray-200 bg-white'
+                      field.value === interval.value
+                        ? "border-[#ff6600] bg-orange-50"
+                        : "border-gray-200 bg-white"
                     }`}
                     whileHover={{ y: -2 }}
                     whileTap={{ y: 0 }}
@@ -182,7 +234,9 @@ export default function CreateAjoGroupForm({ onSubmit }: CreateAjoGroupFormProps
           />
         </div>
         {errors.contribution_interval && (
-          <p className="mt-1 text-sm text-red-500">{errors.contribution_interval.message}</p>
+          <p className="mt-1 text-sm text-red-500">
+            {errors.contribution_interval.message}
+          </p>
         )}
       </motion.div>
 
@@ -200,7 +254,9 @@ export default function CreateAjoGroupForm({ onSubmit }: CreateAjoGroupFormProps
                     key={interval.value}
                     type="button"
                     className={`p-4 rounded-lg border ${
-                      field.value === interval.value ? 'border-[#ff6600] bg-orange-50' : 'border-gray-200 bg-white'
+                      field.value === interval.value
+                        ? "border-[#ff6600] bg-orange-50"
+                        : "border-gray-200 bg-white"
                     }`}
                     whileHover={{ y: -2 }}
                     whileTap={{ y: 0 }}
@@ -213,19 +269,16 @@ export default function CreateAjoGroupForm({ onSubmit }: CreateAjoGroupFormProps
             )}
           />
         </div>
-        {errors.payout_interval && <p className="mt-1 text-sm text-red-500">{errors.payout_interval.message}</p>}
+        {errors.payout_interval && (
+          <p className="mt-1 text-sm text-red-500">
+            {errors.payout_interval.message}
+          </p>
+        )}
       </motion.div>
 
-      <motion.button
-        variants={item}
-        type="submit"
-        disabled={isSubmitting}
-        className="w-full bg-[#ff6600] text-white py-4 px-6 rounded-lg font-medium disabled:opacity-70"
-        whileHover={{ y: -2, boxShadow: '0 4px 10px rgba(255,102,0,0.3)' }}
-        whileTap={{ y: 0, boxShadow: 'none' }}
-      >
-        {isSubmitting ? 'Creating...' : 'Continue'}
-      </motion.button>
+      <Button type="submit" loading={loading}>
+        Create Ajo Group
+      </Button>
     </form>
-  )
+  );
 }

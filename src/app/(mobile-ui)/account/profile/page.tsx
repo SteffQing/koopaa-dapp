@@ -71,20 +71,12 @@ export default function ProfilePage() {
               <div className="py-4 border-b border-[#C4C4C4]">
                 <Skeleton className="h-6 w-full" />
               </div>
-              <div className="py-4 border-b border-[#C4C4C4]">
-                <Skeleton className="h-6 w-full" />
-              </div>
               <div className="py-4">
                 <Skeleton className="h-6 w-full" />
               </div>
             </>
           ) : (
             <>
-              <div className="py-4 border-b border-[#C4C4C4] flex justify-between items-center">
-                <p className="text-[#121212] font-medium text-xs">User id</p>
-                <p className="font-normal text-[#4C4C4C] text-xs">{user?.id}</p>
-              </div>
-
               <EditField
                 label="Username"
                 value={user?.username || "Not set"}

@@ -15,6 +15,7 @@ import {
   staticGroupData,
 } from "@/lib/static";
 import RecentActivities from "@/components/activities";
+import useGetAjoGroup from "@/hooks/blockchain/read/useFetchAjoGroup";
 
 export default function AjoGroupPage({
   params,
@@ -22,6 +23,8 @@ export default function AjoGroupPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = use(params);
+  const { data } = useGetAjoGroup({ pda: id });
+  console.log(data);
 
   const item = {
     hidden: { opacity: 0, y: 10 },

@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { useWallet } from "@solana/wallet-adapter-react";
-import useKoopaProgram from "../useKooPaa";
+import useKoopaProgram from "../useKooPaaProgram";
 import { AjoParticipant } from "../types";
 import { PublicKey } from "@solana/web3.js";
 import { useMemo } from "react";
@@ -89,10 +89,10 @@ export function useUserAjoGroups() {
 export function useGetUserAjoSavings() {
   const { data } = useUserAjoGroups();
   return useMemo(() => {
-    if (!data) return 150;
+    if (!data) return 0;
     return data.reduce(
       (acc, group) => acc + group.contributionAmount * group.contributionRound,
-      150
+      0
     );
   }, [data]);
 }

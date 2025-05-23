@@ -8,7 +8,7 @@ const KEY = "activities";
 function useGetActivities() {
   const { user } = useAuthUser();
   const { data, isLoading } = useQuery({
-    queryKey: [KEY, user?.id],
+    queryKey: [KEY, user?.address],
     queryFn: async () => query.get<Activity[]>(KEY),
     enabled: Boolean(user),
   });

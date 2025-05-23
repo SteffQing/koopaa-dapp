@@ -10,7 +10,7 @@ import StartSaving from "@/views/Savings/start-saving";
 import { useModal } from "@/providers/modal-provider";
 import { GroupTargetModal } from "@/components/modal/start-saving";
 import { toast } from "sonner";
-import { useGetUserAjoSavings } from "@/hooks/blockchain/koopaa/useUserAjoGroups";
+import { useGetUserAjoSavings } from "@/hooks/blockchain/write/useUserAjoGroups";
 
 export default function SavingsPage() {
   const router = useRouter();
