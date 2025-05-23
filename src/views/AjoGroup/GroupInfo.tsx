@@ -1,4 +1,4 @@
-import { Avatar, GetAvatar } from "@/components/avatar";
+import { GetAvatar } from "@/components/avatar";
 import { formatDate, formatDateTS } from "@/lib/date";
 import { motion } from "framer-motion";
 import { ChevronRight } from "lucide-react";
