@@ -1,5 +1,5 @@
-import query from "@/lib/fetch";
-import { Group, Tag, User } from "../../../../prisma-client";
+
+import { Group, Tag } from "../../../../prisma-client";
 import { AjoParticipant } from "../types";
 import { OnChainAjoGroupData } from "./types";
 import { BN } from "@coral-xyz/anchor";
