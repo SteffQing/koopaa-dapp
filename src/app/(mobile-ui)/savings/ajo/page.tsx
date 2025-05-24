@@ -7,6 +7,7 @@ import Card from "@/components/savings-and-wallet/card";
 import GroupCard from "@/views/Savings/group/card";
 import { useGetUserAjoSavings } from "@/hooks/blockchain/read/useUserAjoGroups";
 import useUserGroups from "@/hooks/db/useUserGroups";
+import GroupCardSkeleton from "@/views/Savings/group/skeleton";
 
 export default function AjoSavingsPage() {
   const item = {
@@ -22,12 +23,14 @@ export default function AjoSavingsPage() {
 
       <Card amount={ajoSavings} tab="Savings" type="ajo" />
 
-      <motion.div variants={item} className="mb-6 mt-3">
-        <h2 className="font-medium text-sm text-[#333333] mb-3">
+      <motion.div variants={item} className="mb-6 mt-3 flex flex-col gap-4">
+        <h2 className="font-medium text-sm text-[#333333] mb-1">
           Your Active Groups
         </h2>
 
-        {!isLoading && data && data.joined_groups.length > 0 ? (
+        {isLoading ? (
+          <GroupCardSkeleton />
+        ) : data && data.joined_groups.length > 0 ? (
           <div className="flex flex-col gap-3">
             {data.joined_groups.map((group) => (
               <GroupCard group={group} key={group.pda} />
@@ -42,11 +45,13 @@ export default function AjoSavingsPage() {
         )}
       </motion.div>
 
-      <motion.div variants={item} className="mb-6">
-        <h2 className="font-medium text-sm text-[#333333] mb-3">
+      <motion.div variants={item} className="mb-6 flex flex-col gap-4">
+        <h2 className="font-medium text-sm text-[#333333] mb-1">
           Public Groups Available
         </h2>
-        {!isLoading && data && data.avbl_groups.length > 0 ? (
+        {isLoading ? (
+          <GroupCardSkeleton />
+        ) : data && data.avbl_groups.length > 0 ? (
           <div className="flex flex-col gap-3">
             {data.avbl_groups.map((group) => (
               <GroupCard group={group} key={group.pda} />
