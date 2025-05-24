@@ -14,8 +14,7 @@ export default function AjoGroupPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = use(params);
-  const { data } = useGetAjoGroup({ pda: id });
-  console.log(data);
+  const { data, isLoading } = useGetAjoGroup({ pda: id });
 
   const item = {
     hidden: { opacity: 0, y: 10 },
@@ -24,11 +23,11 @@ export default function AjoGroupPage({
 
   return (
     <Container>
-      <NavHeader path="/savings" header={data?.name ?? ""} />
+      <NavHeader path="/savings" header={data?.name ?? "Ajo Group"} />
 
       <motion.div variants={item} className="mb-4 rounded-xl overflow-hidden">
         <Image
-          src={`/group-cover/${data?.cover_photo ?? 1}.png`}
+          src={`/group-cover/${data?.cover_photo ?? 0}.png`}
           alt={`Cover photo for the ${data?.name} Ajo group`}
           width={400}
           height={200}
@@ -36,7 +35,7 @@ export default function AjoGroupPage({
         />
       </motion.div>
 
-      {data ? <AjoGroup id={id} data={data} /> : <></>}
+      <AjoGroup id={id} data={data} loading={isLoading} />
     </Container>
   );
 }

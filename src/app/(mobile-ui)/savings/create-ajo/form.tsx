@@ -9,6 +9,11 @@ import { createAjoGroupSchema, type CreateAjoGroupFormValues } from "./schema";
 import { ImageSelector } from "@/components/selector/image-selector";
 import { TagSelector } from "@/components/selector/tag-selector";
 import { Button } from "@/components/ui/button";
+import {
+  payoutIntervals,
+  contributionIntervals,
+  tagOptions,
+} from "@/lib/static";
 
 const item = {
   hidden: { opacity: 0, y: 20 },
@@ -21,29 +26,6 @@ const coverPhotos = [
   "/group-cover/2.png",
   "/group-cover/3.png",
   "/group-cover/4.png",
-];
-
-// Tag options
-const tagOptions = [
-  { value: "real estate", label: "Real Estate", icon: "🏠" },
-  { value: "birthday", label: "Birthday", icon: "🎂" },
-  { value: "finance", label: "Finance", icon: "💰" },
-  { value: "lifestyle", label: "Lifestyle", icon: "🌴" },
-  { value: "education", label: "Education", icon: "📚" },
-  { value: "travel", label: "Travel", icon: "✈️" },
-];
-
-// Interval options
-const contributionIntervals = [
-  { value: "1", label: "Daily" },
-  { value: "7", label: "Weekly" },
-  { value: "30", label: "Monthly" },
-];
-
-const payoutIntervals = [
-  { value: "7", label: "Weekly" },
-  { value: "14", label: "Bi-weekly" },
-  { value: "30", label: "Monthly" },
 ];
 
 interface CreateAjoGroupFormProps {

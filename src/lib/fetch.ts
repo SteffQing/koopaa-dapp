@@ -7,6 +7,8 @@ interface FetchOptions<TBody = unknown> extends Omit<RequestInit, "body"> {
   body?: TBody;
 }
 
+export const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
+
 type Meta = {
   page: number;
   limit: number;

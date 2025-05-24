@@ -3,10 +3,12 @@ import { useState } from "react";
 import { toast } from "sonner";
 import ArrowUp from "@/assets/svgs/arrow-up.svg";
 import ArrowDown from "@/assets/svgs/arrow-down.svg";
-import { Eye, RefreshCw } from "lucide-react";
+import { Eye, RefreshCw, Share2 } from "lucide-react";
 import { FormattedBalance } from "@/components/savings-and-wallet/card";
 import useContribute from "@/hooks/blockchain/write/useContribute";
 import usePayout from "@/hooks/blockchain/write/usePayout";
+import { Button } from "@/components/ui/button";
+import query from "@/lib/fetch";
 
 type Props = {
   progress: number;
@@ -18,23 +20,49 @@ type Props = {
   pda: string;
   you: string | undefined;
   canWithdraw: boolean;
+  disabled?: boolean;
 };
 
 export default function GroupSavingsCard(props: Props) {
   const { name, pda, contributionAmount, payout } = props;
   const [isBalanceVisible, setIsBalanceVisible] = useState(true);
+  const [isInviting, setIsInviting] = useState(false);
 
   const { contribute, isPending, loading } = useContribute();
   const withdraw = usePayout();
 
-  const handleTopUp = async () => {
+  const handleTopUp = async () =>
     await contribute(pda, name, contributionAmount);
-  };
+
   const handleWithdraw = async () => {
     if (props.canWithdraw && props.you) {
       await withdraw.reqestPayout(pda, name, payout, props.you);
     } else {
       toast.error("Not eligible for withdrawal yet");
+    }
+  };
+
+  const invite = async () => {
+    setIsInviting(true);
+    try {
+      const load = toast.loading(
+        "Please wait as we generate you a unique invite link"
+      );
+      const { data, error } = await query.post<string>("", { body: { pda } });
+      toast.dismiss(load);
+      if (data) {
+        await navigator.clipboard.writeText(data);
+        toast.success(
+          `Invite link copied! Share with friends to join ${name} Ajo Group`
+        );
+      } else {
+        toast.error(error || "Failed to generate invite link");
+      }
+    } catch (err) {
+      console.error("failed to copy invite link: ", err);
+      toast.error("Failed to copy invite link");
+    } finally {
+      setIsInviting(false);
     }
   };
 
@@ -53,6 +81,20 @@ export default function GroupSavingsCard(props: Props) {
         <button onClick={() => setIsBalanceVisible(!isBalanceVisible)}>
           <Eye size={18} className="text-gray-600" />
         </button>
+        <motion.button
+          onClick={invite}
+          disabled={isInviting}
+          className="flex items-center gap-1 bg-white/50 hover:bg-white/80 px-2 py-1 rounded-full text-xs font-medium text-gray-700 transition-colors disabled:opacity-50"
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+        >
+          {isInviting ? (
+            <RefreshCw size={12} className="animate-spin" />
+          ) : (
+            <Share2 size={12} />
+          )}
+          Invite
+        </motion.button>
       </div>
 
       <div className="mb-4">
@@ -110,30 +152,22 @@ export default function GroupSavingsCard(props: Props) {
       </div>
 
       <div className="grid grid-cols-2 gap-3">
-        <motion.button
-          className="bg-white py-3 rounded-lg flex items-center justify-center gap-2 font-medium"
-          whileHover={{ y: -2, boxShadow: "0 4px 6px rgba(0,0,0,0.1)" }}
-          whileTap={{ y: 0, boxShadow: "none" }}
+        <Button
+          className="bg-white text-black rounded-lg flex "
           onClick={handleTopUp}
-          disabled={!props.started || isPending || loading}
+          disabled={!props.started || props.disabled}
+          loading={isPending || loading}
         >
           Top Up <ArrowDown />
-        </motion.button>
-
-        <motion.button
-          className="bg-black text-white py-3 rounded-lg flex items-center justify-center gap-2 font-medium"
-          whileHover={{ y: -2, boxShadow: "0 4px 6px rgba(0,0,0,0.1)" }}
-          whileTap={{ y: 0, boxShadow: "none" }}
+        </Button>
+        <Button
+          className="bg-black text-white rounded-lg flex"
           onClick={handleWithdraw}
-          disabled={
-            !props.started ||
-            props.canWithdraw ||
-            withdraw.isPending ||
-            withdraw.loading
-          }
+          loading={withdraw.isPending || withdraw.loading}
+          disabled={!props.started || props.canWithdraw || props.disabled}
         >
           Withdraw <ArrowUp />
-        </motion.button>
+        </Button>
       </div>
     </motion.div>
   );

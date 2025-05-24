@@ -5,8 +5,8 @@ import Container from "@/components/container";
 import NavHeader from "@/views/Navigation/nav-header";
 import Card from "@/components/savings-and-wallet/card";
 import GroupCard from "@/views/Savings/group/card";
-import { staticJoinedGroups } from "@/lib/static";
-import { useGetUserAjoSavings } from "@/hooks/blockchain/write/useUserAjoGroups";
+import { useGetUserAjoSavings } from "@/hooks/blockchain/read/useUserAjoGroups";
+import useUserGroups from "@/hooks/db/useUserGroups";
 
 export default function AjoSavingsPage() {
   const item = {
@@ -14,6 +14,7 @@ export default function AjoSavingsPage() {
     show: { opacity: 1, y: 0 },
   };
   const ajoSavings = useGetUserAjoSavings();
+  const { data, isLoading } = useUserGroups();
 
   return (
     <Container>
@@ -26,10 +27,10 @@ export default function AjoSavingsPage() {
           Your Active Groups
         </h2>
 
-        {staticJoinedGroups.length > 0 ? (
+        {!isLoading && data && data.joined_groups.length > 0 ? (
           <div className="flex flex-col gap-3">
-            {staticJoinedGroups.map((group) => (
-              <GroupCard group={group} key={group.id} />
+            {data.joined_groups.map((group) => (
+              <GroupCard group={group} key={group.pda} />
             ))}
           </div>
         ) : (
@@ -45,11 +46,19 @@ export default function AjoSavingsPage() {
         <h2 className="font-medium text-sm text-[#333333] mb-3">
           Public Groups Available
         </h2>
-        <div className="bg-white rounded-xl p-8 flex flex-col items-center justify-center">
-          <p className="text-gray-500 text-center">
-            No public groups available right now!
-          </p>
-        </div>
+        {!isLoading && data && data.avbl_groups.length > 0 ? (
+          <div className="flex flex-col gap-3">
+            {data.avbl_groups.map((group) => (
+              <GroupCard group={group} key={group.pda} />
+            ))}
+          </div>
+        ) : (
+          <div className="bg-white rounded-xl p-8 flex flex-col items-center justify-center">
+            <p className="text-gray-500 text-center">
+              No public groups available right now!
+            </p>
+          </div>
+        )}
       </motion.div>
     </Container>
   );

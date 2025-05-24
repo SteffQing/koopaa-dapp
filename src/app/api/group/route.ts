@@ -94,3 +94,21 @@ export const PUT = withErrorHandler(async (req: NextRequest) => {
     message: `You have successfully joined ${name} Ajo Group`,
   });
 });
+
+export const GET = withErrorHandler(async (req: NextRequest) => {
+  const address = getServerSession(req);
+  const avbl_groups = prisma.group.findMany({
+    where: { participants: { none: { address } } },
+    include: { participants: true },
+  });
+  const joined_groups = prisma.group.findMany({
+    where: { participants: { some: { address } } },
+    include: { participants: true },
+  });
+
+  const res = await Promise.all([avbl_groups, joined_groups]);
+
+  return NextResponse.json({
+    data: { avbl_groups: res[0], joined_groups: res[1] },
+  });
+});

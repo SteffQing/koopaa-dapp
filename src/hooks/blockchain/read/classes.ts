@@ -1,4 +1,3 @@
-
 import { Group, Tag } from "../../../../prisma-client";
 import { AjoParticipant } from "../types";
 import { OnChainAjoGroupData } from "./types";

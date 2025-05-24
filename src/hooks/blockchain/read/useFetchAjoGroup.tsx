@@ -41,7 +41,6 @@ export function useGetAjoGroupOnchain(params: Partial<AjoParams>) {
 
 export default function useGetAjoGroup(params: Partial<AjoParams>) {
   const { data } = useGetAjoGroupOnchain(params);
-  console.log("onchain data", data);
 
   const pda = useMemo(() => {
     try {

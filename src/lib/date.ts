@@ -15,7 +15,8 @@ export function formatActivityTime(dateArg: Date | string): string {
   return date.toLocaleString();
 }
 
-export const formatDate = (date: Date): string => {
+export const formatDate = (dateArg: Date | string): string => {
+  const date = typeof dateArg === "string" ? new Date(dateArg) : dateArg;
   const day = date.getDate();
   const month = date.toLocaleString("default", { month: "short" });
   const year = date.getFullYear();
@@ -32,7 +33,8 @@ export const formatDateTS = (ts: number) => {
   return formatDate(date);
 };
 
-export function getDateHumanReadable(date: Date) {
+export function getDateHumanReadable(dateArg: Date | string) {
+  const date = typeof dateArg === "string" ? new Date(dateArg) : dateArg;
   const day = date.getDate().toString().padStart(2, "0");
   const month = date.toLocaleString("en-US", { month: "short" });
   const year = date.getFullYear();

@@ -16,6 +16,7 @@ interface Props {
   participants: string[];
   createdAt: Date;
   startTimestamp: null | number;
+  disabled?: boolean;
 }
 
 export default function GroupInfo(props: Props) {
@@ -54,7 +55,9 @@ export default function GroupInfo(props: Props) {
           <p className="text-sm text-gray-500 mb-1">Group Type</p>
           <p className="font-medium">Public Group</p>
         </div>
-        <Link href={`/savings/ajo/${props.pda}/members`}>
+        <Link
+          href={props.disabled ? "#" : `/savings/ajo/${props.pda}/participants`}
+        >
           <div className="bg-white rounded-xl p-4 h-full flex flex-col justify-between">
             <p className="text-sm text-gray-500 mb-1">Group Members</p>
             <div className="flex items-center justify-between">
