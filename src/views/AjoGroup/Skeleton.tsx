@@ -58,15 +58,9 @@ function GroupSavingsCardSkeleton() {
       </div>
 
       {/* Action buttons */}
-      <div className="grid grid-cols-2 gap-3">
-        <div className="bg-white rounded-lg p-3 flex items-center justify-center gap-2">
-          <div className="h-4 bg-gray-200 rounded w-12"></div>
-          <ArrowDown className="text-gray-300" size={16} />
-        </div>
-        <div className="bg-gray-300 rounded-lg p-3 flex items-center justify-center gap-2">
-          <div className="h-4 bg-gray-400 rounded w-16"></div>
-          <ArrowUp className="text-gray-400" size={16} />
-        </div>
+      <div className="bg-white rounded-lg p-3 flex items-center justify-center gap-2">
+        <div className="h-4 bg-gray-200 rounded w-12"></div>
+        <ArrowDown className="text-gray-300" size={16} />
       </div>
     </div>
   );

@@ -22,7 +22,7 @@ export default function JoinAjoGroupPage({ params, searchParams }: Props) {
   const { id } = use(params);
   const { inviter } = use(searchParams);
   const router = useRouter();
-  const { data, isLoading } = useGetAjoGroup({ pda: id });
+  const { data, isLoading } = useGetAjoGroup(id);
   const { session } = useSession();
   const { publicKey } = useWallet();
 

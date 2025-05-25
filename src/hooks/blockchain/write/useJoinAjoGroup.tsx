@@ -16,6 +16,7 @@ import { toast } from "sonner";
 import query from "@/lib/fetch";
 import { useRouter } from "next/navigation";
 import { JoinAjoGroup } from "@/app/api/group/schema";
+import { handleOnchainError } from "../helpers/errors";
 
 export default function useJoinAjoGroup() {
   const provider = useAnchorProvider();
@@ -75,12 +76,12 @@ export default function useJoinAjoGroup() {
         // Show toast notification
         transactionToast(signature);
         queryClient.invalidateQueries({
-          queryKey: ["ajo-group", ajoGroup.toString()],
+          queryKey: ["ajo-group", ajoGroup],
         });
 
         return { signature };
       } catch (error) {
-        console.error("Error joining Ajo group:", error);
+        handleOnchainError(error);
         throw error;
       }
     },

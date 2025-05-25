@@ -11,6 +11,7 @@ import { toast } from "sonner";
 import query from "@/lib/fetch";
 import { AddActivityData } from "@/app/api/activities/schema";
 import { ActivityType } from "../../../../prisma-client";
+import { handleOnchainError } from "../helpers/errors";
 
 export default function useVoteToClose() {
   const provider = useAnchorProvider();
@@ -60,7 +61,7 @@ export default function useVoteToClose() {
 
         return { signature };
       } catch (error) {
-        console.error("Error in voting to close Ajo group:", error);
+        handleOnchainError(error);
         throw error;
       }
     },

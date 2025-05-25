@@ -17,6 +17,7 @@ import query from "@/lib/fetch";
 import { AddActivityData } from "@/app/api/activities/schema";
 import { ActivityType } from "../../../../prisma-client";
 import { AnchorError } from "@coral-xyz/anchor";
+import { handleOnchainError } from "../helpers/errors";
 
 export default function useContribute() {
   const provider = useAnchorProvider();
@@ -71,9 +72,7 @@ export default function useContribute() {
 
         return { signature };
       } catch (error) {
-        console.error("Error joining Ajo group:", error);
-        toast.error((error as AnchorError).error.errorMessage);
-
+        handleOnchainError(error);
         throw error;
       }
     },

@@ -16,6 +16,7 @@ import {
   getAssociatedTokenAddressSync,
   TOKEN_PROGRAM_ID,
 } from "@solana/spl-token";
+import { handleOnchainError } from "../helpers/errors";
 
 const DECIMALS = 10 ** 6;
 
@@ -102,7 +103,7 @@ export default function useCreateAjoGroup() {
 
         return { signature, ajoGroupPDA };
       } catch (error) {
-        console.error("Error creating Ajo group:", error);
+        handleOnchainError(error);
         throw error;
       }
     },

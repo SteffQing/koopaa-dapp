@@ -14,7 +14,7 @@ export default function GroupMembersPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = use(params);
-  const { data, isLoading } = useGetAjoGroup({ pda: id });
+  const { data, isLoading } = useGetAjoGroup(id);
   const { publicKey } = useWallet();
 
   const you = data?.youParticipant(publicKey?.toBase58());

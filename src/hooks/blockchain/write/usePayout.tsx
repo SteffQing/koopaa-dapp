@@ -17,6 +17,7 @@ import query from "@/lib/fetch";
 import { AddActivityDataForPayout } from "@/app/api/activities/schema";
 import { ActivityType } from "../../../../prisma-client";
 import { ellipsify } from "@/lib/utils";
+import { handleOnchainError } from "../helpers/errors";
 
 type Params = {
   ajoGroup: string;
@@ -80,7 +81,7 @@ export default function usePayout() {
 
         return { signature };
       } catch (error) {
-        console.error("Error in requesting a payout from Ajo group:", error);
+        handleOnchainError(error);
         throw error;
       }
     },

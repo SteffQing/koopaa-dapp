@@ -24,23 +24,14 @@ type Props = {
 };
 
 export default function GroupSavingsCard(props: Props) {
-  const { name, pda, contributionAmount, payout } = props;
+  const { name, pda, contributionAmount } = props;
   const [isBalanceVisible, setIsBalanceVisible] = useState(true);
   const [isInviting, setIsInviting] = useState(false);
 
   const { contribute, isPending, loading } = useContribute();
-  const withdraw = usePayout();
 
   const handleTopUp = async () =>
     await contribute(pda, name, contributionAmount);
-
-  const handleWithdraw = async () => {
-    if (props.canWithdraw && props.you) {
-      await withdraw.reqestPayout(pda, name, payout, props.you);
-    } else {
-      toast.error("Not eligible for withdrawal yet");
-    }
-  };
 
   const invite = async () => {
     setIsInviting(true);
@@ -76,11 +67,13 @@ export default function GroupSavingsCard(props: Props) {
       className="bg-[#e8ffcc] rounded-xl p-4 mb-6"
       whileHover={{ y: -2, boxShadow: "0 4px 10px rgba(0,0,0,0.05)" }}
     >
-      <div className="flex items-center gap-2 mb-2">
-        <p className="text-gray-700 font-medium">Rotating Payout</p>
-        <button onClick={() => setIsBalanceVisible(!isBalanceVisible)}>
-          <Eye size={18} className="text-gray-600" />
-        </button>
+      <div className="flex items-center justify-between mb-2">
+        <div className="flex items-center gap-2">
+          <p className="text-gray-700 font-medium">Rotating Payout</p>
+          <button onClick={() => setIsBalanceVisible(!isBalanceVisible)}>
+            <Eye size={18} className="text-gray-600" />
+          </button>
+        </div>
         <motion.button
           onClick={invite}
           disabled={isInviting}
@@ -97,7 +90,7 @@ export default function GroupSavingsCard(props: Props) {
         </motion.button>
       </div>
 
-      <div className="mb-4">
+      <div className="mb-4 flex items-center justify-between">
         <div className="flex items-baseline">
           <span className="text-sm mr-1">USDC</span>
           <motion.span
@@ -114,11 +107,10 @@ export default function GroupSavingsCard(props: Props) {
             )}
           </motion.span>
         </div>
-        <div className="flex justify-end">
-          <div className="bg-white rounded-full px-2 py-1 flex items-center gap-1 text-xs">
-            <span>USDC</span>
-            <RefreshCw size={12} />
-          </div>
+
+        <div className="bg-white rounded-full px-2 py-1 flex items-center gap-1 text-xs">
+          <span>USDC</span>
+          <RefreshCw size={12} />
         </div>
       </div>
 
@@ -142,33 +134,20 @@ export default function GroupSavingsCard(props: Props) {
 
       <div className="flex justify-between items-center mb-4">
         <div>
-          <p className="text-sm text-gray-600">Contribution Amount</p>
-          <p className="font-semibold">${props.contributionAmount}</p>
-        </div>
-        <div>
-          <p className="text-sm text-gray-600">Amount you saved</p>
-          <p className="font-semibold">${props.yourContribution}</p>
+          <p className="text-sm text-gray-600">
+            Amount you saved: ${props.yourContribution}
+          </p>
         </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-3">
-        <Button
-          className="bg-white text-black rounded-lg flex "
-          onClick={handleTopUp}
-          disabled={!props.started || props.disabled}
-          loading={isPending || loading}
-        >
-          Top Up <ArrowDown />
-        </Button>
-        <Button
-          className="bg-black text-white rounded-lg flex"
-          onClick={handleWithdraw}
-          loading={withdraw.isPending || withdraw.loading}
-          disabled={!props.started || props.canWithdraw || props.disabled}
-        >
-          Withdraw <ArrowUp />
-        </Button>
-      </div>
+      <Button
+        // className="bg-white text-black rounded-lg flex "
+        onClick={handleTopUp}
+        disabled={!props.started || props.disabled}
+        loading={isPending || loading}
+      >
+        Top Up <ArrowDown />
+      </Button>
     </motion.div>
   );
 }

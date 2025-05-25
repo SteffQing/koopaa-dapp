@@ -14,7 +14,7 @@ export default function AjoGroupPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = use(params);
-  const { data, isLoading } = useGetAjoGroup({ pda: id });
+  const { data, isLoading } = useGetAjoGroup(id);
 
   const item = {
     hidden: { opacity: 0, y: 10 },
