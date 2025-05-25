@@ -1,6 +1,5 @@
 import { Group, Tag } from "../../../../prisma-client";
-import { AjoParticipant } from "../types";
-import { OnChainAjoGroupData } from "./types";
+import { AjoParticipant, AjoGroup } from "../types";
 import { BN } from "@coral-xyz/anchor";
 
 function formatNumber(bn: BN, decimals: number = 6): number {
@@ -101,15 +100,18 @@ export class AjoGroupData {
   }
 
   private get_missing_rounds(userContributionRound: number): number {
+    const currentContributionRound = this.get_current_contribution_round();
+
+    const missingRounds = currentContributionRound - userContributionRound;
+    return Math.max(missingRounds, 0);
+  }
+
+  public get_current_contribution_round() {
     if (this.startTimestamp === null) return 0;
     const now = Math.floor(Date.now() / 1000);
-    const intervalInSeconds = this.contributionInterval * this.DAYSINSECONDS;
-
     const elapsed = now - this.startTimestamp;
-    const totalDueRounds = Math.floor(elapsed / intervalInSeconds);
-
-    const missingRounds = totalDueRounds - userContributionRound;
-    return Math.max(missingRounds, 0);
+    const intervalInSeconds = this.contributionInterval * this.DAYSINSECONDS;
+    return Math.floor(elapsed / intervalInSeconds);
   }
 
   public youParticipant(you: string | undefined) {
@@ -118,6 +120,7 @@ export class AjoGroupData {
       (p) => p.participant.toLowerCase() === you.toLowerCase()
     );
     if (!participant) return null;
+
     const amountSaved = participant.contributionRound * this.contributionAmount;
     const index = this.payoutRound % this.numParticipants;
     const youNext = this.participants[index].participant === you;
@@ -125,10 +128,11 @@ export class AjoGroupData {
       amountSaved,
       missingRounds: this.get_missing_rounds(participant.contributionRound),
       nextPayout: youNext && Boolean(this.startTimestamp),
+      ...participant,
     };
   }
 
-  constructor(onchain_data: OnChainAjoGroupData, offchain_data: Group) {
+  constructor(onchain_data: AjoGroup, offchain_data: Group) {
     this.name = offchain_data.name;
     this.created_at = new Date(offchain_data.created_at);
     this.description = offchain_data.description;

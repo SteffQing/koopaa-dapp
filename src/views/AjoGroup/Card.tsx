@@ -1,14 +1,14 @@
 import { motion } from "framer-motion";
 import { useState } from "react";
 import { toast } from "sonner";
-import ArrowUp from "@/assets/svgs/arrow-up.svg";
 import ArrowDown from "@/assets/svgs/arrow-down.svg";
 import { Eye, RefreshCw, Share2 } from "lucide-react";
 import { FormattedBalance } from "@/components/savings-and-wallet/card";
 import useContribute from "@/hooks/blockchain/write/useContribute";
-import usePayout from "@/hooks/blockchain/write/usePayout";
 import { Button } from "@/components/ui/button";
 import query from "@/lib/fetch";
+import { Currency } from "@/components/savings-and-wallet/types";
+import useGetRate from "@/hooks/useGetRate";
 
 type Props = {
   progress: number;
@@ -19,8 +19,8 @@ type Props = {
   name: string;
   pda: string;
   you: string | undefined;
-  canWithdraw: boolean;
   disabled?: boolean;
+  canTopUp: boolean;
 };
 
 export default function GroupSavingsCard(props: Props) {
@@ -28,7 +28,11 @@ export default function GroupSavingsCard(props: Props) {
   const [isBalanceVisible, setIsBalanceVisible] = useState(true);
   const [isInviting, setIsInviting] = useState(false);
 
+  const [currency, setCurrency] = useState<Currency>("USDC");
+  const [balance, setBalance] = useState(props.payout);
+
   const { contribute, isPending, loading } = useContribute();
+  const rate = useGetRate();
 
   const handleTopUp = async () =>
     await contribute(pda, name, contributionAmount);
@@ -56,6 +60,16 @@ export default function GroupSavingsCard(props: Props) {
       setIsInviting(false);
     }
   };
+
+  function convert() {
+    if (currency === "USDC") {
+      setBalance(props.payout * rate);
+      setCurrency("NGN");
+    } else {
+      setBalance(props.payout);
+      setCurrency("USDC");
+    }
+  }
 
   const item = {
     hidden: { opacity: 0, y: 10 },
@@ -92,7 +106,7 @@ export default function GroupSavingsCard(props: Props) {
 
       <div className="mb-4 flex items-center justify-between">
         <div className="flex items-baseline">
-          <span className="text-sm mr-1">USDC</span>
+          <span className="text-sm mr-1">{currency}</span>
           <motion.span
             className="text-3xl font-bold"
             key={isBalanceVisible.toString()}
@@ -100,16 +114,15 @@ export default function GroupSavingsCard(props: Props) {
             animate={{ opacity: 1 }}
             transition={{ duration: 0.3 }}
           >
-            {isBalanceVisible ? (
-              <FormattedBalance amount={props.payout} />
-            ) : (
-              "****"
-            )}
+            {isBalanceVisible ? <FormattedBalance amount={balance} /> : "****"}
           </motion.span>
         </div>
 
-        <div className="bg-white rounded-full px-2 py-1 flex items-center gap-1 text-xs">
-          <span>USDC</span>
+        <div
+          className="bg-white rounded-full px-2 py-1 flex items-center gap-1 text-xs cursor-pointer"
+          onClick={convert}
+        >
+          <span>{currency}</span>
           <RefreshCw size={12} />
         </div>
       </div>
@@ -143,7 +156,7 @@ export default function GroupSavingsCard(props: Props) {
       <Button
         // className="bg-white text-black rounded-lg flex "
         onClick={handleTopUp}
-        disabled={!props.started || props.disabled}
+        disabled={!props.started || props.disabled || !props.canTopUp}
         loading={isPending || loading}
       >
         Top Up <ArrowDown />

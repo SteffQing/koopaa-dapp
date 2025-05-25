@@ -10,13 +10,13 @@ export type AjoParticipant = {
 
 export type AjoGroup = {
   name: string;
-  securityDeposit: bigint; // u64
-  contributionAmount: bigint; // u64
+  securityDeposit: BN; // u64
+  contributionAmount: BN; // u64
   contributionInterval: number; // u8
   payoutInterval: number; // u8
   numParticipants: number; // u8
   participants: AjoParticipant[];
-  startTimestamp: number | null; // i64 | null
+  startTimestamp: BN | null; // i64 | null
   payoutRound: number; // u16
   closeVotes: PublicKey[];
   isClosed: boolean;

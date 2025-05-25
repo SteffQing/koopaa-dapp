@@ -2,7 +2,6 @@ import {
   Eye,
   RefreshCw,
   ArrowDown,
-  ArrowUp,
   ChevronRight,
   Calendar,
 } from "lucide-react";

@@ -10,6 +10,7 @@ import { Currency, SavingsType, Tab } from "./types";
 import { useModal } from "@/providers/modal-provider";
 import { FundWalletModal } from "../modal/fund-wallet";
 import LoadingDots from "../skeletons/loading-dots";
+import useGetRate from "@/hooks/useGetRate";
 
 interface CardProps {
   amount: number;
@@ -35,8 +36,6 @@ const titleMap = {
   ajo: "Ajo Savings",
 };
 
-const RATE = 1600;
-
 export default function Card({
   amount,
   tab,
@@ -51,12 +50,14 @@ export default function Card({
   const isSavings = tab === "Savings";
   const { showModal } = useModal();
 
+  const rate = useGetRate();
+
   const openFundWalletModal = () => {
     showModal(<FundWalletModal />, { position: "center" });
   };
   function convert() {
     if (currency === "USDC") {
-      setBalance(amount * RATE);
+      setBalance(amount * rate);
       setCurrency("NGN");
     } else {
       setBalance(amount);

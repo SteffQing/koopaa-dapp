@@ -24,6 +24,8 @@ export default function AjoGroup({ data, id, loading, disabled }: Props) {
     () => data?.youParticipant(user?.address),
     [user?.address, data]
   );
+  console.log(you);
+
   return (
     <>
       {loading || !data ? (
@@ -32,13 +34,18 @@ export default function AjoGroup({ data, id, loading, disabled }: Props) {
         <GroupSavingsCard
           progress={data.goal()}
           payout={data.payout()}
-          contributionAmount={data.contributionAmount}
+          contributionAmount={
+            data.contributionAmount * (you?.missingRounds ?? 0)
+          }
+          canTopUp={
+            data.get_current_contribution_round() >
+            (you?.contributionRound ?? 0)
+          }
           yourContribution={you?.amountSaved ?? 0}
           you={user?.address}
           started={Boolean(data.startTimestamp)}
           name={data.name}
           pda={id}
-          canWithdraw={you?.nextPayout ?? false}
           disabled={disabled}
         />
       )}
@@ -51,8 +58,10 @@ export default function AjoGroup({ data, id, loading, disabled }: Props) {
         <GroupInfoSkeleton />
       ) : (
         <GroupInfo
+          payoutRound={data.payoutRound}
           payoutInterval={data.payoutInterval}
           contributionInterval={data.contributionInterval}
+          contributionAmount={data.contributionAmount}
           pda={id}
           createdAt={data.created_at}
           startTimestamp={data.startTimestamp}

@@ -1,5 +1,6 @@
 import { GetAvatar } from "@/components/avatar";
 import { formatDate, formatDateTS } from "@/lib/date";
+import { getPosition } from "@/lib/utils";
 import { motion } from "framer-motion";
 import { ChevronRight } from "lucide-react";
 import Link from "next/link";
@@ -10,8 +11,10 @@ const item = {
 };
 
 interface Props {
+  payoutRound: number;
   payoutInterval: number;
   contributionInterval: number;
+  contributionAmount: number;
   pda: string;
   participants: string[];
   createdAt: Date;
@@ -21,15 +24,15 @@ interface Props {
 
 export default function GroupInfo(props: Props) {
   const participantsCount = props.participants.length;
-  const participantsShown = props.participants.slice(0, 2);
+  const participantsShown = props.participants.slice(0, 3);
   return (
     <>
       <motion.div variants={item} className="grid grid-cols-2 gap-4 mb-4">
-        <div className="bg-white rounded-xl p-4">
+        <div className="bg-[#FCFCFC] rounded-xl p-4 border border-[#CBD5E1]">
           <p className="text-sm text-gray-500 mb-1">Creation Date</p>
           <p className="font-medium">{formatDate(props.createdAt)}</p>
         </div>
-        <div className="bg-white rounded-xl p-4">
+        <div className="bg-[#FCFCFC] rounded-xl p-4 border border-[#CBD5E1]">
           <p className="text-sm text-gray-500 mb-1">Start Date</p>
           <p className="font-medium">
             {props.startTimestamp
@@ -40,18 +43,30 @@ export default function GroupInfo(props: Props) {
       </motion.div>
 
       <motion.div variants={item} className="grid grid-cols-2 gap-4 mb-4">
-        <div className="bg-white rounded-xl p-4">
-          <p className="text-sm text-gray-500 mb-1">Contribution Interval</p>
+        <div className="bg-[#FCFCFC] rounded-xl p-4 border border-[#CBD5E1]">
+          <p className="text-sm text-gray-500 mb-1">Contribution Amount</p>
+          <p className="font-medium">{props.contributionAmount} USDC</p>
+        </div>
+        <div className="bg-[#FCFCFC] rounded-xl p-4 border border-[#CBD5E1]">
+          <p className="text-sm text-gray-500 mb-1">Contribution interval</p>
           <p className="font-medium">{props.contributionInterval} days</p>
         </div>
-        <div className="bg-white rounded-xl p-4">
+      </motion.div>
+      <motion.div variants={item} className="grid grid-cols-2 gap-4 mb-4">
+        <div className="bg-[#FCFCFC] rounded-xl p-4 border border-[#CBD5E1]">
+          <p className="text-sm text-gray-500 mb-1">Payout Round</p>
+          <p className="font-medium">
+            {getPosition(props.payoutRound + 1)} round
+          </p>
+        </div>
+        <div className="bg-[#FCFCFC] rounded-xl p-4 border border-[#CBD5E1]">
           <p className="text-sm text-gray-500 mb-1">Payout interval</p>
           <p className="font-medium">{props.payoutInterval} days</p>
         </div>
       </motion.div>
 
       <motion.div variants={item} className="grid grid-cols-2 gap-4 mb-6">
-        <div className="bg-white rounded-xl p-4">
+        <div className="bg-[#FCFCFC] rounded-xl p-4 border border-[#CBD5E1]">
           <p className="text-sm text-gray-500 mb-1">Group Type</p>
           <p className="font-medium">Public Group</p>
         </div>
