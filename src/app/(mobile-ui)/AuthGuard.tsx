@@ -16,7 +16,7 @@ export default function AuthGuard({ children }: { children: React.ReactNode }) {
 
     const checkAuth = async () => {
       const { error, data } = await query.get<string>("auth");
-toast.info(`Auth response: data ${data}`, error);
+toast.info(`Auth response: data ${data} and error ${error}`);
       if (error) {
         const redirectUrl = `/login?redirect=${encodeURIComponent(pathname)}`;
         router.replace(redirectUrl);
