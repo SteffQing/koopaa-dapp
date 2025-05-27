@@ -23,7 +23,7 @@ export default function AuthGuard({ children }: { children: React.ReactNode }) {
         return;
       }
 
-      if (publicKey && data !== publicKey.toBase58()) {
+      if (!publicKey || publicKey && data !== publicKey.toBase58()) {
         const redirectUrl = `/login?redirect=${encodeURIComponent(pathname)}`;
         router.replace(redirectUrl);
       }
