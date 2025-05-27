@@ -17,17 +17,16 @@ export default function AuthGuard({ children }: { children: React.ReactNode }) {
     const checkAuth = async () => {
       const { error, data } = await query.get<string>("auth");
 toast.info(`Auth response: data ${data} and error ${error}`);
-      if (error) {
+
+const revalidate = !publicKey || error || data!== publicKey.toBase58()
+
+      if (revalidate) {
+await query.delete("auth")
         const redirectUrl = `/login?redirect=${encodeURIComponent(pathname)}`;
         router.replace(redirectUrl);
-        return;
       }
 
-      if (!publicKey || publicKey && data !== publicKey.toBase58()) {
-toast.info(`Should redirect if no pub key`);
-        const redirectUrl = `/login?redirect=${encodeURIComponent(pathname)}`;
-        router.replace(redirectUrl);
-      }
+   
     };
 
     checkAuth();
