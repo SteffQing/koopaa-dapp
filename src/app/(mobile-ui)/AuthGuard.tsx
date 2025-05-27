@@ -30,47 +30,8 @@ export default function AuthGuard({ children }: { children: React.ReactNode }) {
     };
 
     checkAuth();
-  }, [publicKey, router, pathname]);
-
-  useEffect(() => {
-    const handleAccountsChanged = () => {
-      if (publicKey) {
-        // Wallet changed - need to reauthenticate
-        toast.info("Wallet changed - need to reauthenticate");
-      } else {
-        // Wallet disconnected - need to logout
-        toast.info("Wallet disconnected - need to logout");
-      }
-    };
-
-    // Listen for wallet changes
-    window.addEventListener("accountChanged", handleAccountsChanged);
-
-    return () => {
-      window.removeEventListener("accountChanged", handleAccountsChanged);
-    };
-  }, [publicKey]);
+  }, [publicKey, router, pathname]
+)
 
   return <>{children}</>;
 }
-
-/* 
-useEffect(() => {
-  const handleAccountsChanged = () => {
-    if (publicKey) {
-      // Wallet changed - need to reauthenticate
-      createUserSession();
-    } else {
-      // Wallet disconnected - need to logout
-      handleLogout();
-    }
-  };
-
-  // Listen for wallet changes
-  window.addEventListener('walletChange', handleAccountsChanged);
-  
-  return () => {
-    window.removeEventListener('walletChange', handleAccountsChanged);
-  };
-}, [publicKey]);
-*/
