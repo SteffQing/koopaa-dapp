@@ -16,9 +16,8 @@ export default function AuthGuard({ children }: { children: React.ReactNode }) {
 
     const checkAuth = async () => {
       const { error, data } = await query.get<string>("auth");
-toast.info(`Auth response: data ${data} and error ${error}`);
 
-const revalidate = !publicKey || error || data!== publicKey.toBase58()
+const revalidate = !publicKey || error || data !== publicKey.toBase58()
 
       if (revalidate) {
 await query.delete("auth")
