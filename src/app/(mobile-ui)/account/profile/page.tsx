@@ -3,16 +3,20 @@
 import { motion } from "framer-motion";
 import Copy from "@/assets/svgs/copy.svg";
 import { toast } from "sonner";
-import { Avatar } from "@/components/avatar";
+import { Avatar, AvatarPicker } from "@/components/avatar";
 import Container from "@/components/container";
 import NavHeader from "@/views/Navigation/nav-header";
 import { ellipsify } from "@/lib/utils";
 import { useAuthUser } from "@/hooks/useUser";
 import { EditField } from "./EditField";
 import { Skeleton } from "@/components/skeletons";
+import { Camera } from "lucide-react";
+import { useModal } from "@/providers/modal-provider";
 
 export default function ProfilePage() {
   const { user, loading, updateUserProfile } = useAuthUser();
+
+  const { showModal } = useModal();
 
   const copyWalletAddress = () => {
     if (user?.address) {
@@ -29,11 +33,33 @@ export default function ProfilePage() {
     await updateUserProfile({ email: newEmail });
   };
 
+  const handleUpdateAvatar = async (newAvatar: number) => {
+    await updateUserProfile({ avatar: newAvatar });
+  };
+
+  const handleAvatarPicker = () =>
+    showModal(
+      <AvatarPicker
+        onSelect={handleUpdateAvatar}
+        currentAvatar={user?.avatar}
+      />,
+      {
+        position: "center",
+      }
+    );
+
   return (
     <Container className="p-0! bg-[#F2F2F2]!">
       <NavHeader path="/account" header="Profile Details" className="mx-4" />
       <div className="px-4 mt-4 flex flex-col items-center gap-6">
-        <Avatar size={86} />
+        <div className="w-fit relative">
+          <Avatar size={86} number={user?.avatar} />
+          <Camera
+            size={18}
+            className="absolute text-[#9D6D4C] cursor-pointer bottom-2 right-2"
+            onClick={handleAvatarPicker}
+          />
+        </div>
 
         <motion.div
           className="flex gap-3 items-center w-[86.4%] overflow-hidden"

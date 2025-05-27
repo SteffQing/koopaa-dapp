@@ -9,14 +9,17 @@ import RecentActivities from "@/components/activities";
 import Container from "@/components/container";
 import { useAuthUser } from "@/hooks/useUser";
 import { useGetActivities } from "@/hooks/db/useActivities";
+import { useSession } from "@/hooks/useSession";
 
 export default function HomePage() {
   const { user, loading: pending } = useAuthUser();
   const { activities, loading } = useGetActivities();
+  const { session } = useSession();
 
   return (
     <Container>
-      <Header name={user?.username} loading={pending} />
+      <Header name={user?.username} loading={pending} avatar={user?.avatar} />
+      <p>Active Session: {session}</p>
       <SavingsAndWallet />
       <ActionItems user={user} loading={pending} />
       <QuickAccess />

@@ -13,6 +13,9 @@ import Avatar7 from "@/assets/avatars/7.png";
 import Avatar8 from "@/assets/avatars/8.png";
 import Avatar9 from "@/assets/avatars/9.png";
 import useParticipant from "@/hooks/db/useParticipant";
+import { useState } from "react";
+import { useModal } from "@/providers/modal-provider";
+import { Button } from "./ui/button";
 
 const avatarImage: Record<number, StaticImageData> = {
   1: Avatar1,
@@ -52,14 +55,90 @@ const Avatar = ({ number = 1, size = 40 }) => {
   );
 };
 
-const AvatarPicker = ({ onSelect }: { onSelect: (n: number) => void }) => {
+interface AvatarPickerProps {
+  onSelect: (n: number) => Promise<void>;
+  currentAvatar?: number;
+}
+
+const AvatarPicker = ({ onSelect, currentAvatar = 1 }: AvatarPickerProps) => {
+  const [selectedAvatar, setSelectedAvatar] = useState(currentAvatar);
+  const [loading, setLoading] = useState(false);
+  const { hideModal } = useModal();
+
+  const handleAvatarSelect = (avatarNumber: number) => {
+    setSelectedAvatar(avatarNumber);
+  };
+
+  const confirmSelectedAvatar = async () => {
+    setLoading(true);
+    await onSelect(selectedAvatar);
+    setLoading(false);
+  };
+
   return (
-    <div className="grid grid-cols-3 gap-4">
-      {Array.from({ length: 9 }, (_, i) => (
-        <button key={i + 1} onClick={() => onSelect(i + 1)}>
-          <Avatar number={i + 1} />
-        </button>
-      ))}
+    <div className="bg-white rounded-3xl p-6 w-full max-w-sm mx-auto">
+      <div className="text-center mb-6">
+        <h2 className="text-xl font-semibold text-gray-900 mb-1">
+          Choose Avatar
+        </h2>
+        <p className="text-sm text-gray-500">Select your profile picture</p>
+      </div>
+
+      {/* Large Preview Avatar */}
+      <div className="flex justify-center mb-8">
+        <div className="relative">
+          <div className="w-24 h-24 rounded-full bg-gradient-to-br from-blue-100 to-purple-100 p-1">
+            <div className="w-full h-full rounded-full bg-white flex items-center justify-center overflow-hidden">
+              <Avatar number={selectedAvatar} size={88} />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="mb-6">
+        <h3 className="text-sm font-medium text-gray-700 mb-3">
+          Available Avatars
+        </h3>
+        <div className="flex gap-3 overflow-x-auto py-2 scrollbar-hide">
+          {Array.from({ length: 9 }, (_, i) => {
+            const avatarNumber = i + 1;
+            const isSelected = selectedAvatar === avatarNumber;
+
+            return (
+              <button
+                key={avatarNumber}
+                onClick={() => handleAvatarSelect(avatarNumber)}
+                className={`flex-shrink-0 w-14 h-14 rounded-full p-0.5 transition-all duration-200 ${
+                  isSelected
+                    ? "bg-gradient-to-br from-blue-400 to-purple-400 scale-105"
+                    : "bg-gray-200 hover:bg-gray-300 hover:scale-105"
+                }`}
+              >
+                <div className="w-full h-full rounded-full bg-white flex items-center justify-center overflow-hidden">
+                  <Avatar number={avatarNumber} size={52} />
+                </div>
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
+      <div className="flex gap-3">
+        <Button
+          className="flex-1 py-3 px-4 bg-gray-100 text-gray-700 rounded-xl font-medium hover:bg-gray-200 transition-colors cursor-pointer"
+          onClick={hideModal}
+          disabled={loading}
+        >
+          Cancel
+        </Button>
+        <Button
+          className="flex-1 py-3 px-4 bg-blue-500 text-white rounded-xl font-medium hover:bg-blue-600 transition-colors cursor-pointer"
+          loading={loading}
+          onClick={confirmSelectedAvatar}
+        >
+          Confirm
+        </Button>
+      </div>
     </div>
   );
 };

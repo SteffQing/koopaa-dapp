@@ -24,7 +24,7 @@ export const POST = withErrorHandler(async (req: NextRequest) => {
 export async function PATCH(req: NextRequest) {
   try {
     const address = getServerSession(req);
-    const { username, email } = await req.json();
+    const { username, email, avatar } = await req.json();
 
     if (username && typeof username !== "string") {
       return NextResponse.json(
@@ -40,11 +40,19 @@ export async function PATCH(req: NextRequest) {
       );
     }
 
+    if (avatar && typeof avatar !== "number" && avatar >= 1 && avatar <= 9) {
+      return NextResponse.json(
+        { error: "Invalid avatar format" },
+        { status: 400 }
+      );
+    }
+
     const updatedUser = await prisma.user.update({
       where: { address },
       data: {
         ...(username && { username }),
         ...(email && { email }),
+        ...(avatar && { avatar }),
       },
     });
 

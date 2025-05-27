@@ -30,12 +30,10 @@ const coverPhotos = [
 
 interface CreateAjoGroupFormProps {
   onSubmit: (data: CreateAjoGroupFormValues) => void;
-  loading: boolean;
 }
 
 export default function CreateAjoGroupForm({
   onSubmit,
-  loading,
 }: CreateAjoGroupFormProps) {
   const {
     register,
@@ -258,9 +256,7 @@ export default function CreateAjoGroupForm({
         )}
       </motion.div>
 
-      <Button type="submit" loading={loading}>
-        Create Ajo Group
-      </Button>
+      <Button type="submit">Continue</Button>
     </form>
   );
 }

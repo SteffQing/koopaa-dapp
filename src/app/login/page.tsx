@@ -1,32 +1,30 @@
-'use client'
+"use client";
 
-import { motion } from 'framer-motion'
-import { useEffect } from 'react'
-import Image from 'next/image'
-import dynamic from 'next/dynamic'
-import { redirect } from 'next/navigation'
+import { motion } from "framer-motion";
+import { useEffect } from "react";
+import Image from "next/image";
+import dynamic from "next/dynamic";
+import { redirect } from "next/navigation";
 
-import SolanaCoin from '@/assets/coins/solana.png'
-import USDCoin from '@/assets/coins/usdc.png'
-import Disc1 from '@/assets/coins/disc-1.png'
-import Disc2 from '@/assets/coins/disc-2.png'
-import PiggyBank from '@/assets/coins/piggybank.png'
+import SolanaCoin from "@/assets/coins/solana.png";
+import USDCoin from "@/assets/coins/usdc.png";
+import Disc1 from "@/assets/coins/disc-1.png";
+import Disc2 from "@/assets/coins/disc-2.png";
+import PiggyBank from "@/assets/coins/piggybank.png";
 
-import Sol from '@/assets/coins/sol.svg'
-import Koopaa0 from '@/assets/koopaa_0.svg'
+import Sol from "@/assets/coins/sol.svg";
+import Koopaa0 from "@/assets/koopaa_0.svg";
 
-import { useSession } from '@/hooks/useSession'
+import { useSession } from "@/hooks/useSession";
 
-const LoginHandler = dynamic(() => import("./login"), { ssr: false })
+const LoginHandler = dynamic(() => import("./login"), { ssr: false });
 
 export default function LoginPage() {
-  const {isLoaded, isSignedIn} = useSession()
+  const { isLoaded, isSignedIn } = useSession();
 
-  useEffect(()=> {
-    if(isLoaded){
-      if(isSignedIn) redirect("/")
-    }
-  }, [isLoaded, isSignedIn])
+  useEffect(() => {
+    if (isLoaded && isSignedIn) redirect("/");
+  }, [isLoaded, isSignedIn]);
 
   return (
     <motion.div
@@ -40,7 +38,7 @@ export default function LoginPage() {
           className="relative w-full min-h-64 mb-8"
           initial={{ scale: 0.8, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
-          transition={{ delay: 0.4, type: 'spring' }}
+          transition={{ delay: 0.4, type: "spring" }}
         >
           <motion.div
             className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-8"
@@ -51,10 +49,16 @@ export default function LoginPage() {
             transition={{
               repeat: Number.POSITIVE_INFINITY,
               duration: 3,
-              ease: 'easeInOut',
+              ease: "easeInOut",
             }}
           >
-            <Image src={USDCoin} alt="Floating USDCoin" width={60} height={60} className="object-contain" />
+            <Image
+              src={USDCoin}
+              alt="Floating USDCoin"
+              width={60}
+              height={60}
+              className="object-contain"
+            />
           </motion.div>
 
           <Image
@@ -65,11 +69,14 @@ export default function LoginPage() {
             className="object-contain mx-auto pt-[20px]"
           />
 
-          <motion.div
-            className="absolute top-4 right-[1%] transform translate-x-1/2"
-        
-          >
-            <Image src={SolanaCoin} alt="Floating Solana Coin" width={100} height={100} className="object-contain" />
+          <motion.div className="absolute top-4 right-[1%] transform translate-x-1/2">
+            <Image
+              src={SolanaCoin}
+              alt="Floating Solana Coin"
+              width={100}
+              height={100}
+              className="object-contain"
+            />
           </motion.div>
 
           <motion.div
@@ -82,16 +89,22 @@ export default function LoginPage() {
               rotate: {
                 repeat: Number.POSITIVE_INFINITY,
                 duration: 10,
-                ease: 'linear',
+                ease: "linear",
               },
               scale: {
                 repeat: Number.POSITIVE_INFINITY,
                 duration: 3,
-                ease: 'easeInOut',
+                ease: "easeInOut",
               },
             }}
           >
-            <Image src={Disc2} alt="Disc 2" width={70} height={70} className="object-contain" />
+            <Image
+              src={Disc2}
+              alt="Disc 2"
+              width={70}
+              height={70}
+              className="object-contain"
+            />
           </motion.div>
 
           <motion.div
@@ -104,12 +117,12 @@ export default function LoginPage() {
               rotate: {
                 repeat: Number.POSITIVE_INFINITY,
                 duration: 10,
-                ease: 'linear',
+                ease: "linear",
               },
               scale: {
                 repeat: Number.POSITIVE_INFINITY,
                 duration: 3,
-                ease: 'easeInOut',
+                ease: "easeInOut",
               },
             }}
           >
@@ -138,19 +151,20 @@ export default function LoginPage() {
           </h1>
 
           <p className="text-gray-600 mb-8 text-center">
-            Unlock smart, transparent and automated collective saving with your circle — powered by Solana and USDC.
+            Unlock smart, transparent and automated collective saving with your
+            circle — powered by Solana and USDC.
           </p>
         </motion.div>
-        
-    <motion.div
-      className="w-full pb-6"
-      initial={{ y: 20, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{ delay: 0.8 }}
-    >
-      <LoginHandler />
-    </motion.div>
+
+        <motion.div
+          className="w-full pb-6"
+          initial={{ y: 20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ delay: 0.8 }}
+        >
+          <LoginHandler />
+        </motion.div>
       </div>
     </motion.div>
-  )
+  );
 }

@@ -6,10 +6,11 @@ import Bell from "@/assets/svgs/bell.svg";
 
 interface HeaderProps {
   name: string | null | undefined;
+  avatar: number | undefined;
   loading: boolean;
 }
 
-export default function Header({ name, loading }: HeaderProps) {
+export default function Header({ name, loading, avatar }: HeaderProps) {
   const getGreeting = () => {
     const hour = new Date().getHours();
     if (hour < 12) return "Good morning";
@@ -40,7 +41,7 @@ export default function Header({ name, loading }: HeaderProps) {
       >
         <div className="flex items-center gap-3">
           <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-            <Avatar />
+            <Avatar number={avatar} />
           </motion.div>
           <div>
             <h2 className="font-medium text-[#121212] text-base flex items-center gap-1">

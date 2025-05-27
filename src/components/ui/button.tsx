@@ -76,4 +76,31 @@ function Button({
   );
 }
 
-export { Button, buttonVariants };
+type Props = {
+  state: boolean;
+  setState: React.Dispatch<React.SetStateAction<boolean>>;
+};
+
+function SwitchButton({ setState, state }: Props) {
+  return (
+    <motion.div
+      className={cn(
+        "w-8 h-[15px] rounded-full relative cursor-pointer",
+        state ? "bg-[#ff6600]" : "bg-[#A4A4A4]"
+      )}
+      onClick={() => setState(!state)}
+      whileTap={{ scale: 0.9 }}
+    >
+      <motion.div
+        className={cn(
+          "w-5 h-5 bg-[#FCFCFC] rounded-full border-2 absolute top-1/2 -translate-y-1/2",
+          state ? "border-[#FF6600]" : "border-[#A4A4A4]"
+        )}
+        animate={{ x: state ? 12 : 0 }}
+        transition={{ type: "spring", stiffness: 500, damping: 30 }}
+      />
+    </motion.div>
+  );
+}
+
+export { Button, buttonVariants, SwitchButton };

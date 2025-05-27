@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import query from "@/lib/fetch";
 import { useModal } from "@/providers/modal-provider";
 import { useWallet } from "@solana/wallet-adapter-react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
@@ -15,6 +15,8 @@ const LoginHandler = () => {
   const { showModal, isOpen, hideModal } = useModal();
   const { publicKey } = useWallet();
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const redirectPath = searchParams.get("redirect") || "/";
 
   const handleConnectWallet = () =>
     showModal(<ConnectWalletModal />, { position: "center" });
@@ -36,7 +38,7 @@ const LoginHandler = () => {
       }
 
       toast.success(message);
-      router.push("/");
+      router.replace(redirectPath);
     } catch (error) {
       console.error("Session creation error:", error);
     }

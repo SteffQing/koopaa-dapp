@@ -17,7 +17,6 @@ export default function GroupMembersPage({
   const { data, isLoading } = useGetAjoGroup(id);
   const { publicKey } = useWallet();
 
-  const you = data?.youParticipant(publicKey?.toBase58());
   return (
     <Container className="bg-[#F2F2F2]">
       <NavHeader path={`/savings/ajo/${id}`} header="Group Participants" />
