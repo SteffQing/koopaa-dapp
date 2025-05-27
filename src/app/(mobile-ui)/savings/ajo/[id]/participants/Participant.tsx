@@ -29,7 +29,7 @@ export default function Participant({
     <motion.div
       key={participant}
       variants={item}
-      className="bg-white rounded-xl p-4"
+      className="bg-[#FCFCFC] rounded-xl p-4"
       whileHover={{ y: -2, boxShadow: "0 4px 10px rgba(0,0,0,0.05)" }}
     >
       <div className="flex items-center justify-between mb-2">
@@ -73,8 +73,9 @@ export default function Participant({
           </span>
         )}
       </div>
+      <div className="bg-[#E6E6E6] h-[1px] w-full my-2" />
       {isNext && nextPayoutDate && (
-        <p className="text-sm text-gray-500">
+        <p className="text-sm text-gray-500 ml-[52px]">
           Date of collection: {formatDate(nextPayoutDate)}
         </p>
       )}

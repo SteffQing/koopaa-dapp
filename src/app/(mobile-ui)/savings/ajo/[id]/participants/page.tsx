@@ -19,7 +19,7 @@ export default function GroupMembersPage({
 
   const you = data?.youParticipant(publicKey?.toBase58());
   return (
-    <Container>
+    <Container className="bg-[#F2F2F2]">
       <NavHeader path={`/savings/ajo/${id}`} header="Group Participants" />
 
       <div className="space-y-4">
@@ -30,7 +30,7 @@ export default function GroupMembersPage({
             <Participant
               participant={participant}
               nextPayoutDate={data.next_payout_date()}
-              isNext={you?.nextPayout ?? false}
+              isNext={data.payoutRound % data.numParticipants === idx}
               isYou={publicKey?.toBase58() === participant}
               index={idx}
               key={participant}
