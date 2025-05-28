@@ -27,7 +27,7 @@ export default function AjoGroup({ data, id, loading, disabled }: Props) {
 
   return (
     <>
-      {!loading || !data ? (
+      {loading || !data ? (
         <GroupSavingsCardSkeleton />
       ) : (
         <GroupSavingsCard

@@ -76,31 +76,42 @@ function GroupInfoSkeleton() {
     <>
       {/* First row */}
       <div className="grid grid-cols-2 gap-4 mb-4 animate-pulse">
-        <div className="bg-white rounded-xl p-4">
-          <div className="h-4 bg-gray-200 rounded w-20 mb-1"></div>
+        <div className="bg-white rounded-xl p-4 border border-[#CBD5E1]">
+          <div className="h-4 bg-gray-200 rounded w-16 mb-1"></div>
           <div className="h-5 bg-gray-200 rounded w-24"></div>
         </div>
-        <div className="bg-white rounded-xl p-4">
+        <div className="bg-white rounded-xl p-4 border border-[#CBD5E1]">
           <div className="h-4 bg-gray-200 rounded w-16 mb-1"></div>
-          <div className="h-5 bg-gray-200 rounded w-16"></div>
+          <div className="h-5 bg-gray-200 rounded w-24"></div>
         </div>
       </div>
 
       {/* Second row */}
       <div className="grid grid-cols-2 gap-4 mb-4 animate-pulse">
-        <div className="bg-white rounded-xl p-4">
+        <div className="bg-white rounded-xl p-4 border border-[#CBD5E1]">
           <div className="h-4 bg-gray-200 rounded w-28 mb-1"></div>
           <div className="h-5 bg-gray-200 rounded w-12"></div>
         </div>
-        <div className="bg-white rounded-xl p-4">
+        <div className="bg-white rounded-xl p-4 border border-[#CBD5E1]">
           <div className="h-4 bg-gray-200 rounded w-20 mb-1"></div>
           <div className="h-5 bg-gray-200 rounded w-14"></div>
         </div>
       </div>
 
+      <div className="grid grid-cols-2 gap-4 mb-4 animate-pulse">
+        <div className="bg-white rounded-xl p-4 border border-[#CBD5E1]">
+          <div className="h-4 bg-gray-200 rounded w-24 mb-1"></div>
+          <div className="h-5 bg-gray-200 rounded w-20"></div>
+        </div>
+        <div className="bg-white rounded-xl p-4 border border-[#CBD5E1]">
+          <div className="h-4 bg-gray-200 rounded w-20 mb-1"></div>
+          <div className="h-5 bg-gray-200 rounded w-24"></div>
+        </div>
+      </div>
+
       {/* Third row */}
       <div className="grid grid-cols-2 gap-4 mb-6 animate-pulse">
-        <div className="bg-white rounded-xl p-4">
+        <div className="bg-white rounded-xl p-4 border border-[#CBD5E1]">
           <div className="h-4 bg-gray-200 rounded w-20 mb-1"></div>
           <div className="h-5 bg-gray-200 rounded w-24"></div>
         </div>
