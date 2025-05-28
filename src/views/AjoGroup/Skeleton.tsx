@@ -4,6 +4,7 @@ import {
   ArrowDown,
   ChevronRight,
   Calendar,
+  Share2,
 } from "lucide-react";
 
 // Individual skeleton components
@@ -11,13 +12,18 @@ function GroupSavingsCardSkeleton() {
   return (
     <div className="bg-[#e8ffcc] rounded-xl p-4 mb-6 animate-pulse">
       {/* Header */}
-      <div className="flex items-center gap-2 mb-2">
-        <div className="h-5 bg-gray-300 rounded w-32"></div>
-        <Eye size={18} className="text-gray-400" />
+      <div className="flex items-center justify-between mb-2">
+        <div className="flex items-center gap-2">
+          <div className="h-5 bg-gray-300 rounded w-32"></div>
+          <Eye size={18} className="text-gray-400" />
+        </div>
+        <div className="flex items-center gap-1 bg-white/50 hover:bg-white/80 px-2 py-1 rounded-full text-xs font-medium text-gray-700 transition-colors disabled:opacity-50">
+          <Share2 size={12} /> Invite
+        </div>
       </div>
 
       {/* Amount display */}
-      <div className="mb-4">
+      <div className="mb-4 flex items-center justify-between">
         <div className="flex items-baseline">
           <div className="h-4 bg-gray-300 rounded w-12 mr-1"></div>
           <div className="h-8 bg-gray-300 rounded w-20"></div>
@@ -46,14 +52,14 @@ function GroupSavingsCardSkeleton() {
 
       {/* Contribution stats */}
       <div className="flex justify-between items-center mb-4">
-        <div>
+        <div className="flex gap-2">
           <div className="h-4 bg-gray-300 rounded w-28 mb-1"></div>
-          <div className="h-5 bg-gray-300 rounded w-12"></div>
+          <div className="h-4 bg-gray-300 rounded w-12"></div>
         </div>
-        <div className="text-right">
+        {/* <div className="text-right">
           <div className="h-4 bg-gray-300 rounded w-24 mb-1"></div>
           <div className="h-5 bg-gray-300 rounded w-8"></div>
-        </div>
+        </div> */}
       </div>
 
       {/* Action buttons */}

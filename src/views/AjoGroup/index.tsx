@@ -24,11 +24,10 @@ export default function AjoGroup({ data, id, loading, disabled }: Props) {
     () => data?.youParticipant(user?.address),
     [user?.address, data]
   );
-  console.log(you);
 
   return (
     <>
-      {loading || !data ? (
+      {!loading || !data ? (
         <GroupSavingsCardSkeleton />
       ) : (
         <GroupSavingsCard

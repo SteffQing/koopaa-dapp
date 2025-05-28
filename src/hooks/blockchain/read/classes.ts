@@ -149,7 +149,9 @@ export class AjoGroupData {
     this.participants = onchain_data.participants.map(
       (participant) => new AjoGroupParticipantData(participant)
     );
-    this.startTimestamp = formatNumber(onchain_data.startTimestamp, 0);
+    this.startTimestamp = onchain_data.startTimestamp
+      ? formatNumber(onchain_data.startTimestamp, 0)
+      : null;
     this.payoutRound = onchain_data.payoutRound;
     this.closeVotes = onchain_data.closeVotes.map((voter) => voter.toBase58());
     this.isClosed = onchain_data.isClosed;
