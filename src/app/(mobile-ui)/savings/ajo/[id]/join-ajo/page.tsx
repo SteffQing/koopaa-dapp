@@ -44,14 +44,18 @@ export default function JoinAjoGroupPage({ params, searchParams }: Props) {
   };
 
   useEffect(() => {
-    if (!inviter || !publicKey || publicKey.toBase58() !== session) {
+    if (!inviter) {
+      console.log("No inviter");
+
       hideModal();
       router.replace("/");
       return;
     }
 
     if (data) {
+      console.log("Yes data");
       if (data.participants.some((p) => p.participant === session)) {
+        console.log("inviter is in the group already");
         hideModal();
         router.replace("/");
         return;
