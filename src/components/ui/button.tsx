@@ -4,6 +4,7 @@ import { cva, type VariantProps } from "class-variance-authority";
 
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
+import { toast } from "sonner";
 
 const buttonVariants = cva(
   "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-[#e11d48]/20 dark:aria-invalid:ring-[#e11d48]/40 aria-invalid:border-[#e11d48] cursor-pointer disabled:cursor-not-allowed",
@@ -79,16 +80,23 @@ function Button({
 type Props = {
   state: boolean;
   setState: React.Dispatch<React.SetStateAction<boolean>>;
+  disabled?: boolean;
 };
 
-function SwitchButton({ setState, state }: Props) {
+function SwitchButton({ setState, state, disabled }: Props) {
   return (
     <motion.div
       className={cn(
         "w-8 h-[15px] rounded-full relative cursor-pointer",
         state ? "bg-[#ff6600]" : "bg-[#A4A4A4]"
       )}
-      onClick={() => setState(!state)}
+      onClick={() => {
+        if (!disabled) setState(!state);
+        else
+          toast.warning(
+            "This setting has been disabled! Please reach out to KooPaa support team for any questions"
+          );
+      }}
       whileTap={{ scale: 0.9 }}
     >
       <motion.div

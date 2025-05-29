@@ -1,31 +1,41 @@
-'use client'
-import Image from 'next/image'
-import { motion } from 'framer-motion'
-import { cn } from '@/lib/utils'
+"use client";
+import Image from "next/image";
+import { motion } from "framer-motion";
+import { cn } from "@/lib/utils";
 
 interface ImageSelectorProps {
-  images: string[]
-  value: number
-  onChange: (value: number) => void
-  className?: string
+  images: string[];
+  value: number;
+  onChange: (value: number) => void;
+  className?: string;
 }
 
-export function ImageSelector({ images, value, onChange, className }: ImageSelectorProps) {
+export function ImageSelector({
+  images,
+  value,
+  onChange,
+  className,
+}: ImageSelectorProps) {
   return (
-    <div className={cn('grid grid-cols-2 gap-3', className)}>
+    <div className={cn("grid grid-cols-2 gap-3", className)}>
       {images.map((image, index) => (
         <motion.div
-          key={index}
+          key={index + 1}
           className={cn(
-            'relative aspect-video rounded-lg overflow-hidden border-2 cursor-pointer',
-            value === index ? 'border-[#ff6600]' : 'border-transparent',
+            "relative aspect-video rounded-lg overflow-hidden border-2 cursor-pointer",
+            value === index + 1 ? "border-[#ff6600]" : "border-transparent"
           )}
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
-          onClick={() => onChange(index)}
+          onClick={() => onChange(index + 1)}
         >
-          <Image src={image || '/placeholder.svg'} alt={`Cover option ${index + 1}`} fill className="object-cover" />
-          {value === index && (
+          <Image
+            src={image || "/placeholder.svg"}
+            alt={`Cover option ${index + 1}`}
+            fill
+            className="object-cover"
+          />
+          {value === index + 1 && (
             <div className="absolute inset-0 bg-[#ff6600]/10 flex items-center justify-center">
               <div className="w-6 h-6 bg-[#ff6600] rounded-full flex items-center justify-center">
                 <svg
@@ -48,5 +58,5 @@ export function ImageSelector({ images, value, onChange, className }: ImageSelec
         </motion.div>
       ))}
     </div>
-  )
+  );
 }

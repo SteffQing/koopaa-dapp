@@ -1,15 +1,15 @@
-import { useState } from "react";
 import { motion } from "framer-motion";
 import { VariantProps } from "./types";
 import { SwitchButton } from "@/components/ui/button";
+import { useUserSettings } from "@/hooks/useUserSettings";
 
 export const AccessSection = ({ item }: VariantProps) => {
-  const [notificationsEnabled, setNotificationsEnabled] = useState(true);
-  const [showBalances, setShowBalances] = useState(false);
-  const [interestEnabled, setInterestEnabled] = useState(false);
-  const [emergencyExit, setEmergencyExit] = useState(true);
-
-  // Store this data in localstorage for a user-id
+  const {
+    emergencyExitState,
+    interestEnabledState,
+    showBalancesState,
+    notificationsEnabledState,
+  } = useUserSettings();
 
   return (
     <motion.div variants={item}>
@@ -23,9 +23,10 @@ export const AccessSection = ({ item }: VariantProps) => {
             </span>
 
             <SwitchButton
-              setState={setNotificationsEnabled}
-              state={notificationsEnabled}
+              setState={notificationsEnabledState.setState}
+              state={notificationsEnabledState.state}
               key="notificationsEnabled"
+              disabled
             />
           </div>
 
@@ -35,8 +36,8 @@ export const AccessSection = ({ item }: VariantProps) => {
             </span>
 
             <SwitchButton
-              setState={setShowBalances}
-              state={showBalances}
+              setState={showBalancesState.setState}
+              state={showBalancesState.state}
               key="showBalances"
             />
           </div>
@@ -46,9 +47,10 @@ export const AccessSection = ({ item }: VariantProps) => {
               Interest enabled on DEFI yield
             </span>
             <SwitchButton
-              setState={setInterestEnabled}
-              state={interestEnabled}
+              setState={interestEnabledState.setState}
+              state={interestEnabledState.state}
               key="interestEnabled"
+              disabled
             />
           </div>
 
@@ -58,9 +60,10 @@ export const AccessSection = ({ item }: VariantProps) => {
             </span>
 
             <SwitchButton
-              setState={setEmergencyExit}
-              state={emergencyExit}
+              setState={emergencyExitState.setState}
+              state={emergencyExitState.state}
               key="emergencyExit"
+              disabled
             />
           </div>
         </div>

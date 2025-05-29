@@ -1,127 +1,132 @@
-'use client'
+"use client";
 
-import { Avatar } from '@/components/avatar'
-import Container from '@/components/container'
-import { Button } from '@/components/ui/button'
-import { motion } from 'framer-motion'
-import Link from 'next/link'
-import { toast } from 'sonner'
+import Container from "@/components/container";
+import { Button } from "@/components/ui/button";
+import { motion } from "framer-motion";
+// import Link from "next/link";
+import { toast } from "sonner";
+import KooPaaSquad from "@/assets/koopa_clean_squad.png";
+import Image from "next/image";
 
 export default function SquadsPage() {
-  // Sample squad members data
-  const squadMembers = [
-    { id: 1, position: 'top', color: 'bg-green-400' },
-    { id: 2, position: 'topRight', color: 'bg-purple-400' },
-    { id: 3, position: 'right', color: 'bg-blue-400' },
-    { id: 4, position: 'bottomRight', color: 'bg-orange-400' },
-    { id: 5, position: 'bottom', color: 'bg-gray-400' },
-    { id: 6, position: 'bottomLeft', color: 'bg-red-400' },
-    { id: 7, position: 'left', color: 'bg-yellow-400' },
-    { id: 8, position: 'topLeft', color: 'bg-pink-400' },
-    { id: 9, position: 'center', color: 'bg-white' },
-  ]
-
-  // Get position styles based on position name
-  const getPositionStyles = (position: string) => {
-    switch (position) {
-      case 'top':
-        return 'absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2'
-      case 'topRight':
-        return 'absolute top-1/4 right-0 transform translate-x-1/4 -translate-y-1/4'
-      case 'right':
-        return 'absolute top-1/2 right-0 transform translate-x-1/2 -translate-y-1/2'
-      case 'bottomRight':
-        return 'absolute bottom-1/4 right-0 transform translate-x-1/4 translate-y-1/4'
-      case 'bottom':
-        return 'absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-1/2'
-      case 'bottomLeft':
-        return 'absolute bottom-1/4 left-0 transform -translate-x-1/4 translate-y-1/4'
-      case 'left':
-        return 'absolute top-1/2 left-0 transform -translate-x-1/2 -translate-y-1/2'
-      case 'topLeft':
-        return 'absolute top-1/4 left-0 transform -translate-x-1/4 -translate-y-1/4'
-      case 'center':
-        return 'absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2'
-      default:
-        return ''
-    }
-  }
-
   // Animation variants
   const container = {
     hidden: { opacity: 0 },
     show: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.1,
+        staggerChildren: 0.2,
+        delayChildren: 0.3,
       },
     },
-  }
+  };
 
   const item = {
-    hidden: { opacity: 0, y: 20 },
-    show: { opacity: 1, y: 0 },
-  }
+    hidden: { opacity: 0, y: 30 },
+    show: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.6,
+        ease: "easeOut",
+      },
+    },
+  };
+
+  const imageVariants = {
+    hidden: {
+      opacity: 0,
+      scale: 0.8,
+      y: -20,
+    },
+    show: {
+      opacity: 1,
+      scale: 1,
+      y: 0,
+      transition: {
+        duration: 0.8,
+        ease: "easeOut",
+      },
+    },
+  };
+
+  const floatingAnimation = {
+    y: [-8, 8, -8],
+    transition: {
+      duration: 4,
+      repeat: Number.POSITIVE_INFINITY,
+      ease: "easeInOut",
+    },
+  };
 
   return (
-    <Container>
-      <motion.div
-        className="pt-16 pb-8 flex justify-center"
-        initial={{ scale: 0.9, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        transition={{ duration: 0.5 }}
-      >
-        <div className="relative w-64 h-64">
-          {/* Background glow */}
-          <div className="absolute inset-0 bg-orange-100 rounded-full opacity-30 blur-xl"></div>
-
-          {/* Squad members */}
-          {squadMembers.map((member) => (
+    <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-orange-50">
+      <Container>
+        <div className="flex flex-col items-center justify-center min-h-screen py-8">
+          {/* Image Section */}
+          <motion.div
+            className="relative mb-8"
+            variants={imageVariants}
+            initial="hidden"
+            animate="show"
+          >
+            {/* Background glow effect */}
             <motion.div
-              key={member.id}
-              className={`${getPositionStyles(member.position)} ${member.color} rounded-full w-12 h-12 flex items-center justify-center border-2 border-white`}
-              initial={{ scale: 0, opacity: 0 }}
+              className="absolute inset-0 bg-gradient-to-r from-orange-200 to-orange-300 rounded-full opacity-20 blur-3xl scale-110"
               animate={{
-                scale: 1,
-                opacity: 1,
-                rotate: member.position === 'center' ? 0 : [0, 10, 0, -10, 0],
+                scale: [1.1, 1.2, 1.1],
+                opacity: [0.2, 0.3, 0.2],
               }}
               transition={{
-                delay: 0.2 + member.id * 0.1,
-                duration: 0.5,
-                rotate: {
-                  repeat: Number.POSITIVE_INFINITY,
-                  duration: 5 + (member.id % 3),
-                  ease: 'easeInOut',
-                },
+                duration: 3,
+                repeat: Number.POSITIVE_INFINITY,
+                ease: "easeInOut",
               }}
-            >
-              <Avatar size={48} number={member.id} />
+            />
+
+            {/* Floating image */}
+            <motion.div animate={floatingAnimation} className="relative z-10">
+              <Image
+                src={KooPaaSquad || "/placeholder.svg"}
+                alt="KooPaa Squad Illustration"
+                className="w-80 h-80 object-contain drop-shadow-lg"
+                priority
+              />
             </motion.div>
-          ))}
+          </motion.div>
+
+          <motion.div
+            className="px-4 text-center"
+            variants={container}
+            initial="hidden"
+            animate="show"
+          >
+            <motion.h1 className="text-2xl font-bold mb-3" variants={item}>
+              Join a KooPaa squad
+            </motion.h1>
+
+            <motion.p className="text-gray-600 mb-8" variants={item}>
+              No available koopa squad, create one or join existing squads and
+              start saving
+            </motion.p>
+
+            <motion.div className="space-y-4" variants={item}>
+              <Button onClick={() => toast.info("Coming soon")}>
+                {/* <Link href="/squads/join-squad"> */}
+                Join a Squad
+                {/* </Link> */}
+              </Button>
+
+              <Button
+                variant="outline"
+                onClick={() => toast.info("Coming soon")}
+              >
+                Create a New Squad
+              </Button>
+            </motion.div>
+          </motion.div>
         </div>
-      </motion.div>
-
-      {/* Content */}
-      <motion.div className="px-4 text-center" variants={container} initial="hidden" animate="show">
-        <motion.h1 className="text-2xl font-bold mb-3" variants={item}>
-          Join a KooPaa squad
-        </motion.h1>
-
-        <motion.p className="text-gray-600 mb-8" variants={item}>
-          No available koopa squad, create one or join existing squads and start saving
-        </motion.p>
-
-        <motion.div className="space-y-4" variants={item}>
-          <Button>
-            <Link href="/squads/join-squad">Join a Squad</Link>
-          </Button>
-
-          <Button variant="outline" onClick={() => toast.info('Coming soon')}>
-            Create a New Squad
-          </Button>
-        </motion.div>
-      </motion.div>
-    </Container>
-  )
+      </Container>
+    </div>
+  );
 }
