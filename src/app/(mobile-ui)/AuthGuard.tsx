@@ -24,13 +24,11 @@ export default function AuthGuard({ children }: { children: React.ReactNode }) {
     }, 2000);
 
     const checkAuth = async () => {
-      if (!publicKey || !connected) return;
-
       setChecked(true);
       clearTimeout(timeout);
       const { error, data } = await query.get<string>("auth");
 
-      if (error || data !== publicKey.toBase58()) {
+      if (error || data !== publicKey?.toBase58()) {
         await query.delete("auth");
         router.replace(redirectUrl);
       }
