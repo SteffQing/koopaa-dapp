@@ -1,16 +1,17 @@
-"use client";
-
 import BottomNavbar from "@/views/Navigation/navigation";
-import React from "react";
+import { Suspense, ReactNode } from "react";
 import AuthGuard from "./AuthGuard";
+import SplashScreen from "@/views/splash-screen";
 
 export default function MobileLayout({
   children,
-}: Readonly<{ children: React.ReactNode }>) {
+}: Readonly<{ children: ReactNode }>) {
   return (
-    <AuthGuard>
-      {children}
-      <BottomNavbar />
-    </AuthGuard>
+    <Suspense fallback={<SplashScreen />}>
+      <AuthGuard>
+        {children}
+        <BottomNavbar />
+      </AuthGuard>
+    </Suspense>
   );
 }

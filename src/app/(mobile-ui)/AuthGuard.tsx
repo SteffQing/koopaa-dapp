@@ -31,7 +31,7 @@ export default function AuthGuard({ children }: { children: React.ReactNode }) {
     };
 
     checkAuth();
-  }, [publicKey, router, pathname, searchParams]);
+  }, [publicKey, router, pathname, searchParams, checked, connected]);
 
   return <>{children}</>;
 }
