@@ -13,19 +13,25 @@ export default function AuthGuard({ children }: { children: React.ReactNode }) {
   const [checked, setChecked] = useState(false);
 
   useEffect(() => {
+    if (checked) return;
     const fullPath = `${pathname}?${searchParams.toString()}`;
+    const redirectUrl = `/login?redirect=${encodeURIComponent(fullPath)}`;
+
+    const timeout = setTimeout(() => {
+      if (!publicKey || !connected) {
+        query.delete("auth").then(() => router.replace(redirectUrl));
+      }
+    }, 2000);
 
     const checkAuth = async () => {
-      if (!publicKey || !connected || checked) return;
+      if (!publicKey || !connected) return;
 
       setChecked(true);
+      clearTimeout(timeout);
       const { error, data } = await query.get<string>("auth");
 
-      const revalidate = !publicKey || error || data !== publicKey.toBase58();
-
-      if (revalidate) {
+      if (error || data !== publicKey.toBase58()) {
         await query.delete("auth");
-        const redirectUrl = `/login?redirect=${encodeURIComponent(fullPath)}`;
         router.replace(redirectUrl);
       }
     };

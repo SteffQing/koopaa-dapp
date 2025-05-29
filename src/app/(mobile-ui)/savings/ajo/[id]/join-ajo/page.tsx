@@ -39,23 +39,20 @@ export default function JoinAjoGroupPage({ params, searchParams }: Props) {
       {
         position: "center",
         showCloseButton: false,
+        closeOnClickOutside: false,
       }
     );
   };
 
   useEffect(() => {
     if (!inviter) {
-      console.log("No inviter");
-
       hideModal();
       router.replace("/");
       return;
     }
 
     if (data) {
-      console.log("Yes data");
       if (data.participants.some((p) => p.participant === session)) {
-        console.log("inviter is in the group already");
         hideModal();
         router.replace("/");
         return;
