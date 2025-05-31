@@ -7,6 +7,7 @@ import NavHeader from "@/views/Navigation/nav-header";
 import Container from "@/components/container";
 import useGetAjoGroup from "@/hooks/blockchain/read/useFetchAjoGroup";
 import AjoGroup from "@/views/AjoGroup";
+import AjoError from "@/components/error";
 
 export default function AjoGroupPage({
   params,
@@ -14,7 +15,7 @@ export default function AjoGroupPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = use(params);
-  const { data, isLoading } = useGetAjoGroup(id);
+  const { data, isLoading, error, refetch } = useGetAjoGroup(id);
 
   const item = {
     hidden: { opacity: 0, y: 10 },
@@ -34,8 +35,11 @@ export default function AjoGroupPage({
           className="w-full h-40 object-cover"
         />
       </motion.div>
-
-      <AjoGroup id={id} data={data} loading={isLoading} />
+      {error ? (
+        <AjoError onRetry={refetch} message={error.message} />
+      ) : (
+        <AjoGroup id={id} data={data} loading={isLoading} />
+      )}
     </Container>
   );
 }
