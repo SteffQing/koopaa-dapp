@@ -12,6 +12,7 @@ import { useRouter } from "next/navigation";
 import { EnhancedInvitationModal } from "@/components/modal/enhanced-invite";
 import { useSession } from "@/hooks/useSession";
 import { useWallet } from "@solana/wallet-adapter-react";
+import AjoError from "@/components/error";
 
 type Props = {
   params: Promise<{ id: string }>;
@@ -22,7 +23,7 @@ export default function JoinAjoGroupPage({ params, searchParams }: Props) {
   const { id } = use(params);
   const { inviter } = use(searchParams);
   const router = useRouter();
-  const { data, isLoading } = useGetAjoGroup(id);
+  const { data, isLoading, error, refetch } = useGetAjoGroup(id);
   const { session } = useSession();
   const { publicKey } = useWallet();
 
@@ -45,12 +46,6 @@ export default function JoinAjoGroupPage({ params, searchParams }: Props) {
   };
 
   useEffect(() => {
-    if (!inviter) {
-      hideModal();
-      router.replace("/");
-      return;
-    }
-
     if (data) {
       if (data.participants.some((p) => p.participant === session)) {
         hideModal();
@@ -81,7 +76,11 @@ export default function JoinAjoGroupPage({ params, searchParams }: Props) {
         />
       </motion.div>
 
-      <AjoGroup id={id} data={data} loading={isLoading} disabled />
+      {error ? (
+        <AjoError onRetry={refetch} message={error.message} />
+      ) : (
+        <AjoGroup id={id} data={data} loading={isLoading} disabled />
+      )}
     </Container>
   );
 }

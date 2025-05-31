@@ -7,6 +7,7 @@ import useGetAjoGroup from "@/hooks/blockchain/read/useFetchAjoGroup";
 import ParticipantsListSkeleton from "./Skeleton";
 import Participant from "./Participant";
 import { useWallet } from "@solana/wallet-adapter-react";
+import AjoError from "@/components/error";
 
 export default function GroupMembersPage({
   params,
@@ -14,7 +15,7 @@ export default function GroupMembersPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = use(params);
-  const { data, isLoading } = useGetAjoGroup(id);
+  const { data, isLoading, error, refetch } = useGetAjoGroup(id);
   const { publicKey } = useWallet();
 
   return (
@@ -24,6 +25,8 @@ export default function GroupMembersPage({
       <div className="space-y-4">
         {isLoading || !data ? (
           <ParticipantsListSkeleton />
+        ) : error ? (
+          <AjoError message={error.message} onRetry={refetch} />
         ) : (
           data.participants.map(({ participant }, idx) => (
             <Participant

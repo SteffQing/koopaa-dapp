@@ -25,6 +25,11 @@ export default function AjoGroup({ data, id, loading, disabled }: Props) {
     [user?.address, data]
   );
 
+  // console.log(
+  //   data?.get_current_contribution_round(),
+  //   data?.next_contribution_date()
+  // );
+
   return (
     <>
       {loading || !data ? (

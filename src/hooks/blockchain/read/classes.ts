@@ -132,8 +132,6 @@ export class AjoGroupData {
     };
   }
 
-  public whoNext() {}
-
   constructor(onchain_data: AjoGroup, offchain_data: Group) {
     this.name = offchain_data.name;
     this.created_at = new Date(offchain_data.created_at);
