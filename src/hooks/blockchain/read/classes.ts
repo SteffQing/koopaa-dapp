@@ -48,26 +48,26 @@ export class AjoGroupData {
     return payout;
   }
 
-  private minimum_contribution_round(): number {
-    const rounds = this.participants.map((p) => p.contributionRound);
-    return Math.min(...rounds);
-  }
-  private total_saved(): number {
-    return this.minimum_contribution_round() * this.contributionPayout();
+  // private minimum_contribution_round(): number {
+  //   const rounds = this.participants.map((p) => p.contributionRound);
+  //   return Math.min(...rounds);
+  // }
+  private total_collected_contributions(): number {
+    return this.participants.reduce(
+      (total, participant) => total + participant.contributionRound * this.contributionAmount,
+      0
+    );
   }
   private already_disbursed(): number {
-    return (
-      this.payoutRound * this.contributionPayout() * this.actualPayoutInterval()
-    );
+    return this.payoutRound * this.contributionPayout() * this.actualPayoutInterval();
   }
 
   private available_payout() {
-    return this.total_saved() - this.already_disbursed();
+    return this.total_collected_contributions() - this.already_disbursed();
   }
 
   public goal() {
-    const requiredForNextPayout =
-      this.contributionPayout() * this.actualPayoutInterval();
+    const requiredForNextPayout = this.contributionPayout() * this.actualPayoutInterval();
     const available = this.available_payout();
     return Math.min((available / requiredForNextPayout) * 100, 100);
   }
@@ -80,8 +80,7 @@ export class AjoGroupData {
     const intervalInSeconds = this.contributionInterval * this.DAYSINSECONDS;
 
     const intervalsPassed = Math.floor(elapsed / intervalInSeconds);
-    const nextTimestamp =
-      this.startTimestamp + (intervalsPassed + 1) * intervalInSeconds;
+    const nextTimestamp = this.startTimestamp + (intervalsPassed + 1) * intervalInSeconds;
 
     return new Date(nextTimestamp * 1000);
   }
@@ -93,8 +92,7 @@ export class AjoGroupData {
     const intervalInSeconds = this.payoutInterval * this.DAYSINSECONDS;
 
     const intervalsPassed = Math.floor(elapsed / intervalInSeconds);
-    const nextTimestamp =
-      this.startTimestamp + (intervalsPassed + 1) * intervalInSeconds;
+    const nextTimestamp = this.startTimestamp + (intervalsPassed + 1) * intervalInSeconds;
 
     return new Date(nextTimestamp * 1000);
   }
@@ -116,9 +114,7 @@ export class AjoGroupData {
 
   public youParticipant(you: string | undefined) {
     if (!you) return null;
-    const participant = this.participants.find(
-      (p) => p.participant.toLowerCase() === you.toLowerCase()
-    );
+    const participant = this.participants.find((p) => p.participant.toLowerCase() === you.toLowerCase());
     if (!participant) return null;
 
     const amountSaved = participant.contributionRound * this.contributionAmount;
@@ -144,12 +140,8 @@ export class AjoGroupData {
     this.contributionInterval = onchain_data.contributionInterval;
     this.payoutInterval = onchain_data.payoutInterval;
     this.numParticipants = onchain_data.numParticipants;
-    this.participants = onchain_data.participants.map(
-      (participant) => new AjoGroupParticipantData(participant)
-    );
-    this.startTimestamp = onchain_data.startTimestamp
-      ? formatNumber(onchain_data.startTimestamp, 0)
-      : null;
+    this.participants = onchain_data.participants.map((participant) => new AjoGroupParticipantData(participant));
+    this.startTimestamp = onchain_data.startTimestamp ? formatNumber(onchain_data.startTimestamp, 0) : null;
     this.payoutRound = onchain_data.payoutRound;
     this.closeVotes = onchain_data.closeVotes.map((voter) => voter.toBase58());
     this.isClosed = onchain_data.isClosed;

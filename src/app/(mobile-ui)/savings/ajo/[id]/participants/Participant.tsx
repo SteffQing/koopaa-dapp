@@ -17,13 +17,7 @@ const item = {
   show: { opacity: 1, y: 0 },
 };
 
-export default function Participant({
-  participant,
-  index,
-  isNext,
-  nextPayoutDate,
-  isYou,
-}: Props) {
+export default function Participant({ participant, index, isNext, nextPayoutDate, isYou }: Props) {
   const { data, isLoading } = useParticipant(participant);
   return (
     <motion.div
@@ -40,21 +34,15 @@ export default function Participant({
               {isLoading || !data?.data ? (
                 <div className="h-5 bg-gray-200 rounded w-24" />
               ) : (
-                <p className="font-medium">
-                  {isYou ? "You" : data.data.username}
-                </p>
+                <p className="font-medium">{isYou ? "You" : data.data.username}</p>
               )}
 
               {index === 0 && (
-                <span className="ml-2 text-xs bg-orange-100 text-[#ff6b00] px-2 py-0.5 rounded">
-                  Admin
-                </span>
+                <span className="ml-2 text-xs bg-orange-100 text-[#ff6b00] px-2 py-0.5 rounded">Admin</span>
               )}
             </div>
             <div className="flex items-center text-xs text-gray-500">
-              <span className="text-orange-500 font-medium">
-                @{getPosition(index + 1)}
-              </span>
+              <span className="text-orange-500 font-medium">@{getPosition(index + 1)}</span>
               <span className="ml-1">to collect contribution</span>
             </div>
           </div>
@@ -68,17 +56,14 @@ export default function Participant({
             Next
           </motion.button>
         ) : (
-          <span className="bg-yellow-100 text-yellow-700 px-3 py-1 rounded-md text-sm font-medium">
-            Outstanding
-          </span>
+          <span className="bg-yellow-100 text-yellow-700 px-3 py-1 rounded-md text-sm font-medium">Outstanding</span>
         )}
       </div>
       <div className="bg-[#E6E6E6] h-[1px] w-full my-2" />
       {isNext && nextPayoutDate && (
-        <p className="text-sm text-gray-500 ml-[52px]">
-          Date of collection: {formatDate(nextPayoutDate)}
-        </p>
+        <p className="text-sm text-gray-500 ml-[52px]">Date of collection: {formatDate(nextPayoutDate)}</p>
       )}
     </motion.div>
   );
 }
+// #CFFED1 PAID - Need to calculate dates for everyone lolz

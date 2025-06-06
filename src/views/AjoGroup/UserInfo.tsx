@@ -29,8 +29,8 @@ function JoinAjoGroup({ pda, name, fee }: Pick<InfoProps, "pda" | "name" | "fee"
   const openInvitationModal = () => {
     showModal(<EnhancedInvitationModal inviter="KooPaa" groupName={name} id={pda} fee={fee} />, {
       position: "center",
-      showCloseButton: false,
-      closeOnClickOutside: false,
+      showCloseButton: true,
+      closeOnClickOutside: true,
     });
   };
   return (
