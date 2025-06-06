@@ -21,35 +21,20 @@ type Props = {
   you: string | undefined;
   disabled?: boolean;
   canTopUp: boolean;
+  isParticipant: boolean;
 };
 
-export default function GroupSavingsCard(props: Props) {
-  const { name, pda, contributionAmount } = props;
-  const [isBalanceVisible, setIsBalanceVisible] = useState(true);
+export function Invite({ pda }: { pda: string }) {
   const [isInviting, setIsInviting] = useState(false);
-
-  const [currency, setCurrency] = useState<Currency>("USDC");
-  const [balance, setBalance] = useState(props.payout);
-
-  const { contribute, isPending, loading } = useContribute();
-  const rate = useGetRate();
-
-  const handleTopUp = async () =>
-    await contribute(pda, name, contributionAmount);
-
   const invite = async () => {
     setIsInviting(true);
     try {
-      const load = toast.loading(
-        "Please wait as we generate you a unique invite link"
-      );
+      const load = toast.loading("Please wait as we generate you a unique invite link");
       const { data, error } = await query.post<string>("", { body: { pda } });
       toast.dismiss(load);
       if (data) {
         await navigator.clipboard.writeText(data);
-        toast.success(
-          `Invite link copied! Share with friends to join ${name} Ajo Group`
-        );
+        toast.success(`Invite link copied! Share with friends to join ${name} Ajo Group`);
       } else {
         toast.error(error || "Failed to generate invite link");
       }
@@ -60,6 +45,31 @@ export default function GroupSavingsCard(props: Props) {
       setIsInviting(false);
     }
   };
+  return (
+    <motion.button
+      onClick={invite}
+      disabled={isInviting}
+      className="flex items-center gap-1 bg-white/50 hover:bg-white/80 px-2 py-1 rounded-full text-xs font-medium text-gray-700 transition-colors disabled:opacity-50"
+      whileHover={{ scale: 1.05 }}
+      whileTap={{ scale: 0.95 }}
+    >
+      {isInviting ? <RefreshCw size={12} className="animate-spin" /> : <Share2 size={12} />}
+      Invite
+    </motion.button>
+  );
+}
+
+export default function GroupSavingsCard(props: Props) {
+  const { name, pda, contributionAmount } = props;
+  const [isBalanceVisible, setIsBalanceVisible] = useState(true);
+
+  const [currency, setCurrency] = useState<Currency>("USDC");
+  const [balance, setBalance] = useState(props.payout);
+
+  const { contribute, isPending, loading } = useContribute();
+  const rate = useGetRate();
+
+  const handleTopUp = async () => await contribute(pda, name, contributionAmount);
 
   function convert() {
     if (currency === "USDC") {
@@ -88,20 +98,7 @@ export default function GroupSavingsCard(props: Props) {
             <Eye size={18} className="text-gray-600" />
           </button>
         </div>
-        <motion.button
-          onClick={invite}
-          disabled={isInviting}
-          className="flex items-center gap-1 bg-white/50 hover:bg-white/80 px-2 py-1 rounded-full text-xs font-medium text-gray-700 transition-colors disabled:opacity-50"
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-        >
-          {isInviting ? (
-            <RefreshCw size={12} className="animate-spin" />
-          ) : (
-            <Share2 size={12} />
-          )}
-          Invite
-        </motion.button>
+        {!props.started && <Invite pda={pda} />}
       </div>
 
       <div className="mb-4 flex items-center justify-between">
@@ -145,18 +142,16 @@ export default function GroupSavingsCard(props: Props) {
         </div>
       </div>
 
-      <div className="flex justify-between items-center mb-4">
-        <div>
-          <p className="text-sm text-gray-600">
-            Amount you saved: ${props.yourContribution}
-          </p>
+      {props.isParticipant && (
+        <div className="flex justify-between items-center mb-4">
+          <p className="text-sm text-gray-600">Amount you saved: ${props.yourContribution}</p>
         </div>
-      </div>
+      )}
 
       <Button
         // className="bg-white text-black rounded-lg flex "
         onClick={handleTopUp}
-        disabled={!props.started || props.disabled || !props.canTopUp}
+        disabled={!props.started || props.disabled || !props.canTopUp || !props.isParticipant}
         loading={isPending || loading}
       >
         Top Up <ArrowDown />

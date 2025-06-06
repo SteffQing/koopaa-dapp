@@ -49,12 +49,7 @@ const itemVariants = {
   },
 };
 
-export const EnhancedInvitationModal: React.FC<InvitationModalProps> = ({
-  inviter,
-  groupName,
-  id,
-  fee,
-}) => {
+export const EnhancedInvitationModal: React.FC<InvitationModalProps> = ({ inviter, groupName, id, fee }) => {
   const { hideModal } = useModal();
   const router = useRouter();
   const { data, isLoading } = useParticipant(inviter);
@@ -83,11 +78,7 @@ export const EnhancedInvitationModal: React.FC<InvitationModalProps> = ({
           animate="visible"
           exit="exit"
         >
-          {/* Avatar Section */}
-          <motion.div
-            className="flex justify-center mb-6 relative"
-            variants={itemVariants}
-          >
+          <motion.div className="flex justify-center mb-6 relative" variants={itemVariants}>
             <div className="relative">
               <motion.div
                 initial={{ scale: 0, rotate: -180 }}
@@ -103,13 +94,7 @@ export const EnhancedInvitationModal: React.FC<InvitationModalProps> = ({
                 transition={{ delay: 0.3, duration: 0.5, ease: "easeOut" }}
                 whileHover={{ rotate: 15, scale: 1.1 }}
               >
-                <svg
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path
                     d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"
                     fill="currentColor"
@@ -127,7 +112,6 @@ export const EnhancedInvitationModal: React.FC<InvitationModalProps> = ({
             </motion.div>
           </motion.div>
 
-          {/* Invitation Text */}
           <motion.div className="text-center mb-8" variants={itemVariants}>
             <motion.p
               className="text-lg leading-relaxed"
@@ -142,7 +126,7 @@ export const EnhancedInvitationModal: React.FC<InvitationModalProps> = ({
                 transition={{ delay: 0.8, duration: 0.3, ease: "easeOut" }}
                 whileHover={{ scale: 1.05 }}
               >
-                @{trimText(data?.data?.username || "Unknown", 15)}
+                @{trimText(data?.data?.username || "KooPaa", 15)}
               </motion.span>{" "}
               is inviting you to join{" "}
               <motion.span
@@ -159,7 +143,6 @@ export const EnhancedInvitationModal: React.FC<InvitationModalProps> = ({
             </motion.p>
           </motion.div>
 
-          {/* Action Buttons */}
           <motion.div className="space-y-3" variants={itemVariants}>
             <motion.div
               whileHover={{ scale: 1.02 }}
@@ -168,11 +151,7 @@ export const EnhancedInvitationModal: React.FC<InvitationModalProps> = ({
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 1.2, duration: 0.5 }}
             >
-              <Button
-                onClick={handleAccept}
-                className="w-full"
-                loading={loading || isPending}
-              >
+              <Button onClick={handleAccept} className="w-full" loading={loading || isPending}>
                 Accept Invitation
               </Button>
             </motion.div>
@@ -183,12 +162,7 @@ export const EnhancedInvitationModal: React.FC<InvitationModalProps> = ({
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 1.4, duration: 0.5 }}
             >
-              <Button
-                variant="outline"
-                onClick={handleDecline}
-                className="w-full"
-                disabled={loading || isPending}
-              >
+              <Button variant="outline" onClick={handleDecline} className="w-full" disabled={loading || isPending}>
                 Decline
               </Button>
             </motion.div>

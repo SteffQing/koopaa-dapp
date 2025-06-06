@@ -5,11 +5,7 @@ import { useMemo } from "react";
 import { Info, NextSavingDate } from "./UserInfo";
 import GroupInfo from "./GroupInfo";
 import UserGroupActivities from "./Activities";
-import {
-  GroupInfoSkeleton,
-  GroupSavingsCardSkeleton,
-  NextSavingDateSkeleton,
-} from "./Skeleton";
+import { GroupInfoSkeleton, GroupSavingsCardSkeleton, NextSavingDateSkeleton } from "./Skeleton";
 
 interface Props {
   id: string;
@@ -20,15 +16,7 @@ interface Props {
 
 export default function AjoGroup({ data, id, loading, disabled }: Props) {
   const { user } = useAuthUser();
-  const you = useMemo(
-    () => data?.youParticipant(user?.address),
-    [user?.address, data]
-  );
-
-  // console.log(
-  //   data?.get_current_contribution_round(),
-  //   data?.next_contribution_date()
-  // );
+  const you = useMemo(() => data?.youParticipant(user?.address), [user?.address, data]);
 
   return (
     <>
@@ -38,25 +26,26 @@ export default function AjoGroup({ data, id, loading, disabled }: Props) {
         <GroupSavingsCard
           progress={data.goal()}
           payout={data.payout()}
-          contributionAmount={
-            data.contributionAmount * (you?.missingRounds ?? 0)
-          }
-          canTopUp={
-            data.get_current_contribution_round() >
-            (you?.contributionRound ?? 0)
-          }
+          contributionAmount={data.contributionAmount * (you?.missingRounds ?? 0)}
+          canTopUp={data.get_current_contribution_round() > (you?.contributionRound ?? 0)}
           yourContribution={you?.amountSaved ?? 0}
           you={user?.address}
           started={Boolean(data.startTimestamp)}
           name={data.name}
           pda={id}
           disabled={disabled}
+          isParticipant={Boolean(you)}
         />
       )}
       <Info
         nextPayout={you?.nextPayout ?? false}
         missedRounds={you?.missingRounds ?? 0}
         payoutDate={data?.next_payout_date() ?? null}
+        slots={data ? Math.max(0, data.numParticipants - data.participants.length) : 0}
+        pda={id}
+        isParticipant={Boolean(you)}
+        name={data?.name ?? ""}
+        fee={data?.securityDeposit ?? 0}
       />
       {loading || !data ? (
         <GroupInfoSkeleton />
@@ -76,7 +65,7 @@ export default function AjoGroup({ data, id, loading, disabled }: Props) {
       {loading || !data ? (
         <NextSavingDateSkeleton />
       ) : (
-        <NextSavingDate date={data.next_contribution_date()} />
+        Boolean(you) && <NextSavingDate date={data.next_contribution_date()} />
       )}
       <UserGroupActivities pda={id} />
     </>
