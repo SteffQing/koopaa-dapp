@@ -1,4 +1,4 @@
-import { Group, Tag } from "../../../../prisma-client";
+import { Group, Tag } from "@prisma-client";
 import { AjoParticipant, AjoGroup } from "../types";
 import { BN } from "@coral-xyz/anchor";
 

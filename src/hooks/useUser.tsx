@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { User } from "../../prisma-client";
+import { User } from "@prisma-client";
 import { toast } from "sonner";
 
 export function useAuthUser() {

@@ -1,6 +1,6 @@
 import query from "@/lib/fetch";
 import { useQuery } from "@tanstack/react-query";
-import { User } from "../../../prisma-client";
+import { User } from "@prisma-client";
 
 export default function useParticipant(address: string) {
   return useQuery({

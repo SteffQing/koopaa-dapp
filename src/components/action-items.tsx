@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import Clock from "@/assets/svgs/clock.svg";
-import { User } from "../../prisma-client";
+import { User } from "@prisma-client";
 import { useMemo } from "react";
 import { useRouter } from "next/navigation";
 

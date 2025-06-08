@@ -7,7 +7,7 @@ import StackedCoins from "@/assets/svgs/activities/stacked-coins.svg";
 import Target from "@/assets/svgs/activities/target.svg";
 import Transfer from "@/assets/svgs/activities/transfer.svg";
 
-import { Activity, ActivityType } from "../../../prisma-client";
+import { Activity, ActivityType } from "@prisma-client";
 import { groupActivitiesByTimeframe } from "./utils";
 import { Fragment, JSX } from "react";
 import { formatActivityTime } from "@/lib/date";
@@ -37,10 +37,12 @@ const labelMap: Record<string, string> = {
   older: "Older",
 };
 
-export default function RecentActivities({
-  data,
-  loading,
-}: ComponentProps<Activity>) {
+interface Props {
+  data: Activity[] | undefined;
+  loading: boolean;
+}
+
+export default function RecentActivities({ data, loading }: Props) {
   return (
     <motion.div
       className="bg-[#FCFCFC] rounded-[8px] px-3 py-4 flex flex-col gap-3"

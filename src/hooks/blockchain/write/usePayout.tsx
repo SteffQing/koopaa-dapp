@@ -15,7 +15,7 @@ import {
 import { toast } from "sonner";
 import query from "@/lib/fetch";
 import { AddActivityDataForPayout } from "@/app/api/activities/schema";
-import { ActivityType } from "../../../../prisma-client";
+import { ActivityType } from "@prisma-client";
 import { ellipsify } from "@/lib/utils";
 import { handleOnchainError } from "../helpers/errors";
 

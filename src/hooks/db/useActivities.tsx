@@ -1,6 +1,6 @@
 import query from "@/lib/fetch";
 import { useQuery } from "@tanstack/react-query";
-import { Activity } from "../../../prisma-client";
+import { Activity } from "@prisma-client";
 import { useAuthUser } from "../useUser";
 
 const KEY = "activities";
