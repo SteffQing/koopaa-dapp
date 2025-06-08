@@ -8,9 +8,11 @@ import ArrowUp from "@/assets/svgs/arrow-up.svg";
 import ArrowDown from "@/assets/svgs/arrow-down.svg";
 import { Currency, SavingsType, Tab } from "./types";
 import { useModal } from "@/providers/modal-provider";
-import { FundWalletModal } from "../modal/fund-wallet";
+// import { FundWalletModal } from "../modal/fund-wallet";
 import LoadingDots from "../skeletons/loading-dots";
 import useGetRate from "@/hooks/useGetRate";
+import { FaucetModal } from "../modal/faucet-claim";
+import { cn } from "@/lib/utils";
 
 interface CardProps {
   amount: number;
@@ -52,8 +54,11 @@ export default function Card({
 
   const rate = useGetRate();
 
-  const openFundWalletModal = () => {
-    showModal(<FundWalletModal />, { position: "center" });
+  // const openFundWalletModal = () => {
+  //   showModal(<FundWalletModal />, { position: "center" });
+  // };
+  const openFaucetModal = () => {
+    showModal(<FaucetModal />, { position: "center" });
   };
   function convert() {
     if (currency === "USDC") {
@@ -129,7 +134,7 @@ export default function Card({
             className="bg-white py-3 rounded-lg flex items-center justify-center gap-2 font-medium"
             whileHover={{ y: -2, boxShadow: "0 4px 6px rgba(0,0,0,0.1)" }}
             whileTap={{ y: 0, boxShadow: "none" }}
-            onClick={openFundWalletModal}
+            onClick={openFaucetModal}
           >
             {isSavings ? "Top Up" : "Fund Wallet"} <ArrowDown />
           </motion.button>
@@ -147,7 +152,7 @@ export default function Card({
   );
 }
 
-export function FormattedBalance({ amount = 0 }) {
+export function FormattedBalance({ amount = 0, cName = "" }) {
   const [whole, decimal] = amount
     .toLocaleString("en-US", {
       minimumFractionDigits: 2,
@@ -158,7 +163,7 @@ export function FormattedBalance({ amount = 0 }) {
   return (
     <>
       {whole}
-      <span className="text-xl">.{decimal}</span>
+      <span className={cn("text-xl", cName)}>.{decimal}</span>
     </>
   );
 }

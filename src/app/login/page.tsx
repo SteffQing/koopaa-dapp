@@ -28,7 +28,7 @@ export default function LoginPage() {
 
   return (
     <motion.div
-      className="splash-bg container relative pb-4"
+      className="splash-bg container relative pb-4 min-h-screen"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
