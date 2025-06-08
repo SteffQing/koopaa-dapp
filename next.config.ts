@@ -1,5 +1,4 @@
 import type { NextConfig } from "next";
-const path = require("path");
 
 const nextConfig: NextConfig = {
   webpack(config) {
@@ -7,10 +6,6 @@ const nextConfig: NextConfig = {
       test: /\.svg$/i,
       use: ["@svgr/webpack"],
     });
-    config.resolve.alias["@prisma-client"] = path.resolve(
-      __dirname,
-      "prisma-client"
-    );
 
     return config;
   },

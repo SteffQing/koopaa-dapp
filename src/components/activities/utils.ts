@@ -1,4 +1,4 @@
-import { Activity } from "@prisma-client";
+import { Activity } from "../../../prisma-client";
 
 type GroupedActivities = {
   today: Activity[];

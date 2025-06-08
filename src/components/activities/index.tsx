@@ -7,13 +7,13 @@ import StackedCoins from "@/assets/svgs/activities/stacked-coins.svg";
 import Target from "@/assets/svgs/activities/target.svg";
 import Transfer from "@/assets/svgs/activities/transfer.svg";
 
-import { Activity, ActivityType } from "@prisma-client";
 import { groupActivitiesByTimeframe } from "./utils";
 import { Fragment, JSX } from "react";
 import { formatActivityTime } from "@/lib/date";
 import { cn } from "@/lib/utils";
 // import Link from "next/link";
 import { SkeletonActivity } from "../skeletons/activities";
+import { Activity, ActivityType } from "../../../prisma-client";
 
 const IconByType: Record<ActivityType, JSX.Element> = {
   create: <Target />,

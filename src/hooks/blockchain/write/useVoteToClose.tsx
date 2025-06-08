@@ -10,7 +10,7 @@ import { useTransactionToast } from "../../use-transaction-toast";
 import { toast } from "sonner";
 import query from "@/lib/fetch";
 import { AddActivityData } from "@/app/api/activities/schema";
-import { ActivityType } from "@prisma-client";
+import { ActivityType } from "../../../../prisma-client";
 import { handleOnchainError } from "../helpers/errors";
 
 export default function useVoteToClose() {

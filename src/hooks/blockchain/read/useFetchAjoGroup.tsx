@@ -3,7 +3,7 @@ import { getKoopaProgram } from "@/lib/solana/koopa-exports";
 import { useAnchorProvider } from "@/providers/solana-provider";
 import { useQuery } from "@tanstack/react-query";
 import { PublicKey } from "@solana/web3.js";
-import { Group } from "@prisma-client";
+import { Group } from "../../../../prisma-client";
 import { AjoGroupData } from "./classes";
 
 export default function useGetAjoGroup(pda: string) {

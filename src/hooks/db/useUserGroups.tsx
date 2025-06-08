@@ -1,7 +1,7 @@
 import query from "@/lib/fetch";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { useQuery } from "@tanstack/react-query";
-import { Group, User } from "@prisma-client";
+import { Group, User } from "../../../prisma-client";
 
 export type GroupAndParticipants = Group & { participants: User[] };
 
