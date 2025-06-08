@@ -9,6 +9,22 @@ import Participant from "./Participant";
 import { useWallet } from "@solana/wallet-adapter-react";
 import AjoError from "@/components/error";
 
+function calculatePayoutDate(
+  date: Date | null,
+  interval: number,
+  nextPayoutIndex: number,
+  position: number,
+  totalMembers: number
+) {
+  if (!date) return null;
+  const roundsAway = (position - nextPayoutIndex + totalMembers) % totalMembers;
+  const daysUntilPayout = roundsAway * interval;
+
+  const payoutDate = new Date(date);
+  payoutDate.setDate(payoutDate.getDate() + daysUntilPayout);
+  return payoutDate;
+}
+
 export default function GroupMembersPage({
   params,
 }: {
@@ -31,7 +47,13 @@ export default function GroupMembersPage({
           data.participants.map(({ participant }, idx) => (
             <Participant
               participant={participant}
-              nextPayoutDate={data.next_payout_date()}
+              nextPayoutDate={calculatePayoutDate(
+                data.next_payout_date(),
+                data.payoutInterval,
+                data.payoutRound % data.numParticipants,
+                idx,
+                data.numParticipants
+              )}
               isNext={data.payoutRound % data.numParticipants === idx}
               isYou={publicKey?.toBase58() === participant}
               index={idx}
