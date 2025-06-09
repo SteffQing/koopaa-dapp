@@ -20,6 +20,7 @@ import useFaucetBalance from "@/hooks/blockchain/useFaucet";
 import { claimSOL, claimUSDC } from "@/actions/faucet";
 import { FormattedBalance } from "../savings-and-wallet/card";
 import { useTransactionToast } from "@/hooks/use-transaction-toast";
+import { useLocalStorage } from "@/hooks/useLocalStorage";
 
 const USDCIcon = ({ cName }: { cName?: string }) => (
   <div className={cn("w-10 h-10 relative rounded-full", cName)}>
@@ -115,6 +116,7 @@ export const FaucetModal = () => {
   const { hideModal } = useModal();
   const transactionToast = useTransactionToast();
   const queryClient = useQueryClient();
+  const [, showFaucetGiftIcon] = useLocalStorage("faucet", true);
 
   const [selectedTokens, setSelectedTokens] = useState<{
     usdc: boolean;
@@ -133,7 +135,10 @@ export const FaucetModal = () => {
   const { data, isLoading } = useQuery({
     queryKey: ["faucet", session],
     queryFn: async () => query.get<Claim>("faucet"),
-    select: (data) => data.data,
+    select: (data) => {
+      if (data.error) hideModal();
+      return data.data;
+    },
   });
 
   const { isPending, mutateAsync } = useMutation({
@@ -179,6 +184,10 @@ export const FaucetModal = () => {
       toast.error("Failed to claim tokens");
     } finally {
       setClaiming(false);
+      showFaucetGiftIcon(false);
+      toast.info(
+        "Faucet can always be accessed from the Top up button of your Wallet and Savings card!"
+      );
     }
   };
 

@@ -9,7 +9,6 @@ import Savings from "@/assets/svgs/navigation/savings.svg";
 import Squads from "@/assets/svgs/squad.svg";
 import Account from "@/assets/svgs/navigation/account.svg";
 import { cn } from "@/lib/utils";
-// import { useEffect, useState } from "react";
 
 const tabs = [
   { name: "Home", icon: Home, path: "/" },
@@ -21,7 +20,6 @@ const tabs = [
 function useActiveTab() {
   const pathname = usePathname();
 
-  // Find the tab that matches the current path
   const activeTab = tabs.find(
     (tab) =>
       pathname === tab.path ||
@@ -33,26 +31,6 @@ function useActiveTab() {
 
 export default function BottomNavbar() {
   const { activeTab } = useActiveTab();
-  // const [isSplashScreen, setIsSplashScreen] = useState(true);
-
-  // useEffect(() => {
-  //   const splashShown = sessionStorage.getItem("splash_shown");
-
-  //   if ((pathname === "/" && splashShown) || pathname !== "/") {
-  //     setIsSplashScreen(false);
-  //   } else if (pathname === "/" && !splashShown) {
-  //     setIsSplashScreen(true);
-
-  //     const timer = setTimeout(() => {
-  //       setIsSplashScreen(false);
-  //     }, 3500);
-  //     return () => clearTimeout(timer);
-  //   }
-  // }, [pathname]);
-
-  // if (isSplashScreen) {
-  //   return null;
-  // }
 
   return (
     <motion.div
