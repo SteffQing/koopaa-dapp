@@ -110,7 +110,9 @@
             "seeds": [
               {
                 "kind": "const",
-                "value": [103, 108, 111, 98, 97, 108, 45, 115, 116, 97, 116, 101]
+                "value": [
+                  103, 108, 111, 98, 97, 108, 45, 115, 116, 97, 116, 101
+                ]
               }
             ]
           }
@@ -213,7 +215,9 @@
             "seeds": [
               {
                 "kind": "const",
-                "value": [103, 108, 111, 98, 97, 108, 45, 115, 116, 97, 116, 101]
+                "value": [
+                  103, 108, 111, 98, 97, 108, 45, 115, 116, 97, 116, 101
+                ]
               }
             ]
           }
@@ -292,7 +296,9 @@
             "seeds": [
               {
                 "kind": "const",
-                "value": [103, 108, 111, 98, 97, 108, 45, 115, 116, 97, 116, 101]
+                "value": [
+                  103, 108, 111, 98, 97, 108, 45, 115, 116, 97, 116, 101
+                ]
               }
             ]
           }
@@ -341,7 +347,9 @@
             "seeds": [
               {
                 "kind": "const",
-                "value": [103, 108, 111, 98, 97, 108, 45, 115, 116, 97, 116, 101]
+                "value": [
+                  103, 108, 111, 98, 97, 108, 45, 115, 116, 97, 116, 101
+                ]
               }
             ]
           }
@@ -434,7 +442,9 @@
         },
         {
           "name": "recipient",
-          "docs": ["The recipient who will receive tokens (does NOT have to sign)"],
+          "docs": [
+            "The recipient who will receive tokens (does NOT have to sign)"
+          ],
           "writable": true
         },
         {
@@ -470,6 +480,10 @@
     {
       "name": "AjoGroupCreatedEvent",
       "discriminator": [21, 73, 101, 39, 158, 18, 39, 10]
+    },
+    {
+      "name": "AjoGroupStartedEvent",
+      "discriminator": [162, 217, 172, 235, 138, 116, 234, 226]
     },
     {
       "name": "ContributionMadeEvent",
@@ -739,6 +753,22 @@
           {
             "name": "payout_interval",
             "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "AjoGroupStartedEvent",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "group_name",
+            "type": "string"
+          },
+          {
+            "name": "start_timestamp",
+            "type": "i64"
           }
         ]
       }
