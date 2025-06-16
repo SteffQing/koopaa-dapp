@@ -45,13 +45,7 @@ export default function useClaimRefund() {
         [Buffer.from("group-vault"), ajoGroupPDA.toBuffer()],
         programId
       );
-      const [groupSigner] = PublicKey.findProgramAddressSync(
-        [Buffer.from("group-vault"), ajoGroupPDA.toBuffer()],
-        programId
-      );
-
       try {
-        // Using the direct Anchor pattern
         const signature = await program.methods
           .claimRefund()
           .accountsStrict({
@@ -60,7 +54,6 @@ export default function useClaimRefund() {
             tokenMint: USDC,
             participantTokenAccount,
             groupTokenVault: groupTokenVaultPda,
-            groupSigner,
             tokenProgram: TOKEN_PROGRAM_ID,
           })
           .rpc();
