@@ -179,15 +179,15 @@ export const FaucetModal = () => {
       ]);
 
       hideModal();
+      showFaucetGiftIcon(false);
+      toast.info(
+        "Faucet can always be accessed from the Top up button of your Wallet and Savings card!"
+      );
     } catch (error) {
       console.error("Error claiming tokens:", error);
       toast.error("Failed to claim tokens");
     } finally {
       setClaiming(false);
-      showFaucetGiftIcon(false);
-      toast.info(
-        "Faucet can always be accessed from the Top up button of your Wallet and Savings card!"
-      );
     }
   };
 

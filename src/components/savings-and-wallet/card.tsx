@@ -116,7 +116,11 @@ export default function Card({
           <span className="cursor-pointer" onClick={convert}>
             {currency}
           </span>
-          <Refresh className="cursor-pointer" onClick={onRefresh} />
+          <Refresh
+            className={`cursor-pointer transition-transform ${loading ? "animate-spin" : ""}`}
+            onClick={onRefresh}
+            disabled={loading}
+          />
         </div>
       </div>
       {action ? (
@@ -131,7 +135,7 @@ export default function Card({
       ) : (
         <div className="grid grid-cols-2 gap-3 pb-1">
           <motion.button
-            className="bg-white py-3 rounded-lg flex items-center justify-center gap-2 font-medium"
+            className="bg-white py-3 rounded-lg flex items-center justify-center gap-2 font-medium cursor-pointer"
             whileHover={{ y: -2, boxShadow: "0 4px 6px rgba(0,0,0,0.1)" }}
             whileTap={{ y: 0, boxShadow: "none" }}
             onClick={openFaucetModal}
