@@ -53,10 +53,6 @@ export default function usePayout() {
         [Buffer.from("group-vault"), ajoGroupPDA.toBuffer()],
         programId
       );
-      const [groupSigner] = PublicKey.findProgramAddressSync(
-        [Buffer.from("group-vault"), ajoGroupPDA.toBuffer()],
-        programId
-      );
 
       try {
         // Using the direct Anchor pattern
@@ -68,7 +64,6 @@ export default function usePayout() {
             tokenMint: USDC,
             recipient: recipientTokenAccount,
             groupTokenVault: groupTokenVaultPda,
-            groupSigner,
             tokenProgram: TOKEN_PROGRAM_ID,
           })
           .rpc();

@@ -29,21 +29,6 @@
           }
         },
         {
-          "name": "group_signer",
-          "pda": {
-            "seeds": [
-              {
-                "kind": "const",
-                "value": [103, 114, 111, 117, 112, 45, 118, 97, 117, 108, 116]
-              },
-              {
-                "kind": "account",
-                "path": "ajo_group"
-              }
-            ]
-          }
-        },
-        {
           "name": "group_token_vault",
           "writable": true,
           "pda": {
@@ -405,21 +390,6 @@
                 "kind": "account",
                 "path": "ajo_group.name",
                 "account": "AjoGroup"
-              }
-            ]
-          }
-        },
-        {
-          "name": "group_signer",
-          "pda": {
-            "seeds": [
-              {
-                "kind": "const",
-                "value": [103, 114, 111, 117, 112, 45, 118, 97, 117, 108, 116]
-              },
-              {
-                "kind": "account",
-                "path": "ajo_group"
               }
             ]
           }
