@@ -1,13 +1,15 @@
 "use server";
 
-import {
+import
+{
   createTransferInstruction,
   getAssociatedTokenAddressSync,
   TOKEN_PROGRAM_ID,
   createAssociatedTokenAccountInstruction,
   ASSOCIATED_TOKEN_PROGRAM_ID,
 } from "@solana/spl-token";
-import {
+import
+{
   Connection,
   Keypair,
   LAMPORTS_PER_SOL,
@@ -24,20 +26,23 @@ const USDC = new PublicKey("Gh9ZwEmdLJ8DscKNTkTqPbNwLNNBjuSzaG9Vp2KGtKJr");
 
 if (!FAUCET_PRIVATE_KEY) throw new Error("FAUCET_PRIVATE_KEY not found!");
 
-function keypairFromBase58(): Keypair {
+function keypairFromBase58(): Keypair
+{
   const secretKey = bs58.decode(FAUCET_PRIVATE_KEY!);
   return Keypair.fromSecretKey(secretKey);
 }
-async function waitForAccount(pubkey: PublicKey, maxRetries = 10) {
-  for (let i = 0; i < maxRetries; i++) {
-    const info = await connection.getAccountInfo(pubkey);
-    if (info) return;
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-  }
-  throw new Error("Account did not initialize in time.");
-}
+// async function waitForAccount(pubkey: PublicKey, maxRetries = 10)
+// {
+//   for (let i = 0; i < maxRetries; i++) {
+//     const info = await connection.getAccountInfo(pubkey);
+//     if (info) return;
+//     await new Promise((resolve) => setTimeout(resolve, 1000));
+//   }
+//   throw new Error("Account did not initialize in time.");
+// }
 
-async function getOrCreateATA(recipient: PublicKey, payer: Keypair) {
+async function getOrCreateATA(recipient: PublicKey, payer: Keypair)
+{
   const ata = getAssociatedTokenAddressSync(USDC, recipient);
 
   const accountInfo = await connection.getAccountInfo(ata);
@@ -53,13 +58,15 @@ async function getOrCreateATA(recipient: PublicKey, payer: Keypair) {
 
     const tx = new Transaction().add(createAtaIx);
     await sendAndConfirmTransaction(connection, tx, [payer]);
-    await waitForAccount(ata);
+    // await waitForAccount(ata);
   }
 
   return ata;
 }
 
-const claimSOL = async (to: string, amount: number) => {
+
+const claimSOL = async (to: string, amount: number) =>
+{
   const fromKeypair = keypairFromBase58();
   const toPubkey = new PublicKey(to);
   const amountLamports = amount * LAMPORTS_PER_SOL;
@@ -78,7 +85,8 @@ const claimSOL = async (to: string, amount: number) => {
   return sig;
 };
 
-const claimUSDC = async (to: string, amount: number) => {
+const claimUSDC = async (to: string, amount: number) =>
+{
   const fromKeypair = keypairFromBase58();
   const toPubkey = new PublicKey(to);
   const amountUsdc = amount * 10 ** 6;

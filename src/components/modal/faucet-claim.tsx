@@ -16,7 +16,7 @@ import SOL from "@/assets/coins/solana.png";
 import Refresh from "@/assets/svgs/refresh.svg";
 import Image from "next/image";
 import { useModal } from "@/providers/modal-provider";
-import useFaucetBalance from "@/hooks/blockchain/useFaucet";
+import useFaucetBalance, { useATA } from "@/hooks/blockchain/useFaucet";
 import { claimSOL, claimUSDC } from "@/actions/faucet";
 import { FormattedBalance } from "../savings-and-wallet/card";
 import { useTransactionToast } from "@/hooks/use-transaction-toast";
@@ -141,6 +141,8 @@ export const FaucetModal = () => {
     },
   });
 
+  const { data: ok } = useATA();
+
   const { isPending, mutateAsync } = useMutation({
     mutationKey: ["faucet", selectedTokens.sol, selectedTokens.usdc],
     mutationFn: async (txHashes: [string | false, string | false]) =>
@@ -170,7 +172,7 @@ export const FaucetModal = () => {
       setClaiming(true);
       const hashes = await Promise.all([
         sol && claimSOL(to, 0.01),
-        usdc && claimUSDC(to, 1000),
+        usdc && Boolean(ok) && claimUSDC(to, 1000),
       ]);
       await mutateAsync(hashes);
       await Promise.all([
@@ -306,7 +308,9 @@ export const FaucetModal = () => {
 
           <Button
             onClick={handleClaim}
-            disabled={!session || (!selectedTokens.usdc && !selectedTokens.sol)}
+            disabled={
+              !session || (!selectedTokens.usdc && !selectedTokens.sol) || !ok
+            }
             loading={isLoading || isPending || claiming}
             className="w-full bg-[#ff6b00] hover:bg-[#e55a00] text-white py-3 text-base font-semibold"
           >

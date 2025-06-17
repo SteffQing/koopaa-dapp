@@ -1,8 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { clearSession, createSession, getSession } from "@/lib/session";
 import prisma from "@/lib/prisma";
+import { withErrorHandler } from "../utils";
 
-export async function DELETE() {
+export async function DELETE()
+{
   const res = NextResponse.json({ data: "Logged out" });
   clearSession(res);
 
@@ -14,7 +16,8 @@ export async function DELETE() {
   return res;
 }
 
-export async function GET(req: NextRequest) {
+export async function GET(req: NextRequest)
+{
   const session = getSession(req);
 
   if (!session)
@@ -23,7 +26,8 @@ export async function GET(req: NextRequest) {
   return NextResponse.json({ data: session });
 }
 
-export async function POST(req: NextRequest) {
+export async function POST(req: NextRequest)
+{
   try {
     const { address } = await req.json();
 
