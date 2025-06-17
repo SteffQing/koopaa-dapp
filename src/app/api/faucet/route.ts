@@ -1,7 +1,7 @@
 import redis from "@/lib/redis";
 import { type NextRequest, NextResponse } from "next/server";
 import { getServerSession, withErrorHandler } from "../utils";
-import { Connection, PublicKey } from "@solana/web3.js";
+import { PublicKey } from "@solana/web3.js";
 import getOrCreateATA from "./ata";
 
 export const GET = withErrorHandler(async (req: NextRequest) =>

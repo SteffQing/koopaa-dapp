@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { clearSession, createSession, getSession } from "@/lib/session";
 import prisma from "@/lib/prisma";
-import { withErrorHandler } from "../utils";
 
 export async function DELETE()
 {
