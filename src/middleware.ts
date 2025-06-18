@@ -6,9 +6,7 @@ const publicPaths = ["/login", "/api/auth", "/api/waitlist"];
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  const isPublicPath = publicPaths.some(
-    (path) => pathname === path || pathname.startsWith(`${path}/`)
-  );
+  const isPublicPath = publicPaths.some((path) => pathname === path || pathname.startsWith(`${path}/`));
 
   if (isPublicPath) return NextResponse.next();
   const session = getSession(request);
@@ -32,5 +30,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/((?!_next/static|_next/image|favicon.ico|public).*)"],
+  matcher: ["/((?!_next/static|_next/image|favicon.ico|.*\\..*).*)"],
 };
