@@ -2,6 +2,11 @@
   "name": "template-next-tailwind",
   "version": "0.0.0",
   "private": true,
+  "author": {
+    "name": "Steven Tomi",
+    "email": "steveola23@gmail.com",
+    "url": "https://x.com/steffqing"
+  },
   "scripts": {
     "build": "next build",
     "ci": "npm run build && npm run lint && npm run format:check",
