@@ -1,7 +1,6 @@
 import { motion } from "framer-motion";
 import { useState } from "react";
 import { toast } from "sonner";
-import ArrowDown from "@/assets/svgs/arrow-down.svg";
 import { Eye, RefreshCw, Share2 } from "lucide-react";
 import { FormattedBalance } from "@/components/savings-and-wallet/card";
 import useContribute from "@/hooks/blockchain/write/useContribute";

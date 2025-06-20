@@ -8,7 +8,7 @@ import ActionItems from "@/components/action-items";
 import RecentActivities from "@/components/activities";
 import Container from "@/components/container";
 import { useAuthUser } from "@/hooks/useUser";
-import { useGetActivities } from "@/hooks/db/useActivities";
+import { useGetActivities } from "@/hooks/db/useActivities";
 
 export default function HomePage() {
   const { user, loading: pending } = useAuthUser();
@@ -16,7 +16,8 @@ export default function HomePage() {
 
   return (
     <Container>
-      <Header name={user?.username} loading={pending} avatar={user?.avatar} />
+      <Header name={user?.username} loading={pending} avatar={user?.avatar} address={user?.address} />
+
       <SavingsAndWallet />
       <ActionItems user={user} loading={pending} />
       <QuickAccess />

@@ -2,15 +2,16 @@
 
 import { Avatar } from "@/components/avatar";
 import { motion } from "framer-motion";
-import Bell from "@/assets/svgs/bell.svg";
+import NovuInbox from "@/components/inbox/NovuInbox";
 
 interface HeaderProps {
   name: string | null | undefined;
   avatar: number | undefined;
   loading: boolean;
+  address: string | undefined;
 }
 
-export default function Header({ name, loading, avatar }: HeaderProps) {
+export default function Header({ name, loading, avatar, address }: HeaderProps) {
   const getGreeting = () => {
     const hour = new Date().getHours();
     if (hour < 12) return "Good morning";
@@ -23,9 +24,7 @@ export default function Header({ name, loading, avatar }: HeaderProps) {
     else {
       if (name) {
         const firstName = name.split(" ")[0];
-        return firstName.length > 10
-          ? `${firstName.slice(0, 7)}...`
-          : firstName;
+        return firstName.length > 10 ? `${firstName.slice(0, 7)}...` : firstName;
       } else return "Anon";
     }
   };
@@ -47,19 +46,11 @@ export default function Header({ name, loading, avatar }: HeaderProps) {
             <h2 className="font-medium text-[#121212] text-base flex items-center gap-1">
               {getGreeting()}, {parseName()} 😊
             </h2>
-            <p className="text-xs font-normal text-[#767676]">
-              How is your day going
-            </p>
+            <p className="text-xs font-normal text-[#767676]">How is your day going</p>
           </div>
         </div>
 
-        <motion.button
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.9 }}
-          className="w-10 h-10 rounded-[20px] p-2 bg-[#FFF0E0] flex items-center justify-center"
-        >
-          <Bell size={20} />
-        </motion.button>
+        {address && <NovuInbox subscriberId={address} />}
       </motion.div>
     </header>
   );
