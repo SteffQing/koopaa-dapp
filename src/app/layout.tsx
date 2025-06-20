@@ -10,14 +10,12 @@ export const metadata: Metadata = {
   description: "Save Smart with Your Circle, On-Chain",
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{ children: React.ReactNode }>) {
+export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`antialiased`}>
         <AppProviders>{children}</AppProviders>
-        <Toaster position="bottom-center" />
+        <Toaster position="bottom-center" closeButton />
         <Analytics />
       </body>
     </html>

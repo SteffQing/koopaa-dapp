@@ -149,12 +149,11 @@ export default function GroupSavingsCard(props: Props) {
       )}
 
       <Button
-        // className="bg-white text-black rounded-lg flex "
         onClick={handleTopUp}
         disabled={!props.started || props.disabled || !props.canTopUp || !props.isParticipant}
         loading={isPending || loading}
       >
-        Top Up <ArrowDown />
+        Contribute
       </Button>
     </motion.div>
   );

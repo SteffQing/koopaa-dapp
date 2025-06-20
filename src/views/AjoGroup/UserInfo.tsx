@@ -97,14 +97,15 @@ export function Info({ missedRounds, nextPayout, payoutDate, slots, isParticipan
   const hasPayout = nextPayout && Boolean(payoutDate);
   const hasSlots = slots > 0;
 
-  return (
-    <>
-      {hasMissedRounds && <MissingRounds missedRounds={missedRounds} />}
-      {hasPayout && <NextPayout payoutDate={payoutDate as Date} />}
-      {isParticipant && hasSlots && <OpenSlotsInvite slots={slots} pda={props.pda} />}
-      {!isParticipant && hasSlots && <JoinAjoGroup {...props} />}
-    </>
-  );
+  if (hasMissedRounds) return <MissingRounds missedRounds={missedRounds} />;
+
+  if (hasPayout) return <NextPayout payoutDate={payoutDate as Date} />;
+
+  if (isParticipant && hasSlots) return <OpenSlotsInvite slots={slots} pda={props.pda} />;
+
+  if (!isParticipant && hasSlots) return <JoinAjoGroup {...props} />;
+
+  return <></>;
 }
 
 export function NextSavingDate({ date }: { date: Date | null }) {
