@@ -9,30 +9,30 @@ export default function NovuInbox({ subscriberId }: { subscriberId: string }) {
     },
 
     // Filter by tags - shows notifications from workflows tagged "promotions"
-    {
-      label: "Promotions",
-      filter: { tags: ["promotions"] },
-    },
+    // {
+    //   label: "Promotions",
+    //   filter: { tags: ["promotions"] },
+    // },
 
-    // Filter by multiple tags - shows notifications with either "security" OR "alert" tags
-    {
-      label: "Security",
-      filter: { tags: ["security", "alert"] },
-    },
+    // // Filter by multiple tags - shows notifications with either "security" OR "alert" tags
+    // {
+    //   label: "Security",
+    //   filter: { tags: ["security", "alert"] },
+    // },
 
-    // Filter by data attributes - shows notifications with priority="high" in payload
-    {
-      label: "High Priority",
-      filter: { data: { priority: "high" } },
-    },
+    // // Filter by data attributes - shows notifications with priority="high" in payload
+    // {
+    //   label: "High Priority",
+    //   filter: { data: { priority: "high" } },
+    // },
 
-    // Combined filtering - shows notifications that:
-    // 1. Come from workflows tagged "alert" AND
-    // 2. Have priority="high" in their data payload
-    {
-      label: "Critical Alerts",
-      filter: { tags: ["alert"], data: { priority: "high" } },
-    },
+    // // Combined filtering - shows notifications that:
+    // // 1. Come from workflows tagged "alert" AND
+    // // 2. Have priority="high" in their data payload
+    // {
+    //   label: "Critical Alerts",
+    //   filter: { tags: ["alert"], data: { priority: "high" } },
+    // },
   ];
 
   return (
