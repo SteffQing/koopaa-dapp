@@ -1,7 +1,6 @@
 "use client";
 
 import { motion } from "framer-motion";
-// import { ChevronRight } from "lucide-react";
 
 import StackedCoins from "@/assets/svgs/activities/stacked-coins.svg";
 import Target from "@/assets/svgs/activities/target.svg";

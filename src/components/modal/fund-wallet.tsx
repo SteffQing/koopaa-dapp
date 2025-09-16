@@ -69,30 +69,6 @@ export const FundWalletModal: React.FC = () => {
             result to lost of funds
           </p>
         </div>
-
-        {/* <motion.div
-          className="bg-white border border-gray-200 rounded-xl p-4 flex items-center justify-between"
-          whileHover={{ y: -2, boxShadow: "0 4px 10px rgba(0,0,0,0.05)" }}
-          whileTap={{ y: 0 }}
-          onClick={() => {
-            hideModal();
-            // Handle transfer from Sol wallet
-          }}
-        >
-          <div className="flex items-center gap-4">
-            <div className="w-10 h-10 bg-[#ff6b00] rounded-full flex items-center justify-center">
-              <span className="text-white font-bold">≡</span>
-            </div>
-            <div>
-              <h3 className="font-medium">Transfer from Sol wallet</h3>
-              <p className="text-gray-500 text-sm">
-                Fund your koopa wallet with funds from your connected solana
-                wallet
-              </p>
-            </div>
-          </div>
-          <ChevronRight size={20} className="text-gray-400" />
-        </motion.div> */}
       </div>
     </div>
   );

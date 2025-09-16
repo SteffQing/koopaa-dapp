@@ -2,7 +2,7 @@
 
 import { WalletError } from "@solana/wallet-adapter-base";
 import {
-  AnchorWallet,
+  type AnchorWallet,
   ConnectionProvider,
   useConnection,
   useWallet,
