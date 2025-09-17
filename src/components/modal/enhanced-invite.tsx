@@ -14,7 +14,6 @@ interface InvitationModalProps {
   inviter: string;
   groupName: string;
   id: string;
-  fee: number;
 }
 
 const trimText = (text: string, maxLength = 20): string => {
@@ -49,14 +48,14 @@ const itemVariants = {
   },
 };
 
-export const EnhancedInvitationModal: React.FC<InvitationModalProps> = ({ inviter, groupName, id, fee }) => {
+export const EnhancedInvitationModal: React.FC<InvitationModalProps> = ({ inviter, groupName, id }) => {
   const { hideModal } = useModal();
   const router = useRouter();
   const { data, isLoading } = useParticipant(inviter);
   const { joinAjoGroup, loading, isPending } = useJoinAjoGroup();
 
   const handleAccept = async () => {
-    await joinAjoGroup(id, groupName, fee);
+    await joinAjoGroup(id, groupName);
     hideModal();
   };
 

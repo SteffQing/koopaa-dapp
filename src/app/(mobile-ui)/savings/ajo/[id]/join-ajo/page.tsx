@@ -29,20 +29,12 @@ export default function JoinAjoGroupPage({ params, searchParams }: Props) {
 
   const { showModal, hideModal } = useModal();
 
-  const openInvitationModal = (name: string, fee: number) => {
-    showModal(
-      <EnhancedInvitationModal
-        inviter={inviter}
-        groupName={name}
-        id={id}
-        fee={fee}
-      />,
-      {
-        position: "center",
-        showCloseButton: false,
-        closeOnClickOutside: false,
-      }
-    );
+  const openInvitationModal = (name: string) => {
+    showModal(<EnhancedInvitationModal inviter={inviter} groupName={name} id={id} />, {
+      position: "center",
+      showCloseButton: false,
+      closeOnClickOutside: false,
+    });
   };
 
   useEffect(() => {
@@ -52,7 +44,7 @@ export default function JoinAjoGroupPage({ params, searchParams }: Props) {
         router.replace("/");
         return;
       }
-      openInvitationModal(data.name, data.securityDeposit);
+      openInvitationModal(data.name);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data, session, publicKey]);

@@ -20,14 +20,13 @@ interface InfoProps {
   pda: string;
   isParticipant: boolean;
   name: string;
-  fee: number;
 }
 
-function JoinAjoGroup({ pda, name, fee }: Pick<InfoProps, "pda" | "name" | "fee">) {
+function JoinAjoGroup({ pda, name }: Pick<InfoProps, "pda" | "name">) {
   const { showModal } = useModal();
 
   const openInvitationModal = () => {
-    showModal(<EnhancedInvitationModal inviter="KooPaa" groupName={name} id={pda} fee={fee} />, {
+    showModal(<EnhancedInvitationModal inviter="KooPaa" groupName={name} id={pda} />, {
       position: "center",
       showCloseButton: true,
       closeOnClickOutside: true,

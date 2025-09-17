@@ -10,7 +10,6 @@ export type AjoParticipant = {
 
 export type AjoGroup = {
   name: string;
-  securityDeposit: BN; // u64
   contributionAmount: BN; // u64
   contributionInterval: number; // u8
   payoutInterval: number; // u8

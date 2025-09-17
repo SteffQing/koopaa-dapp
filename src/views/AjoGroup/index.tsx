@@ -45,7 +45,6 @@ export default function AjoGroup({ data, id, loading, disabled }: Props) {
         pda={id}
         isParticipant={Boolean(you)}
         name={data?.name ?? ""}
-        fee={data?.securityDeposit ?? 0}
       />
       {loading || !data ? (
         <GroupInfoSkeleton />

@@ -45,10 +45,6 @@ export default function ViewAndSubmitForm(data: CreateAjoGroupFormValues) {
           content={`${data.payout_interval} days`}
         />
         <Entry
-          title="Security Deposit"
-          content={data.security_deposit.toString()}
-        />
-        <Entry
           title="Contribution Amount"
           content={`$${data.contribution_amount}`}
           isLast
