@@ -26,7 +26,9 @@ export async function GET(req: NextRequest) {
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { address, message, signature } = loginSchema.parse(body);
+    console.log(body, "body");
+
+    const { address, message, signature, domain, uri } = loginSchema.parse(body);
 
     const decodedMessage = Buffer.from(message, "base64");
     const decodedSignature = Buffer.from(signature, "base64");
