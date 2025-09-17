@@ -1,5 +1,5 @@
 {
-  "address": "33NAzyKNuayyqKNW6QMXbNT69CikAhCUhPbgwZn1LR3o",
+  "address": "2ritrNbhimgFDysvHUgh1Cc5Xr5Z9qWmiumSH76WVzXh",
   "metadata": {
     "name": "koopa",
     "version": "0.1.0",
@@ -8,8 +8,17 @@
   },
   "instructions": [
     {
-      "name": "claim_refund",
-      "discriminator": [15, 16, 30, 161, 255, 228, 97, 60],
+      "name": "approve_join_request",
+      "discriminator": [
+        155,
+        51,
+        199,
+        71,
+        35,
+        84,
+        237,
+        59
+      ],
       "accounts": [
         {
           "name": "ajo_group",
@@ -18,7 +27,97 @@
             "seeds": [
               {
                 "kind": "const",
-                "value": [97, 106, 111, 45, 103, 114, 111, 117, 112]
+                "value": [
+                  97,
+                  106,
+                  111,
+                  45,
+                  103,
+                  114,
+                  111,
+                  117,
+                  112
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "ajo_group.name",
+                "account": "AjoGroup"
+              }
+            ]
+          }
+        },
+        {
+          "name": "participant"
+        },
+        {
+          "name": "caller",
+          "signer": true
+        },
+        {
+          "name": "global_state",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  103,
+                  108,
+                  111,
+                  98,
+                  97,
+                  108,
+                  45,
+                  115,
+                  116,
+                  97,
+                  116,
+                  101
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "args": [
+        {
+          "name": "approve",
+          "type": "bool"
+        }
+      ]
+    },
+    {
+      "name": "claim_refund",
+      "discriminator": [
+        15,
+        16,
+        30,
+        161,
+        255,
+        228,
+        97,
+        60
+      ],
+      "accounts": [
+        {
+          "name": "ajo_group",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  97,
+                  106,
+                  111,
+                  45,
+                  103,
+                  114,
+                  111,
+                  117,
+                  112
+                ]
               },
               {
                 "kind": "account",
@@ -35,7 +134,19 @@
             "seeds": [
               {
                 "kind": "const",
-                "value": [103, 114, 111, 117, 112, 45, 118, 97, 117, 108, 116]
+                "value": [
+                  103,
+                  114,
+                  111,
+                  117,
+                  112,
+                  45,
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
               },
               {
                 "kind": "account",
@@ -65,7 +176,16 @@
     },
     {
       "name": "close_ajo_group",
-      "discriminator": [71, 157, 241, 188, 147, 228, 114, 235],
+      "discriminator": [
+        71,
+        157,
+        241,
+        188,
+        147,
+        228,
+        114,
+        235
+      ],
       "accounts": [
         {
           "name": "ajo_group",
@@ -74,7 +194,17 @@
             "seeds": [
               {
                 "kind": "const",
-                "value": [97, 106, 111, 45, 103, 114, 111, 117, 112]
+                "value": [
+                  97,
+                  106,
+                  111,
+                  45,
+                  103,
+                  114,
+                  111,
+                  117,
+                  112
+                ]
               },
               {
                 "kind": "account",
@@ -96,7 +226,18 @@
               {
                 "kind": "const",
                 "value": [
-                  103, 108, 111, 98, 97, 108, 45, 115, 116, 97, 116, 101
+                  103,
+                  108,
+                  111,
+                  98,
+                  97,
+                  108,
+                  45,
+                  115,
+                  116,
+                  97,
+                  116,
+                  101
                 ]
               }
             ]
@@ -111,7 +252,16 @@
     },
     {
       "name": "contribute",
-      "discriminator": [82, 33, 68, 131, 32, 0, 205, 95],
+      "discriminator": [
+        82,
+        33,
+        68,
+        131,
+        32,
+        0,
+        205,
+        95
+      ],
       "accounts": [
         {
           "name": "ajo_group",
@@ -120,7 +270,17 @@
             "seeds": [
               {
                 "kind": "const",
-                "value": [97, 106, 111, 45, 103, 114, 111, 117, 112]
+                "value": [
+                  97,
+                  106,
+                  111,
+                  45,
+                  103,
+                  114,
+                  111,
+                  117,
+                  112
+                ]
               },
               {
                 "kind": "account",
@@ -145,7 +305,19 @@
             "seeds": [
               {
                 "kind": "const",
-                "value": [103, 114, 111, 117, 112, 45, 118, 97, 117, 108, 116]
+                "value": [
+                  103,
+                  114,
+                  111,
+                  117,
+                  112,
+                  45,
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
               },
               {
                 "kind": "account",
@@ -170,7 +342,16 @@
     },
     {
       "name": "create_ajo_group",
-      "discriminator": [246, 150, 153, 174, 32, 199, 185, 25],
+      "discriminator": [
+        246,
+        150,
+        153,
+        174,
+        32,
+        199,
+        185,
+        25
+      ],
       "accounts": [
         {
           "name": "ajo_group",
@@ -179,7 +360,17 @@
             "seeds": [
               {
                 "kind": "const",
-                "value": [97, 106, 111, 45, 103, 114, 111, 117, 112]
+                "value": [
+                  97,
+                  106,
+                  111,
+                  45,
+                  103,
+                  114,
+                  111,
+                  117,
+                  112
+                ]
               },
               {
                 "kind": "arg",
@@ -201,7 +392,18 @@
               {
                 "kind": "const",
                 "value": [
-                  103, 108, 111, 98, 97, 108, 45, 115, 116, 97, 116, 101
+                  103,
+                  108,
+                  111,
+                  98,
+                  97,
+                  108,
+                  45,
+                  115,
+                  116,
+                  97,
+                  116,
+                  101
                 ]
               }
             ]
@@ -211,17 +413,25 @@
           "name": "token_mint"
         },
         {
-          "name": "creator_token_account",
-          "writable": true
-        },
-        {
           "name": "group_token_vault",
           "writable": true,
           "pda": {
             "seeds": [
               {
                 "kind": "const",
-                "value": [103, 114, 111, 117, 112, 45, 118, 97, 117, 108, 116]
+                "value": [
+                  103,
+                  114,
+                  111,
+                  117,
+                  112,
+                  45,
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
               },
               {
                 "kind": "account",
@@ -249,10 +459,6 @@
           "type": "string"
         },
         {
-          "name": "security_deposit",
-          "type": "u64"
-        },
-        {
           "name": "contribution_amount",
           "type": "u64"
         },
@@ -272,7 +478,16 @@
     },
     {
       "name": "initialize",
-      "discriminator": [175, 175, 109, 31, 13, 152, 155, 237],
+      "discriminator": [
+        175,
+        175,
+        109,
+        31,
+        13,
+        152,
+        155,
+        237
+      ],
       "accounts": [
         {
           "name": "global_state",
@@ -282,7 +497,18 @@
               {
                 "kind": "const",
                 "value": [
-                  103, 108, 111, 98, 97, 108, 45, 115, 116, 97, 116, 101
+                  103,
+                  108,
+                  111,
+                  98,
+                  97,
+                  108,
+                  45,
+                  115,
+                  116,
+                  97,
+                  116,
+                  101
                 ]
               }
             ]
@@ -301,90 +527,36 @@
       "args": []
     },
     {
-      "name": "join_ajo_group",
-      "discriminator": [13, 201, 36, 164, 38, 54, 221, 143],
+      "name": "payout",
+      "discriminator": [
+        149,
+        140,
+        194,
+        236,
+        174,
+        189,
+        6,
+        239
+      ],
       "accounts": [
         {
           "name": "ajo_group",
-          "writable": true,
-          "pda": {
-            "seeds": [
-              {
-                "kind": "const",
-                "value": [97, 106, 111, 45, 103, 114, 111, 117, 112]
-              },
-              {
-                "kind": "account",
-                "path": "ajo_group.name",
-                "account": "AjoGroup"
-              }
-            ]
-          }
-        },
-        {
-          "name": "participant",
-          "signer": true
-        },
-        {
-          "name": "global_state",
           "writable": true,
           "pda": {
             "seeds": [
               {
                 "kind": "const",
                 "value": [
-                  103, 108, 111, 98, 97, 108, 45, 115, 116, 97, 116, 101
+                  97,
+                  106,
+                  111,
+                  45,
+                  103,
+                  114,
+                  111,
+                  117,
+                  112
                 ]
-              }
-            ]
-          }
-        },
-        {
-          "name": "token_mint"
-        },
-        {
-          "name": "participant_token_account",
-          "writable": true
-        },
-        {
-          "name": "group_token_vault",
-          "writable": true,
-          "pda": {
-            "seeds": [
-              {
-                "kind": "const",
-                "value": [103, 114, 111, 117, 112, 45, 118, 97, 117, 108, 116]
-              },
-              {
-                "kind": "account",
-                "path": "ajo_group"
-              }
-            ]
-          }
-        },
-        {
-          "name": "token_program",
-          "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
-        },
-        {
-          "name": "system_program",
-          "address": "11111111111111111111111111111111"
-        }
-      ],
-      "args": []
-    },
-    {
-      "name": "payout",
-      "discriminator": [149, 140, 194, 236, 174, 189, 6, 239],
-      "accounts": [
-        {
-          "name": "ajo_group",
-          "writable": true,
-          "pda": {
-            "seeds": [
-              {
-                "kind": "const",
-                "value": [97, 106, 111, 45, 103, 114, 111, 117, 112]
               },
               {
                 "kind": "account",
@@ -401,7 +573,19 @@
             "seeds": [
               {
                 "kind": "const",
-                "value": [103, 114, 111, 117, 112, 45, 118, 97, 117, 108, 116]
+                "value": [
+                  103,
+                  114,
+                  111,
+                  117,
+                  112,
+                  45,
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
               },
               {
                 "kind": "account",
@@ -430,46 +614,208 @@
         }
       ],
       "args": []
+    },
+    {
+      "name": "request_join_ajo_group",
+      "discriminator": [
+        17,
+        237,
+        144,
+        186,
+        135,
+        71,
+        137,
+        39
+      ],
+      "accounts": [
+        {
+          "name": "ajo_group",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  97,
+                  106,
+                  111,
+                  45,
+                  103,
+                  114,
+                  111,
+                  117,
+                  112
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "ajo_group.name",
+                "account": "AjoGroup"
+              }
+            ]
+          }
+        },
+        {
+          "name": "participant",
+          "signer": true
+        },
+        {
+          "name": "token_program",
+          "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": []
     }
   ],
   "accounts": [
     {
       "name": "AjoGroup",
-      "discriminator": [205, 236, 137, 105, 137, 38, 51, 219]
+      "discriminator": [
+        205,
+        236,
+        137,
+        105,
+        137,
+        38,
+        51,
+        219
+      ]
     },
     {
       "name": "GlobalState",
-      "discriminator": [163, 46, 74, 168, 216, 123, 133, 98]
+      "discriminator": [
+        163,
+        46,
+        74,
+        168,
+        216,
+        123,
+        133,
+        98
+      ]
     }
   ],
   "events": [
     {
       "name": "AjoGroupClosedEvent",
-      "discriminator": [74, 105, 44, 67, 63, 184, 139, 220]
+      "discriminator": [
+        74,
+        105,
+        44,
+        67,
+        63,
+        184,
+        139,
+        220
+      ]
     },
     {
       "name": "AjoGroupCreatedEvent",
-      "discriminator": [21, 73, 101, 39, 158, 18, 39, 10]
+      "discriminator": [
+        21,
+        73,
+        101,
+        39,
+        158,
+        18,
+        39,
+        10
+      ]
     },
     {
       "name": "AjoGroupStartedEvent",
-      "discriminator": [162, 217, 172, 235, 138, 116, 234, 226]
+      "discriminator": [
+        162,
+        217,
+        172,
+        235,
+        138,
+        116,
+        234,
+        226
+      ]
     },
     {
       "name": "ContributionMadeEvent",
-      "discriminator": [3, 118, 240, 79, 205, 32, 105, 96]
+      "discriminator": [
+        3,
+        118,
+        240,
+        79,
+        205,
+        32,
+        105,
+        96
+      ]
+    },
+    {
+      "name": "JoinRequestRejectedEvent",
+      "discriminator": [
+        106,
+        33,
+        117,
+        73,
+        162,
+        101,
+        96,
+        115
+      ]
+    },
+    {
+      "name": "ParticipantInWaitingRoomEvent",
+      "discriminator": [
+        77,
+        227,
+        209,
+        240,
+        53,
+        190,
+        51,
+        64
+      ]
     },
     {
       "name": "ParticipantJoinedEvent",
-      "discriminator": [23, 196, 6, 94, 41, 112, 23, 180]
+      "discriminator": [
+        23,
+        196,
+        6,
+        94,
+        41,
+        112,
+        23,
+        180
+      ]
     },
     {
       "name": "PayoutMadeEvent",
-      "discriminator": [214, 222, 231, 167, 208, 36, 205, 93]
+      "discriminator": [
+        214,
+        222,
+        231,
+        167,
+        208,
+        36,
+        205,
+        93
+      ]
     },
     {
       "name": "RefundClaimedEvent",
-      "discriminator": [77, 83, 172, 123, 235, 58, 154, 233]
+      "discriminator": [
+        77,
+        83,
+        172,
+        123,
+        235,
+        58,
+        154,
+        233
+      ]
     }
   ],
   "errors": [
@@ -520,86 +866,91 @@
     },
     {
       "code": 6009,
-      "name": "InvalidSecurityDeposit",
-      "msg": "Security Deposit must be greater than 0"
+      "name": "AlreadyRequested",
+      "msg": "You have already requested to joined this group"
     },
     {
       "code": 6010,
-      "name": "OnlyAdminCanUpdate",
-      "msg": "Only admin can update global state"
+      "name": "GroupHasNoAdmin",
+      "msg": "No Group admin"
     },
     {
       "code": 6011,
+      "name": "OnlyAdminCanUpdate",
+      "msg": "Only admin can update state"
+    },
+    {
+      "code": 6012,
       "name": "AlreadyVotedToClose",
       "msg": "You have already voted to close this group"
     },
     {
-      "code": 6012,
+      "code": 6013,
       "name": "NotParticipant",
       "msg": "You are not a participant in this group"
     },
     {
-      "code": 6013,
+      "code": 6014,
       "name": "GroupNotStarted",
       "msg": "Group has not started yet"
     },
     {
-      "code": 6014,
+      "code": 6015,
       "name": "GroupNotClosed",
       "msg": "Group has not been closed yet"
     },
     {
-      "code": 6015,
+      "code": 6016,
       "name": "GroupCompleted",
       "msg": "Group has completed all rounds"
     },
     {
-      "code": 6016,
+      "code": 6017,
       "name": "NotAParticipant",
       "msg": "You are not a participant in this group"
     },
     {
-      "code": 6017,
+      "code": 6018,
       "name": "CannotContributeToThisRound",
       "msg": "You cannot contribute to this round"
     },
     {
-      "code": 6018,
+      "code": 6019,
       "name": "IntervalNotPassed",
       "msg": "Interval has not passed yet"
     },
     {
-      "code": 6019,
+      "code": 6020,
       "name": "InsufficientFunds",
       "msg": "Insufficient funds in token account"
     },
     {
-      "code": 6020,
+      "code": 6021,
       "name": "InvalidFeePercentage",
       "msg": "Fee percentage must be between 0 and 100"
     },
     {
-      "code": 6021,
+      "code": 6022,
       "name": "AlreadyContributed",
       "msg": "You have already contributed to this round"
     },
     {
-      "code": 6022,
+      "code": 6023,
       "name": "NotCurrentRecipient",
       "msg": "You are not the recipient for this round"
     },
     {
-      "code": 6023,
+      "code": 6024,
       "name": "PayoutNotYetDue",
       "msg": "Payout period has not yet arrived"
     },
     {
-      "code": 6024,
+      "code": 6025,
       "name": "InvalidTokenAccountMint",
       "msg": "Token Account mint does not match"
     },
     {
-      "code": 6025,
+      "code": 6026,
       "name": "NoRefundToClaim",
       "msg": "No refunds is available for you to claim on this group"
     }
@@ -613,10 +964,6 @@
           {
             "name": "name",
             "type": "string"
-          },
-          {
-            "name": "security_deposit",
-            "type": "u64"
           },
           {
             "name": "contribution_amount",
@@ -656,6 +1003,12 @@
           },
           {
             "name": "close_votes",
+            "type": {
+              "vec": "pubkey"
+            }
+          },
+          {
+            "name": "waiting_room",
             "type": {
               "vec": "pubkey"
             }
@@ -703,10 +1056,6 @@
           {
             "name": "group_name",
             "type": "string"
-          },
-          {
-            "name": "security_deposit",
-            "type": "u64"
           },
           {
             "name": "contribution_amount",
@@ -808,6 +1157,38 @@
       }
     },
     {
+      "name": "JoinRequestRejectedEvent",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "group_name",
+            "type": "string"
+          },
+          {
+            "name": "participant",
+            "type": "pubkey"
+          }
+        ]
+      }
+    },
+    {
+      "name": "ParticipantInWaitingRoomEvent",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "group_name",
+            "type": "string"
+          },
+          {
+            "name": "participant",
+            "type": "pubkey"
+          }
+        ]
+      }
+    },
+    {
       "name": "ParticipantJoinedEvent",
       "type": {
         "kind": "struct",
@@ -823,6 +1204,10 @@
           {
             "name": "join_timestamp",
             "type": "i64"
+          },
+          {
+            "name": "admin_invited",
+            "type": "bool"
           }
         ]
       }

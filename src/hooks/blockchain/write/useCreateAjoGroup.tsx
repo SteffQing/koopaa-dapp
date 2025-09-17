@@ -12,10 +12,7 @@ import query from "@/lib/fetch";
 import { CreatedAjoGroup } from "@/app/api/group/schema";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
-import {
-  getAssociatedTokenAddressSync,
-  TOKEN_PROGRAM_ID,
-} from "@solana/spl-token";
+import { getAssociatedTokenAddressSync, TOKEN_PROGRAM_ID } from "@solana/spl-token";
 import { handleOnchainError } from "../helpers/errors";
 
 const DECIMALS = 10 ** 6;
@@ -30,20 +27,13 @@ export default function useCreateAjoGroup() {
   const router = useRouter();
 
   const [globalStatePDA] = useMemo(
-    () =>
-      PublicKey.findProgramAddressSync(
-        [Buffer.from("global-state")],
-        programId
-      ),
+    () => PublicKey.findProgramAddressSync([Buffer.from("global-state")], programId),
     [programId]
   );
 
   const findAjoGroupPDA = useCallback(
     (name: string) => {
-      return PublicKey.findProgramAddressSync(
-        [Buffer.from("ajo-group"), Buffer.from(name)],
-        programId
-      );
+      return PublicKey.findProgramAddressSync([Buffer.from("ajo-group"), Buffer.from(name)], programId);
     },
     [programId]
   );
@@ -53,23 +43,10 @@ export default function useCreateAjoGroup() {
       if (!userPublicKey) throw new Error("Wallet not connected");
       if (!program) throw new Error("Program not found");
 
-      const {
-        name,
-        contribution_amount,
-        security_deposit,
-        max_participants,
-        contribution_interval,
-        payout_interval,
-      } = params;
+      const { name, contribution_amount, max_participants, contribution_interval, payout_interval } = params;
 
       const [ajoGroupPDA] = findAjoGroupPDA(name);
       const contributionAmount = new BN(contribution_amount * DECIMALS);
-      const securityDeposit = new BN(security_deposit * DECIMALS);
-
-      const creatorTokenAccount = getAssociatedTokenAddressSync(
-        USDC,
-        userPublicKey
-      );
 
       const [groupTokenVaultPda] = PublicKey.findProgramAddressSync(
         [Buffer.from("group-vault"), ajoGroupPDA.toBuffer()],
@@ -80,7 +57,6 @@ export default function useCreateAjoGroup() {
         const signature = await program.methods
           .createAjoGroup(
             name,
-            securityDeposit,
             contributionAmount,
             Number(contribution_interval),
             Number(payout_interval),
@@ -91,7 +67,6 @@ export default function useCreateAjoGroup() {
             creator: userPublicKey,
             globalState: globalStatePDA,
             tokenMint: USDC,
-            creatorTokenAccount,
             groupTokenVault: groupTokenVaultPda,
             tokenProgram: TOKEN_PROGRAM_ID,
             systemProgram: SystemProgram.programId,
@@ -112,8 +87,7 @@ export default function useCreateAjoGroup() {
 
   const { mutateAsync: dbCreate, isPending: loading } = useMutation({
     mutationKey: ["create-ajo-group-db-call"],
-    mutationFn: async (createdAjoGroup: CreatedAjoGroup) =>
-      query.post("group", { body: createdAjoGroup }),
+    mutationFn: async (createdAjoGroup: CreatedAjoGroup) => query.post("group", { body: createdAjoGroup }),
     onSuccess({ message, error }, { pda }) {
       if (message) {
         toast.success(message);

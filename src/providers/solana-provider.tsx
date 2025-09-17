@@ -13,6 +13,25 @@ import { ReactNode, useCallback, useMemo } from "react";
 import "@solana/wallet-adapter-react-ui/styles.css";
 import { AnchorProvider } from "@coral-xyz/anchor";
 import { useCluster } from "@/components/cluster/cluster-data-access";
+import {
+  createDefaultAuthorizationCache,
+  createDefaultChainSelector,
+  createDefaultWalletNotFoundHandler,
+  registerMwa,
+} from "@solana-mobile/wallet-standard-mobile";
+
+registerMwa({
+  appIdentity: {
+    name: "KooPaa",
+    uri: "https://app.koopaa.fun",
+    icon: "logo.png",
+  },
+  authorizationCache: createDefaultAuthorizationCache(),
+  chains: ["solana:devnet" /* "solana:mainnet" */],
+  chainSelector: createDefaultChainSelector(),
+  onWalletNotFound: createDefaultWalletNotFoundHandler(),
+  // remoteHostAuthority: "<REPLACE_WITH_URL_>", // Include to enable remote connection option.
+});
 
 export function SolanaProvider({ children }: { children: ReactNode }) {
   const { cluster } = useCluster();
@@ -20,6 +39,23 @@ export function SolanaProvider({ children }: { children: ReactNode }) {
   const onError = useCallback((error: WalletError) => {
     console.error(error);
   }, []);
+
+  // const wallets = useMemo(
+  //   () => [
+  //     new SolanaMobileWalletAdapter({
+  //       addressSelector: createDefaultAddressSelector(),
+  //       appIdentity: {
+  //         name: "My app",
+  //         uri: "https://myapp.io",
+  //         icon: "relative/path/to/icon.png",
+  //       },
+  //       authorizationResultCache: createDefaultAuthorizationResultCache(),
+  //       cluster: WalletAdapterNetwork.Devnet,
+  //       onWalletNotFound: createDefaultWalletNotFoundHandler(),
+  //     }),
+  //   ],
+  //   []
+  // );
 
   return (
     <ConnectionProvider endpoint={endpoint}>

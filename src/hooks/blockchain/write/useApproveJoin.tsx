@@ -14,7 +14,13 @@ import { useRouter } from "next/navigation";
 import { JoinAjoGroup } from "@/app/api/group/schema";
 import { handleOnchainError } from "../helpers/errors";
 
-export default function useJoinAjoGroup() {
+type ApproveJoinParams = {
+  ajoGroup: string;
+  participant: string;
+  approved: boolean;
+};
+
+export default function useApproveJoin() {
   const provider = useAnchorProvider();
   const { publicKey: userPublicKey } = useWallet();
 
@@ -24,22 +30,27 @@ export default function useJoinAjoGroup() {
 
   const programId = getKoopaProgramId();
   const program = useMemo(() => getKoopaProgram(provider, programId), [provider, programId]);
+  const [globalStatePDA] = useMemo(
+    () => PublicKey.findProgramAddressSync([Buffer.from("global-state")], programId),
+    [programId]
+  );
 
   // Join an existing Ajo group
   const { mutateAsync: joinOnchain, isPending } = useMutation({
-    mutationFn: async (ajoGroup: string) => {
+    mutationFn: async (params: ApproveJoinParams) => {
       if (!userPublicKey) throw new Error("Wallet not connected");
+      const { ajoGroup, participant, approved } = params;
       const ajoGroupPDA = new PublicKey(ajoGroup);
 
       try {
         // Using the direct Anchor pattern
         const signature = await program.methods
-          .requestJoinAjoGroup()
+          .approveJoinRequest(approved)
           .accountsStrict({
             ajoGroup: ajoGroupPDA,
-            participant: userPublicKey,
-            tokenProgram: TOKEN_PROGRAM_ID,
-            systemProgram: SystemProgram.programId,
+            participant: new PublicKey(participant),
+            caller: userPublicKey,
+            globalState: globalStatePDA,
           })
           .rpc();
 
@@ -75,15 +86,15 @@ export default function useJoinAjoGroup() {
     },
   });
 
-  async function joinAjoGroup(pda: string, name: string) {
-    const { signature } = await joinOnchain(pda);
+  async function approveJoinAjoGroup(params: ApproveJoinParams, name: string) {
+    const { signature } = await joinOnchain(params);
     const joinData: JoinAjoGroup = {
       name,
-      pda,
+      pda: params.ajoGroup,
       signature,
     };
     await dbJoin(joinData);
   }
 
-  return { joinAjoGroup, isPending, loading };
+  return { approveJoinAjoGroup, isPending, loading };
 }

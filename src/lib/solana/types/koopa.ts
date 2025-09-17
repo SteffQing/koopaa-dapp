@@ -5,7 +5,7 @@
  * IDL can be found at `target/idl/koopa.json`.
  */
 export type Koopa = {
-  address: "33NAzyKNuayyqKNW6QMXbNT69CikAhCUhPbgwZn1LR3o";
+  address: "2ritrNbhimgFDysvHUgh1Cc5Xr5Z9qWmiumSH76WVzXh";
   metadata: {
     name: "koopa";
     version: "0.1.0";
@@ -13,6 +13,54 @@ export type Koopa = {
     description: "Created with Anchor";
   };
   instructions: [
+    {
+      name: "approveJoinRequest";
+      discriminator: [155, 51, 199, 71, 35, 84, 237, 59];
+      accounts: [
+        {
+          name: "ajoGroup";
+          writable: true;
+          pda: {
+            seeds: [
+              {
+                kind: "const";
+                value: [97, 106, 111, 45, 103, 114, 111, 117, 112];
+              },
+              {
+                kind: "account";
+                path: "ajo_group.name";
+                account: "ajoGroup";
+              },
+            ];
+          };
+        },
+        {
+          name: "participant";
+        },
+        {
+          name: "caller";
+          signer: true;
+        },
+        {
+          name: "globalState";
+          writable: true;
+          pda: {
+            seeds: [
+              {
+                kind: "const";
+                value: [103, 108, 111, 98, 97, 108, 45, 115, 116, 97, 116, 101];
+              },
+            ];
+          };
+        },
+      ];
+      args: [
+        {
+          name: "approve";
+          type: "bool";
+        },
+      ];
+    },
     {
       name: "claimRefund";
       discriminator: [15, 16, 30, 161, 255, 228, 97, 60];
@@ -213,10 +261,6 @@ export type Koopa = {
           name: "tokenMint";
         },
         {
-          name: "creatorTokenAccount";
-          writable: true;
-        },
-        {
           name: "groupTokenVault";
           writable: true;
           pda: {
@@ -249,10 +293,6 @@ export type Koopa = {
         {
           name: "name";
           type: "string";
-        },
-        {
-          name: "securityDeposit";
-          type: "u64";
         },
         {
           name: "contributionAmount";
@@ -301,77 +341,6 @@ export type Koopa = {
       args: [];
     },
     {
-      name: "joinAjoGroup";
-      discriminator: [13, 201, 36, 164, 38, 54, 221, 143];
-      accounts: [
-        {
-          name: "ajoGroup";
-          writable: true;
-          pda: {
-            seeds: [
-              {
-                kind: "const";
-                value: [97, 106, 111, 45, 103, 114, 111, 117, 112];
-              },
-              {
-                kind: "account";
-                path: "ajo_group.name";
-                account: "ajoGroup";
-              },
-            ];
-          };
-        },
-        {
-          name: "participant";
-          signer: true;
-        },
-        {
-          name: "globalState";
-          writable: true;
-          pda: {
-            seeds: [
-              {
-                kind: "const";
-                value: [103, 108, 111, 98, 97, 108, 45, 115, 116, 97, 116, 101];
-              },
-            ];
-          };
-        },
-        {
-          name: "tokenMint";
-        },
-        {
-          name: "participantTokenAccount";
-          writable: true;
-        },
-        {
-          name: "groupTokenVault";
-          writable: true;
-          pda: {
-            seeds: [
-              {
-                kind: "const";
-                value: [103, 114, 111, 117, 112, 45, 118, 97, 117, 108, 116];
-              },
-              {
-                kind: "account";
-                path: "ajoGroup";
-              },
-            ];
-          };
-        },
-        {
-          name: "tokenProgram";
-          address: "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA";
-        },
-        {
-          name: "systemProgram";
-          address: "11111111111111111111111111111111";
-        },
-      ];
-      args: [];
-    },
-    {
       name: "payout";
       discriminator: [149, 140, 194, 236, 174, 189, 6, 239];
       accounts: [
@@ -410,9 +379,7 @@ export type Koopa = {
         },
         {
           name: "recipient";
-          docs: [
-            "The recipient who will receive tokens (does NOT have to sign)",
-          ];
+          docs: ["The recipient who will receive tokens (does NOT have to sign)"];
           writable: true;
         },
         {
@@ -425,6 +392,42 @@ export type Koopa = {
         {
           name: "tokenProgram";
           address: "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA";
+        },
+      ];
+      args: [];
+    },
+    {
+      name: "requestJoinAjoGroup";
+      discriminator: [17, 237, 144, 186, 135, 71, 137, 39];
+      accounts: [
+        {
+          name: "ajoGroup";
+          writable: true;
+          pda: {
+            seeds: [
+              {
+                kind: "const";
+                value: [97, 106, 111, 45, 103, 114, 111, 117, 112];
+              },
+              {
+                kind: "account";
+                path: "ajo_group.name";
+                account: "ajoGroup";
+              },
+            ];
+          };
+        },
+        {
+          name: "participant";
+          signer: true;
+        },
+        {
+          name: "tokenProgram";
+          address: "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA";
+        },
+        {
+          name: "systemProgram";
+          address: "11111111111111111111111111111111";
         },
       ];
       args: [];
@@ -456,6 +459,14 @@ export type Koopa = {
     {
       name: "contributionMadeEvent";
       discriminator: [3, 118, 240, 79, 205, 32, 105, 96];
+    },
+    {
+      name: "joinRequestRejectedEvent";
+      discriminator: [106, 33, 117, 73, 162, 101, 96, 115];
+    },
+    {
+      name: "participantInWaitingRoomEvent";
+      discriminator: [77, 227, 209, 240, 53, 190, 51, 64];
     },
     {
       name: "participantJoinedEvent";
@@ -518,86 +529,91 @@ export type Koopa = {
     },
     {
       code: 6009;
-      name: "invalidSecurityDeposit";
-      msg: "Security Deposit must be greater than 0";
+      name: "alreadyRequested";
+      msg: "You have already requested to joined this group";
     },
     {
       code: 6010;
-      name: "onlyAdminCanUpdate";
-      msg: "Only admin can update global state";
+      name: "groupHasNoAdmin";
+      msg: "No Group admin";
     },
     {
       code: 6011;
+      name: "onlyAdminCanUpdate";
+      msg: "Only admin can update state";
+    },
+    {
+      code: 6012;
       name: "alreadyVotedToClose";
       msg: "You have already voted to close this group";
     },
     {
-      code: 6012;
+      code: 6013;
       name: "notParticipant";
       msg: "You are not a participant in this group";
     },
     {
-      code: 6013;
+      code: 6014;
       name: "groupNotStarted";
       msg: "Group has not started yet";
     },
     {
-      code: 6014;
+      code: 6015;
       name: "groupNotClosed";
       msg: "Group has not been closed yet";
     },
     {
-      code: 6015;
+      code: 6016;
       name: "groupCompleted";
       msg: "Group has completed all rounds";
     },
     {
-      code: 6016;
+      code: 6017;
       name: "notAParticipant";
       msg: "You are not a participant in this group";
     },
     {
-      code: 6017;
+      code: 6018;
       name: "cannotContributeToThisRound";
       msg: "You cannot contribute to this round";
     },
     {
-      code: 6018;
+      code: 6019;
       name: "intervalNotPassed";
       msg: "Interval has not passed yet";
     },
     {
-      code: 6019;
+      code: 6020;
       name: "insufficientFunds";
       msg: "Insufficient funds in token account";
     },
     {
-      code: 6020;
+      code: 6021;
       name: "invalidFeePercentage";
       msg: "Fee percentage must be between 0 and 100";
     },
     {
-      code: 6021;
+      code: 6022;
       name: "alreadyContributed";
       msg: "You have already contributed to this round";
     },
     {
-      code: 6022;
+      code: 6023;
       name: "notCurrentRecipient";
       msg: "You are not the recipient for this round";
     },
     {
-      code: 6023;
+      code: 6024;
       name: "payoutNotYetDue";
       msg: "Payout period has not yet arrived";
     },
     {
-      code: 6024;
+      code: 6025;
       name: "invalidTokenAccountMint";
       msg: "Token Account mint does not match";
     },
     {
-      code: 6025;
+      code: 6026;
       name: "noRefundToClaim";
       msg: "No refunds is available for you to claim on this group";
     },
@@ -611,10 +627,6 @@ export type Koopa = {
           {
             name: "name";
             type: "string";
-          },
-          {
-            name: "securityDeposit";
-            type: "u64";
           },
           {
             name: "contributionAmount";
@@ -654,6 +666,12 @@ export type Koopa = {
           },
           {
             name: "closeVotes";
+            type: {
+              vec: "pubkey";
+            };
+          },
+          {
+            name: "waitingRoom";
             type: {
               vec: "pubkey";
             };
@@ -701,10 +719,6 @@ export type Koopa = {
           {
             name: "groupName";
             type: "string";
-          },
-          {
-            name: "securityDeposit";
-            type: "u64";
           },
           {
             name: "contributionAmount";
@@ -806,6 +820,38 @@ export type Koopa = {
       };
     },
     {
+      name: "joinRequestRejectedEvent";
+      type: {
+        kind: "struct";
+        fields: [
+          {
+            name: "groupName";
+            type: "string";
+          },
+          {
+            name: "participant";
+            type: "pubkey";
+          },
+        ];
+      };
+    },
+    {
+      name: "participantInWaitingRoomEvent";
+      type: {
+        kind: "struct";
+        fields: [
+          {
+            name: "groupName";
+            type: "string";
+          },
+          {
+            name: "participant";
+            type: "pubkey";
+          },
+        ];
+      };
+    },
+    {
       name: "participantJoinedEvent";
       type: {
         kind: "struct";
@@ -821,6 +867,10 @@ export type Koopa = {
           {
             name: "joinTimestamp";
             type: "i64";
+          },
+          {
+            name: "adminInvited";
+            type: "bool";
           },
         ];
       };

@@ -1,7 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { clearSession, createSession, getSession } from "@/lib/session";
 import prisma from "@/lib/prisma";
-import NovuWelcome from "./novu-welcome";
+import { loginSchema } from "./schema";
+import { Message, PublicKey } from "@solana/web3.js";
+import nacl from "tweetnacl";
+// import NovuWelcome from "./novu-welcome";
 
 export async function DELETE() {
   const res = NextResponse.json({ data: "Logged out" });
@@ -22,9 +25,20 @@ export async function GET(req: NextRequest) {
 
 export async function POST(req: NextRequest) {
   try {
-    const { address } = await req.json();
+    const body = await req.json();
+    const { address, message, signature } = loginSchema.parse(body);
 
-    if (!address) return NextResponse.json({ error: "Wallet address is required to sign you in" }, { status: 400 });
+    const decodedMessage = Buffer.from(message, "base64");
+    const decodedSignature = Buffer.from(signature, "base64");
+    const publicKey = new PublicKey(address);
+
+    const isValid = nacl.sign.detached.verify(decodedMessage, decodedSignature, publicKey.toBytes());
+    if (!isValid) {
+      return NextResponse.json(
+        { error: "The provided key and signatures are invalid and your login attempt is rejected" },
+        { status: 401 }
+      );
+    }
 
     const existingUser = await prisma.user.findUnique({
       where: { address },
@@ -37,7 +51,7 @@ export async function POST(req: NextRequest) {
             address,
           },
         }),
-        NovuWelcome(address),
+        // NovuWelcome(address),
       ]);
     }
 

@@ -13,21 +13,25 @@ const LoginHandler = () => {
   const [isConnecting, setIsConnecting] = useState(false);
   const [isCreatingSession, setIsCreatingSession] = useState(false);
   const { showModal, isOpen, hideModal } = useModal();
-  const { publicKey } = useWallet();
+  const { publicKey, signMessage } = useWallet();
   const router = useRouter();
   const searchParams = useSearchParams();
   const redirectPath = searchParams.get("redirect") || "/";
 
-  const handleConnectWallet = () =>
-    showModal(<ConnectWalletModal />, { position: "center" });
+  const handleConnectWallet = () => showModal(<ConnectWalletModal />, { position: "center" });
 
   const createUserSession = async () => {
-    if (!publicKey || isCreatingSession) return;
+    if (!publicKey || isCreatingSession || !signMessage) return;
 
     setIsCreatingSession(true);
     try {
+      const msg = new TextEncoder().encode(`Koopaa login: ${Date.now()}`);
+      const signature = await signMessage(msg);
+      const signatureBase64 = Buffer.from(signature).toString("base64");
+      const messageBase64 = Buffer.from(msg).toString("base64");
+
       const { error, message } = await query.post("auth", {
-        body: { address: publicKey.toBase58() },
+        body: { address: publicKey.toBase58(), signature: signatureBase64, message: messageBase64 },
       });
 
       if (error) {
@@ -63,16 +67,8 @@ const LoginHandler = () => {
   }, [publicKey, isOpen]);
 
   return (
-    <Button
-      onClick={handleConnectWallet}
-      disabled={isConnecting || isCreatingSession}
-      className="w-full"
-    >
-      {isConnecting
-        ? "Connecting..."
-        : isCreatingSession
-          ? "Setting up..."
-          : "Connect Wallet"}
+    <Button onClick={handleConnectWallet} disabled={isConnecting || isCreatingSession} className="w-full">
+      {isConnecting ? "Connecting..." : isCreatingSession ? "Setting up..." : "Connect Wallet"}
     </Button>
   );
 };

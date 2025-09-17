@@ -26,6 +26,7 @@ model Group {
     tag          Tag
     cover_photo  Int
     participants User[]
+    waiting_room String[]
 }
 
 model Activity {

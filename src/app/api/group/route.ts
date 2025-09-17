@@ -6,15 +6,7 @@ import { createdAjoGroupSchema, joinAjoGroupSchema } from "./schema";
 // Create and Join new Ajo Group
 export const POST = withErrorHandler(async (req: NextRequest) => {
   const body = await req.json();
-  const {
-    name,
-    pda,
-    tag,
-    group_cover_photo,
-    description,
-    signature,
-    security_deposit,
-  } = createdAjoGroupSchema.parse(body);
+  const { name, pda, tag, group_cover_photo, description, signature } = createdAjoGroupSchema.parse(body);
 
   const address = getServerSession(req);
 
@@ -47,7 +39,6 @@ export const POST = withErrorHandler(async (req: NextRequest) => {
       type: "create",
       userId: address,
       sig: signature,
-      amount: security_deposit,
       group_pda: pda,
     },
   });
@@ -62,8 +53,7 @@ export const POST = withErrorHandler(async (req: NextRequest) => {
 // Join an Ajo Group
 export const PUT = withErrorHandler(async (req: NextRequest) => {
   const body = await req.json();
-  const { name, pda, signature, security_deposit } =
-    joinAjoGroupSchema.parse(body);
+  const { name, pda, signature } = joinAjoGroupSchema.parse(body);
 
   const address = getServerSession(req);
 
@@ -83,7 +73,6 @@ export const PUT = withErrorHandler(async (req: NextRequest) => {
       type: "create",
       userId: address,
       sig: signature,
-      amount: security_deposit,
       group_pda: pda,
     },
   });
