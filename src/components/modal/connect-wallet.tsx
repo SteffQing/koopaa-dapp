@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { useWallet } from "@solana/wallet-adapter-react";
 import Image from "next/image";
 import { motion } from "framer-motion";
+import { SolanaMobileWalletAdapterWalletName } from "@solana-mobile/wallet-standard-mobile";
 
 export const ConnectWalletModal = () => {
   const { select, wallets, publicKey, disconnect } = useWallet();
@@ -50,7 +51,12 @@ export const ConnectWalletModal = () => {
                     />
                   )}
                 </div>
-                <span className="font-medium">Connect with {wallet.adapter.name}</span>
+                <span className="font-medium">
+                  Connect with{" "}
+                  {wallet.adapter.name === SolanaMobileWalletAdapterWalletName
+                    ? `Installed Wallet`
+                    : wallet.adapter.name}
+                </span>
               </div>
             </motion.button>
           ))
