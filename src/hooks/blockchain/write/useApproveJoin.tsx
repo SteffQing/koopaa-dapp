@@ -1,13 +1,12 @@
 "use client";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { PublicKey, SystemProgram } from "@solana/web3.js";
+import { PublicKey } from "@solana/web3.js";
 import { useMemo } from "react";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { getKoopaProgram } from "@/lib/solana/koopa-exports";
 import { getKoopaProgramId } from "@/lib/solana/koopa-exports";
 import { useAnchorProvider } from "@/providers/solana-provider";
 import { useTransactionToast } from "../../use-transaction-toast";
-import { TOKEN_PROGRAM_ID } from "@solana/spl-token";
 import { toast } from "sonner";
 import query from "@/lib/fetch";
 import { useRouter } from "next/navigation";

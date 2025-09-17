@@ -12,7 +12,7 @@ import query from "@/lib/fetch";
 import { CreatedAjoGroup } from "@/app/api/group/schema";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
-import { getAssociatedTokenAddressSync, TOKEN_PROGRAM_ID } from "@solana/spl-token";
+import { TOKEN_PROGRAM_ID } from "@solana/spl-token";
 import { handleOnchainError } from "../helpers/errors";
 
 const DECIMALS = 10 ** 6;

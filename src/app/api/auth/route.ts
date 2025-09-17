@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { clearSession, createSession, getSession } from "@/lib/session";
 import prisma from "@/lib/prisma";
 import { loginSchema } from "./schema";
-import { Message, PublicKey } from "@solana/web3.js";
+import { PublicKey } from "@solana/web3.js";
 import nacl from "tweetnacl";
 // import NovuWelcome from "./novu-welcome";
 
