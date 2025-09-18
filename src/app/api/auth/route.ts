@@ -28,13 +28,21 @@ export async function POST(req: NextRequest) {
     const body = await req.json();
     console.log(body, "body");
 
-    const { address, message, signature } = loginSchema.parse(body);
+    const { address, message, signature, domain, uri } = loginSchema.parse(body);
 
     const decodedMessage = Buffer.from(message, "base64");
     const decodedSignature = Buffer.from(signature, "base64");
     const publicKey = new PublicKey(address);
 
-    const isValid = nacl.sign.detached.verify(decodedMessage, decodedSignature, publicKey.toBytes());
+    let isValid: boolean;
+    if (domain && uri) {
+      const statement = decodedMessage.toString();
+      const signInMessage = Buffer.from(`${statement}\nURI: ${uri}\nDomain: ${domain}`);
+      isValid = nacl.sign.detached.verify(signInMessage, decodedSignature, publicKey.toBytes());
+    } else {
+      isValid = nacl.sign.detached.verify(decodedMessage, decodedSignature, publicKey.toBytes());
+    }
+
     if (!isValid) {
       return NextResponse.json(
         { error: "The provided key and signatures are invalid and your login attempt is rejected" },
