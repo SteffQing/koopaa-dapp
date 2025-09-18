@@ -5,7 +5,6 @@ import { useWallet } from "@solana/wallet-adapter-react";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { SolanaMobileWalletAdapterWalletName } from "@solana-mobile/wallet-standard-mobile";
-import { WalletName } from "@solana/wallet-adapter-base";
 
 export const ConnectWalletModal = () => {
   const { select, wallets, publicKey, disconnect } = useWallet();

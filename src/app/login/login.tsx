@@ -6,7 +6,6 @@ import { Button } from "@/components/ui/button";
 import query from "@/lib/fetch";
 import { useModal } from "@/providers/modal-provider";
 import { SolanaMobileWalletAdapterWalletName } from "@solana-mobile/wallet-standard-mobile";
-import { type WalletName } from "@solana/wallet-adapter-base";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -15,9 +14,8 @@ import { toast } from "sonner";
 const LoginHandler = () => {
   const [isConnecting, setIsConnecting] = useState(false);
   const [isCreatingSession, setIsCreatingSession] = useState(false);
-  const [isSigning, setIsSigning] = useState(false);
   const { showModal, isOpen, hideModal } = useModal();
-  const { publicKey, signMessage, wallet, signIn, select } = useWallet();
+  const { publicKey, signMessage, wallet, signIn } = useWallet();
   const router = useRouter();
   const searchParams = useSearchParams();
   const redirectPath = searchParams.get("redirect") || "/";
