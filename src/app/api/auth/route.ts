@@ -2,8 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { clearSession, createSession, getSession } from "@/lib/session";
 import prisma from "@/lib/prisma";
 import { loginSchema } from "./schema";
-import { PublicKey } from "@solana/web3.js";
-import nacl from "tweetnacl";
+// import { PublicKey } from "@solana/web3.js";
+// import nacl from "tweetnacl";
 // import NovuWelcome from "./novu-welcome";
 
 export async function DELETE() {
@@ -29,7 +29,7 @@ export async function POST(req: NextRequest) {
 
     console.log(body, "body");
 
-    // const { address, message, signature, domain, uri } = loginSchema.parse(body);
+    const { address /* message, signature, domain, uri */ } = loginSchema.parse(body);
 
     // const decodedMessage = Buffer.from(message, "base64");
     // const decodedSignature = Buffer.from(signature, "base64");
