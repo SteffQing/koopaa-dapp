@@ -40,9 +40,11 @@ export async function POST(req: NextRequest) {
 
     let isValid: boolean;
     if (domain && uri) {
-      const statement = decodedMessage.toString();
-      const signInMessage = Buffer.from(`${statement}\nURI: ${uri}\nDomain: ${domain}`);
-      isValid = nacl.sign.detached.verify(signInMessage, decodedSignature, publicKey.toBytes());
+      // const statement = decodedMessage.toString();
+      // const signInMessage = Buffer.from(`${statement}\nURI: ${uri}\nDomain: ${domain}`);
+      // isValid = nacl.sign.detached.verify(signInMessage, decodedSignature, publicKey.toBytes());
+      const expectedMessage = Buffer.from(`Koopaa login: ${parseInt(decodedMessage.toString().split(": ")[1])}`);
+      isValid = nacl.sign.detached.verify(expectedMessage, decodedSignature, publicKey.toBytes());
     } else {
       isValid = nacl.sign.detached.verify(decodedMessage, decodedSignature, publicKey.toBytes());
     }

@@ -5,9 +5,10 @@ import { useWallet } from "@solana/wallet-adapter-react";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { SolanaMobileWalletAdapterWalletName } from "@solana-mobile/wallet-standard-mobile";
+import { WalletName } from "@solana/wallet-adapter-base";
 
-export const ConnectWalletModal = () => {
-  const { select, wallets, publicKey, disconnect } = useWallet();
+export const ConnectWalletModal = ({ onSelectWallet }: { onSelectWallet: (walletName: WalletName) => void }) => {
+  const { select, wallets, publicKey, disconnect, wallet } = useWallet();
 
   if (publicKey) {
     return (
@@ -16,6 +17,9 @@ export const ConnectWalletModal = () => {
         <div className="bg-gray-100 p-3 rounded-lg w-full overflow-hidden text-center">
           <p className="text-sm font-mono truncate">{publicKey.toBase58()}</p>
         </div>
+        <Button onClick={() => onSelectWallet(wallet!.adapter.name)} className="w-full">
+          Sign In
+        </Button>
         <Button onClick={disconnect} variant="destructive" className="w-full mt-4">
           Disconnect Wallet
         </Button>
@@ -24,6 +28,7 @@ export const ConnectWalletModal = () => {
   }
 
   const installedWallets = wallets.filter((wallet) => wallet.readyState === "Installed");
+  const isMobile = /Mobi|Android/i.test(navigator.userAgent);
 
   return (
     <div className="p-6">
@@ -38,7 +43,14 @@ export const ConnectWalletModal = () => {
               className="w-full bg-white border border-gray-200 rounded-xl p-4 flex items-center justify-between cursor-pointer"
               whileHover={{ y: -2, boxShadow: "0 4px 10px rgba(0,0,0,0.05)" }}
               whileTap={{ y: 0 }}
-              onClick={() => select(wallet.adapter.name)}
+              // onClick={() => select(wallet.adapter.name)}
+              onClick={() => {
+                if (wallet.adapter.name === SolanaMobileWalletAdapterWalletName && isMobile) {
+                  onSelectWallet(wallet.adapter.name); // Trigger signIn for MWA
+                } else {
+                  select(wallet.adapter.name); // Connect only, sign later
+                }
+              }}
             >
               <div className="flex items-center gap-4">
                 <div className="w-8 h-8 rounded-full flex items-center justify-center overflow-hidden">
