@@ -39,7 +39,7 @@ const LoginHandler = () => {
         return;
       }
 
-      let payload: any = { address: publicKey.toBase58() };
+      let payload: object = { address: publicKey.toBase58() };
 
       if (wallet?.adapter?.name === SolanaMobileWalletAdapterWalletName && signIn) {
         // MWA: Use signIn for connect + sign
