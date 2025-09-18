@@ -4,7 +4,6 @@ import prisma from "@/lib/prisma";
 import { loginSchema } from "./schema";
 import { PublicKey } from "@solana/web3.js";
 import nacl from "tweetnacl";
-import sendMessage from "@/actions/tg";
 // import NovuWelcome from "./novu-welcome";
 
 export async function DELETE() {
@@ -28,33 +27,31 @@ export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
 
-    await sendMessage(JSON.stringify(body, null, 2));
-
     console.log(body, "body");
 
-    const { address, message, signature, domain, uri } = loginSchema.parse(body);
+    // const { address, message, signature, domain, uri } = loginSchema.parse(body);
 
-    const decodedMessage = Buffer.from(message, "base64");
-    const decodedSignature = Buffer.from(signature, "base64");
-    const publicKey = new PublicKey(address);
+    // const decodedMessage = Buffer.from(message, "base64");
+    // const decodedSignature = Buffer.from(signature, "base64");
+    // const publicKey = new PublicKey(address);
 
-    let isValid: boolean;
-    if (domain && uri) {
-      // const statement = decodedMessage.toString();
-      // const signInMessage = Buffer.from(`${statement}\nURI: ${uri}\nDomain: ${domain}`);
-      // isValid = nacl.sign.detached.verify(signInMessage, decodedSignature, publicKey.toBytes());
-      const expectedMessage = Buffer.from(`Koopaa login: ${parseInt(decodedMessage.toString().split(": ")[1])}`);
-      isValid = nacl.sign.detached.verify(expectedMessage, decodedSignature, publicKey.toBytes());
-    } else {
-      isValid = nacl.sign.detached.verify(decodedMessage, decodedSignature, publicKey.toBytes());
-    }
+    // let isValid: boolean;
+    // if (domain && uri) {
+    // const statement = decodedMessage.toString();
+    // const signInMessage = Buffer.from(`${statement}\nURI: ${uri}\nDomain: ${domain}`);
+    // isValid = nacl.sign.detached.verify(signInMessage, decodedSignature, publicKey.toBytes());
+    //   const expectedMessage = Buffer.from(`Koopaa login: ${parseInt(decodedMessage.toString().split(": ")[1])}`);
+    //   isValid = nacl.sign.detached.verify(expectedMessage, decodedSignature, publicKey.toBytes());
+    // } else {
+    //   isValid = nacl.sign.detached.verify(decodedMessage, decodedSignature, publicKey.toBytes());
+    // }
 
-    if (!isValid) {
-      return NextResponse.json(
-        { error: "The provided key and signatures are invalid and your login attempt is rejected" },
-        { status: 401 }
-      );
-    }
+    // if (!isValid) {
+    //   return NextResponse.json(
+    //     { error: "The provided key and signatures are invalid and your login attempt is rejected" },
+    //     { status: 401 }
+    //   );
+    // }
 
     const existingUser = await prisma.user.findUnique({
       where: { address },

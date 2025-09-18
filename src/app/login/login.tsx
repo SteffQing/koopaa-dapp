@@ -22,74 +22,7 @@ const LoginHandler = () => {
   const searchParams = useSearchParams();
   const redirectPath = searchParams.get("redirect") || "/";
 
-  const handleSignIn = async (walletName?: WalletName) => {
-    if (isSigning) return;
-
-    setIsSigning(true);
-    try {
-      // If walletName provided (from modal), select it
-      if (walletName && !publicKey) {
-        select(walletName);
-        return; // Wait for publicKey to be available
-      }
-
-      if (!publicKey) {
-        toast.error("Please connect a wallet first");
-        setIsSigning(false);
-        return;
-      }
-
-      let payload: object = { address: publicKey.toBase58() };
-
-      if (wallet?.adapter?.name === SolanaMobileWalletAdapterWalletName && signIn) {
-        // MWA: Use signIn for connect + sign
-        const signInInput = {
-          domain: window.location.host,
-          statement: `Koopaa login: ${Date.now()}`,
-          uri: window.location.origin,
-        };
-        const signInOutput = await signIn(signInInput);
-        payload = {
-          ...payload,
-          signature: Buffer.from(signInOutput.signature).toString("base64"),
-          message: Buffer.from(signInInput.statement).toString("base64"),
-          domain: signInInput.domain,
-          uri: signInInput.uri,
-        };
-      } else if (signMessage) {
-        // Non-MWA: Use signMessage
-        const msg = new TextEncoder().encode(`Koopaa login: ${Date.now()}`);
-        const signature = await signMessage(msg);
-        payload = {
-          ...payload,
-          signature: Buffer.from(signature).toString("base64"),
-          message: Buffer.from(msg).toString("base64"),
-        };
-      } else {
-        throw new Error("Wallet does not support signing");
-      }
-
-      const { error, message } = await query.post("auth", { body: payload });
-
-      if (error) {
-        toast.error(error);
-        throw new Error(error);
-      }
-
-      toast.success(message);
-      hideModal();
-      router.replace(redirectPath);
-    } catch (error) {
-      console.error("Sign-in error:", error);
-      toast.error("Failed to sign in. Please try again.");
-    } finally {
-      setIsSigning(false);
-      setIsConnecting(false);
-    }
-  };
-
-  const handleConnectWallet = () =>
-    showModal(<ConnectWalletModal onSelectWallet={handleSignIn} />, { position: "center" });
+  const handleConnectWallet = () => showModal(<ConnectWalletModal />, { position: "center" });
 
   const createUserSession = async () => {
     if (!publicKey || isCreatingSession) return;
