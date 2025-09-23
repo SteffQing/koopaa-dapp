@@ -6,6 +6,7 @@ import Outstanding from "@/assets/svgs/user-info/outstanding-contribution.svg";
 import PayoutComing from "@/assets/svgs/user-info/payout-coming.svg";
 import { useModal } from "@/providers/modal-provider";
 import { EnhancedInvitationModal } from "@/components/modal/enhanced-invite";
+import AdminApprovalModal from "@/components/modal/admin-approval";
 
 const item = {
   hidden: { opacity: 0, y: 10 },
@@ -20,7 +21,10 @@ interface InfoProps {
   pda: string;
   isParticipant: boolean;
   isWaiting: boolean;
+  isAdmin: boolean;
   name: string;
+  room: string[];
+  participants: string[];
 }
 
 function JoinAjoGroup({ pda, name }: Pick<InfoProps, "pda" | "name">) {
@@ -38,6 +42,26 @@ function JoinAjoGroup({ pda, name }: Pick<InfoProps, "pda" | "name">) {
       <div className="flex items-left cursor-pointer flex-col" onClick={openInvitationModal}>
         <p className="font-medium text-[#FCFCFC]">Click to Join this group</p>
         <p className="text-sm text-[#767676]">Join this saving group and start saving</p>
+      </div>
+    </motion.div>
+  );
+}
+
+function WaitingRoom({ pda, name, room, participants }: Pick<InfoProps, "pda" | "name" | "room" | "participants">) {
+  const { showModal } = useModal();
+
+  const openWaitingRoomModal = () => {
+    showModal(<AdminApprovalModal waitingRoomUsers={room} groupName={name} pda={pda} participants={participants} />, {
+      position: "center",
+      showCloseButton: true,
+      closeOnClickOutside: true,
+    });
+  };
+  return (
+    <motion.div variants={item} className="bg-[#121212] rounded-xl p-4 mb-6">
+      <div className="flex items-left cursor-pointer flex-col" onClick={openWaitingRoomModal}>
+        <p className="font-medium text-[#FCFCFC]">Check Waiting Room</p>
+        <p className="text-sm text-[#767676]">Open the waiting room to invite or approve join requests</p>
       </div>
     </motion.div>
   );
@@ -97,9 +121,13 @@ export function Info({ missedRounds, nextPayout, payoutDate, slots, isParticipan
   const hasPayout = nextPayout && Boolean(payoutDate);
   const hasSlots = slots > 0;
 
+  console.log(props);
+
   if (hasMissedRounds) return <MissingRounds missedRounds={missedRounds} />;
 
   if (hasPayout) return <NextPayout payoutDate={payoutDate as Date} />;
+
+  if (props.isAdmin) return <WaitingRoom {...props} />;
 
   if ((isParticipant || props.isWaiting) && hasSlots) return <OpenSlotsInvite slots={slots} pda={props.pda} />;
 

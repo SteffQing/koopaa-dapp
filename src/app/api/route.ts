@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getServerSession, withErrorHandler } from "./utils";
+import { getSearchParams, getServerSession, withErrorHandler } from "./utils";
 import { BASE_URL } from "@/lib/fetch";
 import redis from "@/lib/redis";
+import prisma from "@/lib/prisma";
 
 async function generateShortCode(url: string, length = 10): Promise<string> {
   const encoder = new TextEncoder();
@@ -29,4 +30,25 @@ export const POST = withErrorHandler(async (req: NextRequest) => {
   await redis.set(code, url);
 
   return NextResponse.json({ data: `${BASE_URL}/invite/${code}` });
+});
+
+export const GET = withErrorHandler(async (req: NextRequest) => {
+  const { q } = getSearchParams(req);
+  const query = q.trim();
+
+  if (!query) return NextResponse.json({ data: [] });
+
+  const users = await prisma.user.findMany({
+    where: {
+      OR: [
+        { address: { equals: query, mode: "insensitive" } }, // exact match for address
+        { username: { contains: query, mode: "insensitive" } }, // partial match
+        { email: { contains: query, mode: "insensitive" } }, // partial match
+      ],
+    },
+    take: 20,
+    select: { address: true },
+  });
+  const addresses = users.map((user) => user.address);
+  return NextResponse.json({ data: addresses });
 });

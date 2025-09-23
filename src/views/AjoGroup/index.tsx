@@ -18,6 +18,7 @@ export default function AjoGroup({ data, id, loading, disabled }: Props) {
   const { user } = useAuthUser();
   const you = useMemo(() => data?.youParticipant(user?.address), [user?.address, data]);
   const youWaiting = useMemo(() => data?.inWaitingRoom(user?.address), [user?.address, data]);
+  const youIsAdmin = useMemo(() => data?.isAdmin(user?.address), [user?.address, data]);
 
   return (
     <>
@@ -46,7 +47,10 @@ export default function AjoGroup({ data, id, loading, disabled }: Props) {
         pda={id}
         isParticipant={Boolean(you)}
         isWaiting={Boolean(youWaiting)}
+        isAdmin={Boolean(youIsAdmin)}
         name={data?.name ?? ""}
+        room={data?.waitingRoom ?? []}
+        participants={data?.participants.map((p) => p.participant) ?? []}
       />
       {loading || !data ? (
         <GroupInfoSkeleton />

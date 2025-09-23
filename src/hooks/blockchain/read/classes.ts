@@ -130,6 +130,11 @@ export class AjoGroupData {
     return arrayContains(this.waitingRoom, you);
   }
 
+  public isAdmin(you: string | undefined) {
+    if (!you) return false;
+    return this.participants[0].participant.toLowerCase() === you.toLowerCase();
+  }
+
   constructor(onchain_data: AjoGroup, offchain_data: Group) {
     this.name = onchain_data.name;
     this.created_at = new Date(offchain_data.created_at);
