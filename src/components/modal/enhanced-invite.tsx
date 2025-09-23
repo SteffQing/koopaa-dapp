@@ -56,6 +56,7 @@ export const EnhancedInvitationModal: React.FC<InvitationModalProps> = ({ invite
 
   const handleAccept = async () => {
     await joinAjoGroup(id, groupName);
+    router.refresh();
     hideModal();
   };
 

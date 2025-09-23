@@ -1,3 +1,4 @@
+import { arrayContains } from "@/lib/utils";
 import { Tag, Group } from "../../../../prisma-client";
 import { AjoParticipant, AjoGroup } from "../types";
 import { BN } from "@coral-xyz/anchor";
@@ -122,6 +123,11 @@ export class AjoGroupData {
       nextPayout: youNext && Boolean(this.startTimestamp),
       ...participant,
     };
+  }
+
+  public inWaitingRoom(you: string | undefined) {
+    if (!you) return false;
+    return arrayContains(this.waitingRoom, you);
   }
 
   constructor(onchain_data: AjoGroup, offchain_data: Group) {

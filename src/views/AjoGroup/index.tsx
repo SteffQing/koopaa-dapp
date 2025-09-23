@@ -17,6 +17,7 @@ interface Props {
 export default function AjoGroup({ data, id, loading, disabled }: Props) {
   const { user } = useAuthUser();
   const you = useMemo(() => data?.youParticipant(user?.address), [user?.address, data]);
+  const youWaiting = useMemo(() => data?.inWaitingRoom(user?.address), [user?.address, data]);
 
   return (
     <>
@@ -44,6 +45,7 @@ export default function AjoGroup({ data, id, loading, disabled }: Props) {
         slots={data ? Math.max(0, data.numParticipants - data.participants.length) : 0}
         pda={id}
         isParticipant={Boolean(you)}
+        isWaiting={Boolean(youWaiting)}
         name={data?.name ?? ""}
       />
       {loading || !data ? (

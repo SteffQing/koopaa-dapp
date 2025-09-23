@@ -18,7 +18,7 @@ export default function Telegram() {
           damping: 30,
         }}
       >
-        <div className="max-w-[400px] bg-transparent absolute bottom-[140px] right-4">
+        <div className="max-w-[400px] bg-transparent absolute bottom-24 right-4">
           <div className="relative group">
             <Link href="https://t.me/+hxd5Ob1F78hkZTNk" target="_blank">
               <TelegramIcon />

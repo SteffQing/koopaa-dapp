@@ -19,6 +19,7 @@ interface InfoProps {
   slots: number;
   pda: string;
   isParticipant: boolean;
+  isWaiting: boolean;
   name: string;
 }
 
@@ -100,9 +101,9 @@ export function Info({ missedRounds, nextPayout, payoutDate, slots, isParticipan
 
   if (hasPayout) return <NextPayout payoutDate={payoutDate as Date} />;
 
-  if (isParticipant && hasSlots) return <OpenSlotsInvite slots={slots} pda={props.pda} />;
+  if ((isParticipant || props.isWaiting) && hasSlots) return <OpenSlotsInvite slots={slots} pda={props.pda} />;
 
-  if (!isParticipant && hasSlots) return <JoinAjoGroup {...props} />;
+  if (!(isParticipant || props.isWaiting) && hasSlots) return <JoinAjoGroup {...props} />;
 
   return <></>;
 }

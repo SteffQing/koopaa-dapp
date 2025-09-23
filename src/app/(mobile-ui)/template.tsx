@@ -2,7 +2,7 @@ import BottomNavbar from "@/views/Navigation/navigation";
 import { Suspense, ReactNode } from "react";
 import AuthGuard from "./AuthGuard";
 import SplashScreen from "@/views/splash-screen";
-import Faucet from "@/components/faucet";
+// import Faucet from "@/components/faucet";
 import Telegram from "@/components/telegram";
 
 export default function MobileLayout({ children }: Readonly<{ children: ReactNode }>) {
@@ -11,7 +11,7 @@ export default function MobileLayout({ children }: Readonly<{ children: ReactNod
       <AuthGuard>
         {children}
         <BottomNavbar />
-        <Faucet />
+        {/* <Faucet /> */}
         <Telegram />
       </AuthGuard>
     </Suspense>

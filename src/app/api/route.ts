@@ -8,10 +8,7 @@ async function generateShortCode(url: string, length = 10): Promise<string> {
   const data = encoder.encode(url);
   const hashBuffer = await crypto.subtle.digest("SHA-256", data);
   const hashArray = Array.from(new Uint8Array(hashBuffer));
-  const base64 = btoa(String.fromCharCode(...hashArray)).replace(
-    /[^a-zA-Z0-9]/g,
-    ""
-  );
+  const base64 = btoa(String.fromCharCode(...hashArray)).replace(/[^a-zA-Z0-9]/g, "");
   return base64.slice(0, length);
 }
 
@@ -27,7 +24,7 @@ export const POST = withErrorHandler(async (req: NextRequest) => {
       { status: 400 }
     );
 
-  const url = `/savings/ajo/${pda}/join-ajo?inviter=${address}`;
+  const url = `/savings/ajo/${pda}?inviter=${address}`;
   const code = await generateShortCode(url);
   await redis.set(code, url);
 
