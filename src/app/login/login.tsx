@@ -39,7 +39,7 @@ const LoginHandler = () => {
         //   const signInOutput = await signIn(signInInput);
         payload = {
           ...payload,
-          // signature: Buffer.from(signInOutput.signature).toString("base64"),
+          signature: "SIGNATURE", // Buffer.from(signInOutput.signature).toString("base64"),
           message: Buffer.from(signInInput.statement).toString("base64"),
           domain: signInInput.domain,
           uri: signInInput.uri,
