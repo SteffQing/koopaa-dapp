@@ -112,7 +112,7 @@ export default query;
 const MAX_RETRIES = 3;
 const DELAY_MS = 1000;
 
-export function withRetry<T, TArgs extends any[]>(fn: (...args: TArgs) => Promise<FetchResponse<T>>) {
+export function withRetry<T, TArgs extends unknown[]>(fn: (...args: TArgs) => Promise<FetchResponse<T>>) {
   return async (...args: TArgs) => {
     for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
       const res = await fn(...args);

@@ -9,9 +9,7 @@ export function ellipsify(str = "", len = 4, delimiter = "..") {
   const strLen = str.length;
   const limit = len * 2 + delimiter.length;
 
-  return strLen >= limit
-    ? str.substring(0, len) + delimiter + str.substring(strLen - len, strLen)
-    : str;
+  return strLen >= limit ? str.substring(0, len) + delimiter + str.substring(strLen - len, strLen) : str;
 }
 
 export function isValidEmail(email: string): boolean {
@@ -26,4 +24,8 @@ export function getPosition(position: number) {
   if (j === 2 && k !== 12) return `${position}nd`;
   if (j === 3 && k !== 13) return `${position}rd`;
   return `${position}th`;
+}
+
+export function arrayContains(array: string[], value: string) {
+  return array.map((arr) => arr.toLowerCase()).includes(value.toLowerCase());
 }

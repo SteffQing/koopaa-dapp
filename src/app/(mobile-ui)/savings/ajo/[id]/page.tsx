@@ -10,9 +10,9 @@ import AjoGroup from "@/views/AjoGroup";
 import AjoError from "@/components/error";
 import { useModal } from "@/providers/modal-provider";
 import { EnhancedInvitationModal } from "@/components/modal/enhanced-invite";
-import { useRouter } from "next/navigation";
 import { useSession } from "@/hooks/useSession";
 import { useWallet } from "@solana/wallet-adapter-react";
+import { arrayContains } from "@/lib/utils";
 
 type Props = {
   params: Promise<{ id: string }>;
@@ -22,7 +22,6 @@ type Props = {
 export default function AjoGroupPage({ params, searchParams }: Props) {
   const { id } = use(params);
   const { inviter } = use(searchParams);
-  const router = useRouter();
   const { data, isLoading, error, refetch } = useGetAjoGroup(id);
   const { session } = useSession();
   const { publicKey } = useWallet();
@@ -39,9 +38,17 @@ export default function AjoGroupPage({ params, searchParams }: Props) {
   };
 
   useEffect(() => {
-    if (data && inviter) {
-      const { name, participants } = data;
-      openInvitationModal(data.name);
+    if (data && session) {
+      const { name, participants, waitingRoom } = data;
+      if (
+        arrayContains(waitingRoom, session) ||
+        arrayContains(
+          participants.map((p) => p.participant),
+          session
+        )
+      )
+        return;
+      openInvitationModal(name);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data, session, publicKey, inviter]);
