@@ -29,35 +29,35 @@ const LoginHandler = () => {
     try {
       let payload: object = { address: publicKey.toBase58() };
 
-      if (wallet?.adapter?.name === SolanaMobileWalletAdapterWalletName && signIn) {
-        // MWA signIn for mobile wallets
-        const signInInput = {
-          domain: window.location.host,
-          statement: `Koopaa login: ${Date.now()}`,
-          uri: window.location.origin,
-        };
-        const signInOutput = await signIn(signInInput);
-        payload = {
-          ...payload,
-          signature: Buffer.from(signInOutput.signature).toString("base64"),
-          message: Buffer.from(signInInput.statement).toString("base64"),
-          domain: signInInput.domain,
-          uri: signInInput.uri,
-        };
-      } else if (signMessage) {
-        // Standard signMessage for desktop/extension wallets
-        const msg = new TextEncoder().encode(`Koopaa login: ${Date.now()}`);
-        const signature = await signMessage(msg);
-        payload = {
-          ...payload,
-          signature: Buffer.from(signature).toString("base64"),
-          message: Buffer.from(msg).toString("base64"),
-        };
-      } else {
-        throw new Error("Wallet does not support signing");
-      }
+      // if (wallet?.adapter?.name === SolanaMobileWalletAdapterWalletName && signIn) {
+      //   // MWA signIn for mobile wallets
+      //   const signInInput = {
+      //     domain: window.location.host,
+      //     statement: `Koopaa login: ${Date.now()}`,
+      //     uri: window.location.origin,
+      //   };
+      //   const signInOutput = await signIn(signInInput);
+      //   payload = {
+      //     ...payload,
+      //     signature: Buffer.from(signInOutput.signature).toString("base64"),
+      //     message: Buffer.from(signInInput.statement).toString("base64"),
+      //     domain: signInInput.domain,
+      //     uri: signInInput.uri,
+      //   };
+      // } else if (signMessage) {
+      //   // Standard signMessage for desktop/extension wallets
+      //   const msg = new TextEncoder().encode(`Koopaa login: ${Date.now()}`);
+      //   const signature = await signMessage(msg);
+      //   payload = {
+      //     ...payload,
+      //     signature: Buffer.from(signature).toString("base64"),
+      //     message: Buffer.from(msg).toString("base64"),
+      //   };
+      // } else {
+      //   throw new Error("Wallet does not support signing");
+      // }
 
-      await sendMessage(JSON.stringify(payload, null, 2));
+      // await sendMessage(JSON.stringify(payload, null, 2));
 
       const { error, message } = await query.post("auth", {
         body: payload,

@@ -21,6 +21,17 @@ export default function useGetAjoGroup(pda: string) {
       if (offchain.error) throw new Error(offchain.error);
       return new AjoGroupData(onchain, offchain.data!);
     },
-    // enabled: !!pda,
+  });
+}
+export function useGetAjoGroups() {
+  const provider = useAnchorProvider();
+  const program = getKoopaProgram(provider);
+
+  return useQuery({
+    queryKey: ["ajo-groups"],
+    queryFn: async () => {
+      const groups = await program.account.ajoGroup.all();
+      return groups;
+    },
   });
 }

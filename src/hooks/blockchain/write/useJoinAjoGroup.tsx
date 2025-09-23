@@ -9,9 +9,9 @@ import { useAnchorProvider } from "@/providers/solana-provider";
 import { useTransactionToast } from "../../use-transaction-toast";
 import { TOKEN_PROGRAM_ID } from "@solana/spl-token";
 import { toast } from "sonner";
-import query from "@/lib/fetch";
+import query, { type FetchResponse, withRetry } from "@/lib/fetch";
 import { useRouter } from "next/navigation";
-import { JoinAjoGroup } from "@/app/api/group/schema";
+import type { JoinAjoGroup } from "@/app/api/group/schema";
 import { handleOnchainError } from "../helpers/errors";
 
 export default function useJoinAjoGroup() {
@@ -57,15 +57,16 @@ export default function useJoinAjoGroup() {
     },
   });
 
-  const { mutateAsync: dbJoin, isPending: loading } = useMutation({
+  const { mutateAsync: dbJoin, isPending: loading } = useMutation<FetchResponse<unknown>, Error, JoinAjoGroup>({
     mutationKey: ["join-ajo-group-db-call"],
-    mutationFn: async (ajoGroupdata: JoinAjoGroup) => query.put("group", { body: ajoGroupdata }),
+    mutationFn: withRetry(async (ajoGroupdata: JoinAjoGroup) => query.put("group", { body: ajoGroupdata })),
     onSuccess({ message, error }, { pda }) {
       if (message) {
         toast.success(message);
-        queryClient.invalidateQueries({ queryKey: ["ajo-group", pda] });
-        queryClient.invalidateQueries({ queryKey: ["ajo-group-members", pda] });
-        router.replace(`/savings/ajo/${pda}`);
+        Promise.all([
+          queryClient.invalidateQueries({ queryKey: ["ajo-group", pda] }),
+          queryClient.invalidateQueries({ queryKey: ["ajo-group-members", pda] }),
+        ]).then(() => router.replace(`/savings/ajo/${pda}`));
       } else {
         toast.error(error);
       }

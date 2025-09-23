@@ -8,9 +8,9 @@ import { getKoopaProgramId } from "@/lib/solana/koopa-exports";
 import { useAnchorProvider } from "@/providers/solana-provider";
 import { useTransactionToast } from "../../use-transaction-toast";
 import { toast } from "sonner";
-import query from "@/lib/fetch";
+import query, { type FetchResponse, withRetry } from "@/lib/fetch";
 import { useRouter } from "next/navigation";
-import { JoinAjoGroup } from "@/app/api/group/schema";
+import type { ApprovalJoinAjoGroup } from "@/app/api/group/schema";
 import { handleOnchainError } from "../helpers/errors";
 
 type ApproveJoinParams = {
@@ -34,8 +34,8 @@ export default function useApproveJoin() {
     [programId]
   );
 
-  // Join an existing Ajo group
-  const { mutateAsync: joinOnchain, isPending } = useMutation({
+  // Approve Join Ajo group
+  const { mutateAsync: approveJoinOnchain, isPending } = useMutation({
     mutationFn: async (params: ApproveJoinParams) => {
       if (!userPublicKey) throw new Error("Wallet not connected");
       const { ajoGroup, participant, approved } = params;
@@ -67,15 +67,16 @@ export default function useApproveJoin() {
     },
   });
 
-  const { mutateAsync: dbJoin, isPending: loading } = useMutation({
-    mutationKey: ["join-ajo-group-db-call"],
-    mutationFn: async (ajoGroupdata: JoinAjoGroup) => query.put("group", { body: ajoGroupdata }),
+  const { mutateAsync: dbJoin, isPending: loading } = useMutation<FetchResponse<unknown>, Error, ApprovalJoinAjoGroup>({
+    mutationKey: ["approve-join-ajo-group-db-call"],
+    mutationFn: withRetry(async (ajoGroupdata: ApprovalJoinAjoGroup) => query.patch("group", { body: ajoGroupdata })),
     onSuccess({ message, error }, { pda }) {
       if (message) {
         toast.success(message);
-        queryClient.invalidateQueries({ queryKey: ["ajo-group", pda] });
-        queryClient.invalidateQueries({ queryKey: ["ajo-group-members", pda] });
-        router.replace(`/savings/ajo/${pda}`);
+        Promise.all([
+          queryClient.invalidateQueries({ queryKey: ["ajo-group", pda] }),
+          queryClient.invalidateQueries({ queryKey: ["ajo-group-members", pda] }),
+        ]).then(() => router.replace(`/savings/ajo/${pda}`));
       } else {
         toast.error(error);
       }
@@ -86,11 +87,13 @@ export default function useApproveJoin() {
   });
 
   async function approveJoinAjoGroup(params: ApproveJoinParams, name: string) {
-    const { signature } = await joinOnchain(params);
-    const joinData: JoinAjoGroup = {
+    const { signature } = await approveJoinOnchain(params);
+    const joinData: ApprovalJoinAjoGroup = {
       name,
       pda: params.ajoGroup,
       signature,
+      approval: params.approved,
+      participant: params.participant,
     };
     await dbJoin(joinData);
   }

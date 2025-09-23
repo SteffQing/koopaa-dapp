@@ -29,6 +29,7 @@ export class AjoGroupData {
   startTimestamp: null | number;
   payoutRound: number;
   closeVotes: string[];
+  waitingRoom: string[];
   isClosed: boolean;
   //   vaultBump: number;
   //   bumps: number;
@@ -138,6 +139,7 @@ export class AjoGroupData {
     this.startTimestamp = onchain_data.startTimestamp ? formatNumber(onchain_data.startTimestamp, 0) : null;
     this.payoutRound = onchain_data.payoutRound;
     this.closeVotes = onchain_data.closeVotes.map((voter) => voter.toBase58());
+    this.waitingRoom = onchain_data.waitingRoom.map((voter) => voter.toBase58());
     this.isClosed = onchain_data.isClosed;
     // this.vaultBump = onchain_data.vaultBump;
     // this.bumps = onchain_data.bumps;

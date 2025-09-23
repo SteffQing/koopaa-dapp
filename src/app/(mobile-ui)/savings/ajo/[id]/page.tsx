@@ -2,20 +2,49 @@
 
 import { motion } from "framer-motion";
 import Image from "next/image";
-import { use } from "react";
+import { use, useEffect } from "react";
 import NavHeader from "@/views/Navigation/nav-header";
 import Container from "@/components/container";
 import useGetAjoGroup from "@/hooks/blockchain/read/useFetchAjoGroup";
 import AjoGroup from "@/views/AjoGroup";
 import AjoError from "@/components/error";
+import { useModal } from "@/providers/modal-provider";
+import { EnhancedInvitationModal } from "@/components/modal/enhanced-invite";
+import { useRouter } from "next/navigation";
+import { useSession } from "@/hooks/useSession";
+import { useWallet } from "@solana/wallet-adapter-react";
 
-export default function AjoGroupPage({
-  params,
-}: {
+type Props = {
   params: Promise<{ id: string }>;
-}) {
+  searchParams: Promise<{ inviter?: string }>;
+};
+
+export default function AjoGroupPage({ params, searchParams }: Props) {
   const { id } = use(params);
+  const { inviter } = use(searchParams);
+  const router = useRouter();
   const { data, isLoading, error, refetch } = useGetAjoGroup(id);
+  const { session } = useSession();
+  const { publicKey } = useWallet();
+
+  const { showModal } = useModal();
+
+  const openInvitationModal = (name: string) => {
+    if (!inviter) return;
+    showModal(<EnhancedInvitationModal inviter={inviter} groupName={name} id={id} />, {
+      position: "center",
+      showCloseButton: true,
+      closeOnClickOutside: false,
+    });
+  };
+
+  useEffect(() => {
+    if (data && inviter) {
+      const { name, participants } = data;
+      openInvitationModal(data.name);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data, session, publicKey, inviter]);
 
   const item = {
     hidden: { opacity: 0, y: 10 },

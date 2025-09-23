@@ -10,9 +10,7 @@ export const createdAjoGroupSchema = createAjoGroupSchema
   })
   .extend({
     pda: z.string().min(1, "Ajo Group needs a PDA identifier"),
-    signature: z
-      .string()
-      .min(1, "Transaction hash with which Group was created"),
+    signature: z.string().min(1, "Transaction hash with which Group was created"),
   });
 
 export const joinAjoGroupSchema = createdAjoGroupSchema.omit({
@@ -21,5 +19,11 @@ export const joinAjoGroupSchema = createdAjoGroupSchema.omit({
   tag: true,
 });
 
+export const approvalJoinAjoGroupSchema = joinAjoGroupSchema.extend({
+  approval: z.boolean(),
+  participant: z.string().min(1, "Participant address is required"),
+});
+
 export type CreatedAjoGroup = z.infer<typeof createdAjoGroupSchema>;
 export type JoinAjoGroup = z.infer<typeof joinAjoGroupSchema>;
+export type ApprovalJoinAjoGroup = z.infer<typeof approvalJoinAjoGroupSchema>;

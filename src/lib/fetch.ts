@@ -1,21 +1,23 @@
+import { toast } from "sonner";
+
 type HttpMethod = "GET" | "POST" | "PUT" | "DELETE" | "PATCH";
 
 type ParamsType = null | number | boolean | string | undefined;
 
-interface FetchOptions<TBody = unknown> extends Omit<RequestInit, "body"> {
+export interface FetchOptions<TBody = unknown> extends Omit<RequestInit, "body"> {
   params?: Record<string, ParamsType>;
   body?: TBody;
 }
 
 export const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
-type Meta = {
+export type Meta = {
   page: number;
   limit: number;
   total?: number;
   totalPages?: number;
 };
-type FetchResponse<T> = Response & {
+export type FetchResponse<T> = Response & {
   error?: string;
   data?: T;
   ok?: boolean;
@@ -77,43 +79,28 @@ class Fetch {
       } as FetchResponse<T>;
     } catch (error) {
       console.error(error);
-      throw new Error("");
+      throw error;
     }
   }
 
   // GET doesn't use a body so we set TBody to undefined
-  async get<T>(
-    path: string,
-    options: FetchOptions<undefined> = {}
-  ): Promise<FetchResponse<T>> {
+  async get<T>(path: string, options: FetchOptions<undefined> = {}): Promise<FetchResponse<T>> {
     return this.request<T, undefined>(path, "GET", options);
   }
 
-  async post<T, TBody = unknown>(
-    path: string,
-    options: FetchOptions<TBody> = {}
-  ): Promise<FetchResponse<T>> {
+  async post<T, TBody = unknown>(path: string, options: FetchOptions<TBody> = {}): Promise<FetchResponse<T>> {
     return this.request<T, TBody>(path, "POST", options);
   }
 
-  async put<T, TBody = unknown>(
-    path: string,
-    options: FetchOptions<TBody> = {}
-  ): Promise<FetchResponse<T>> {
+  async put<T, TBody = unknown>(path: string, options: FetchOptions<TBody> = {}): Promise<FetchResponse<T>> {
     return this.request<T, TBody>(path, "PUT", options);
   }
 
-  async patch<T, TBody = unknown>(
-    path: string,
-    options: FetchOptions<TBody> = {}
-  ): Promise<FetchResponse<T>> {
+  async patch<T, TBody = unknown>(path: string, options: FetchOptions<TBody> = {}): Promise<FetchResponse<T>> {
     return this.request<T, TBody>(path, "PATCH", options);
   }
 
-  async delete<T, TBody = unknown>(
-    path: string,
-    options: FetchOptions<TBody> = {}
-  ): Promise<FetchResponse<T>> {
+  async delete<T, TBody = unknown>(path: string, options: FetchOptions<TBody> = {}): Promise<FetchResponse<T>> {
     return this.request<T, TBody>(path, "DELETE", options);
   }
 }
@@ -121,3 +108,22 @@ class Fetch {
 const query = new Fetch();
 
 export default query;
+
+const MAX_RETRIES = 3;
+const DELAY_MS = 1000;
+
+export function withRetry<T, TArgs extends any[]>(fn: (...args: TArgs) => Promise<FetchResponse<T>>) {
+  return async (...args: TArgs) => {
+    for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
+      const res = await fn(...args);
+      if (res.status === 503) {
+        const delay = DELAY_MS * Math.pow(2, attempt - 1);
+        toast.info(`Database connection issue. Retrying (${attempt}/${MAX_RETRIES})...`);
+        await new Promise((resolve) => setTimeout(resolve, delay));
+        continue;
+      }
+      return res;
+    }
+    return await fn(...args);
+  };
+}

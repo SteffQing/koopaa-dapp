@@ -1,7 +1,8 @@
 import prisma from "@/lib/prisma";
 import { getServerSession, withErrorHandler } from "../utils";
 import { NextRequest, NextResponse } from "next/server";
-import { createdAjoGroupSchema, joinAjoGroupSchema } from "./schema";
+import { approvalJoinAjoGroupSchema, createdAjoGroupSchema, joinAjoGroupSchema } from "./schema";
+// import redis from "@/lib/redis";
 
 // Create and Join new Ajo Group
 export const POST = withErrorHandler(async (req: NextRequest) => {
@@ -9,6 +10,7 @@ export const POST = withErrorHandler(async (req: NextRequest) => {
   const { name, pda, tag, group_cover_photo, description, signature } = createdAjoGroupSchema.parse(body);
 
   const address = getServerSession(req);
+  // await redis.lpush("ajo-group-creation", JSON.stringify({ pda, tag, group_cover_photo, description }));
 
   const groupCreate = prisma.group.create({
     data: {
@@ -17,6 +19,7 @@ export const POST = withErrorHandler(async (req: NextRequest) => {
       tag,
       cover_photo: group_cover_photo,
       description,
+      admin: address,
       participants: {
         connect: {
           address,
@@ -33,7 +36,7 @@ export const POST = withErrorHandler(async (req: NextRequest) => {
       group_pda: pda,
     },
   });
-  const joinActivity = prisma.activity.create({
+  const activity = prisma.activity.create({
     data: {
       title: `Joined ${name} Ajo Group`,
       type: "create",
@@ -43,14 +46,14 @@ export const POST = withErrorHandler(async (req: NextRequest) => {
     },
   });
 
-  await Promise.all([groupCreate, createActivity, joinActivity]);
+  await Promise.all([groupCreate, createActivity, activity]);
 
   return NextResponse.json({
     message: `${name} Ajo Group has been successfully created`,
   });
 });
 
-// Join an Ajo Group
+// Request to Join an Ajo Group
 export const PUT = withErrorHandler(async (req: NextRequest) => {
   const body = await req.json();
   const { name, pda, signature } = joinAjoGroupSchema.parse(body);
@@ -60,16 +63,14 @@ export const PUT = withErrorHandler(async (req: NextRequest) => {
   const groupJoin = prisma.group.update({
     where: { pda },
     data: {
-      participants: {
-        connect: {
-          address,
-        },
+      waiting_room: {
+        push: address,
       },
     },
   });
-  const joinActivity = prisma.activity.create({
+  const activity = prisma.activity.create({
     data: {
-      title: `Joined ${name} Ajo Group`,
+      title: `Request to Join ${name} Ajo Group`,
       type: "create",
       userId: address,
       sig: signature,
@@ -77,10 +78,70 @@ export const PUT = withErrorHandler(async (req: NextRequest) => {
     },
   });
 
-  await Promise.all([groupJoin, joinActivity]);
+  await Promise.all([groupJoin, activity]);
 
   return NextResponse.json({
-    message: `You have successfully joined ${name} Ajo Group`,
+    message: `You are in the waiting room to join ${name} Ajo Group`,
+  });
+});
+
+// Approval to Join an Ajo Group
+export const PATCH = withErrorHandler(async (req: NextRequest) => {
+  const body = await req.json();
+  const { name, pda, signature, approval, participant } = approvalJoinAjoGroupSchema.parse(body);
+
+  const address = getServerSession(req);
+
+  const group = await prisma.group.findUnique({
+    where: { pda },
+    select: { waiting_room: true, admin: true },
+  });
+
+  if (!group) {
+    throw new Error("Group not found");
+  }
+  if (group.admin.toLowerCase() !== address.toLowerCase()) {
+    throw new Error("You are not the admin of this group");
+  }
+
+  const groupJoin = prisma.group.update({
+    where: { pda },
+    data: {
+      waiting_room: group.waiting_room.filter((addr) => addr !== participant),
+      ...(approval && {
+        participants: {
+          connect: {
+            address: participant,
+          },
+        },
+      }),
+    },
+  });
+
+  const activity_data = {
+    title: `Request to Join ${name} Ajo Group ${approval ? "Approved" : "Rejected"}`,
+    type: "create",
+    sig: signature,
+    group_pda: pda,
+  } as const;
+
+  const admin_activity = prisma.activity.create({
+    data: {
+      ...activity_data,
+      userId: address,
+    },
+  });
+  const participant_activity = prisma.activity.create({
+    data: {
+      ...activity_data,
+      userId: participant,
+    },
+  });
+
+  await Promise.all([groupJoin, participant_activity, admin_activity]);
+
+  return NextResponse.json({
+    message: `You are in the waiting room to join ${name} Ajo Group`,
   });
 });
 

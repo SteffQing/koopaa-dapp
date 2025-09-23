@@ -8,8 +8,8 @@ import { useTransactionToast } from "../../use-transaction-toast";
 import useUSDCMint from "../helpers/useUSDCMint";
 import useKoopaProgram from "../useKooPaaProgram";
 import { CreateAjoGroupFormValues } from "@/app/(mobile-ui)/savings/create-ajo/schema";
-import query from "@/lib/fetch";
-import { CreatedAjoGroup } from "@/app/api/group/schema";
+import query, { withRetry, type FetchResponse } from "@/lib/fetch";
+import type { CreatedAjoGroup } from "@/app/api/group/schema";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { TOKEN_PROGRAM_ID } from "@solana/spl-token";
@@ -85,9 +85,10 @@ export default function useCreateAjoGroup() {
     mutationKey: ["create-ajo-group-block-call", userPublicKey?.toBase58()],
   });
 
-  const { mutateAsync: dbCreate, isPending: loading } = useMutation({
+  const { mutateAsync: dbCreate, isPending: loading } = useMutation<FetchResponse<unknown>, Error, CreatedAjoGroup>({
     mutationKey: ["create-ajo-group-db-call"],
-    mutationFn: async (createdAjoGroup: CreatedAjoGroup) => query.post("group", { body: createdAjoGroup }),
+    mutationFn: withRetry(async (createdAjoGroup: CreatedAjoGroup) => query.post("group", { body: createdAjoGroup })),
+    // mutationFn: async (createdAjoGroup: CreatedAjoGroup) => query.post("group", { body: createdAjoGroup }),
     onSuccess({ message, error }, { pda }) {
       if (message) {
         toast.success(message);

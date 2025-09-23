@@ -18,6 +18,7 @@ export type AjoGroup = {
   startTimestamp: BN | null; // i64 | null
   payoutRound: number; // u16
   closeVotes: PublicKey[];
+  waitingRoom: PublicKey[];
   isClosed: boolean;
   vaultBump: number; // u8
   bumps: number; // u8

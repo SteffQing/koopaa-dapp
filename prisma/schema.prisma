@@ -25,6 +25,7 @@ model Group {
     description  String
     tag          Tag
     cover_photo  Int
+    admin        String
     participants User[]
     waiting_room String[]
 }
