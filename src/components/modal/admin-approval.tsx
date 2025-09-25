@@ -54,7 +54,7 @@ const UserCard: React.FC<{
   ajoGroup: string;
   groupName: string;
 }> = ({ user, ajoGroup, groupName }) => {
-  const { data, isLoading } = useParticipant(user);
+  const { data } = useParticipant(user);
   const { approveJoinAjoGroup, isPending, loading } = useApproveJoin();
   const params = { ajoGroup, participant: user, approved: true };
 
