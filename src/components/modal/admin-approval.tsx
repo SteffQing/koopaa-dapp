@@ -62,12 +62,7 @@ const UserCard: React.FC<{
   const reject = async () => approveJoinAjoGroup({ ...params, approved: false }, groupName);
 
   return (
-    <motion.div
-      variants={itemVariants}
-      className="bg-card border border-border rounded-lg p-4 space-y-3"
-      whileHover={{ scale: 1.01 }}
-      transition={{ duration: 0.2 }}
-    >
+    <motion.div variants={itemVariants} className="bg-card border border-border rounded-lg p-4 space-y-3">
       <div className="flex items-center gap-3">
         <Avatar size={48} number={data?.data?.avatar} />
         <div className="flex-1 min-w-0">
@@ -76,22 +71,20 @@ const UserCard: React.FC<{
           </div>
           <p className="text-sm text-muted-foreground truncate">{ellipsify(data?.data?.address)}</p>{" "}
         </div>
-      </div>
 
-      <div className="flex gap-2">
-        <Button
-          size="sm"
-          onClick={approve}
-          loading={isPending || loading}
-          className="flex-1 bg-green-600 hover:bg-green-700 text-white"
-        >
-          <Check className="w-4 h-4 mr-1" />
-          Approve
-        </Button>
-        <Button size="sm" variant="destructive" onClick={reject} loading={isPending || loading} className="flex-1">
-          <X className="w-4 h-4 mr-1" />
-          Reject
-        </Button>
+        <div className="flex gap-2">
+          <Button
+            size="sm"
+            onClick={approve}
+            loading={isPending || loading}
+            className="flex-1 bg-green-600 hover:bg-green-700 text-white"
+          >
+            <Check className="w-4 h-4 mr-1" />
+          </Button>
+          <Button size="sm" variant="destructive" onClick={reject} loading={isPending || loading} className="flex-1">
+            <X className="w-4 h-4 mr-1" />
+          </Button>
+        </div>
       </div>
     </motion.div>
   );
@@ -132,26 +125,22 @@ const AdminApprovalModal: React.FC<AdminApprovalModalProps> = ({ groupName, pda,
         <motion.div variants={itemVariants} className="mb-6">
           <h2 className="text-xl font-semibold text-foreground mb-2">Manage Join Requests</h2>
           <p className="text-sm text-muted-foreground">
-            Review and approve users waiting to join <span className="font-medium text-[#ff6b00]">{groupName}</span>
+            Add or approve users waiting to join <span className="font-medium text-[#ff6b00]">{groupName}</span>
           </p>
         </motion.div>
 
-        {/* Search */}
-        {waitingRoomUsers.length > 0 && (
-          <motion.div variants={itemVariants} className="mb-4">
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-              <Input
-                placeholder="Search users..."
-                value={query_}
-                onChange={(e) => setQuery(e.target.value)}
-                className="pl-10"
-              />
-            </div>
-          </motion.div>
-        )}
+        <motion.div variants={itemVariants} className="mb-4">
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+            <Input
+              placeholder="Search users..."
+              value={query_}
+              onChange={(e) => setQuery(e.target.value)}
+              className="pl-10"
+            />
+          </div>
+        </motion.div>
 
-        {/* Waiting Room Users */}
         <div className="flex-1 overflow-y-auto">
           {users.length === 0 ? (
             <motion.div variants={itemVariants} className="text-center py-12 text-muted-foreground">
@@ -173,13 +162,6 @@ const AdminApprovalModal: React.FC<AdminApprovalModalProps> = ({ groupName, pda,
             </motion.div>
           )}
         </div>
-
-        {/* Footer */}
-        <motion.div variants={itemVariants} className="mt-6 pt-4 border-t border-border">
-          <Button variant="outline" onClick={hideModal} className="w-full bg-transparent">
-            Close
-          </Button>
-        </motion.div>
       </motion.div>
     </AnimatePresence>
   );
