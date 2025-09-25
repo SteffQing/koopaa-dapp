@@ -76,12 +76,12 @@ const UserCard: React.FC<{
           <Button
             size="sm"
             onClick={approve}
-            loading={isPending || loading}
+            disabled={isPending || loading}
             className="flex-1 bg-green-600 hover:bg-green-700 text-white"
           >
             <Check className="w-4 h-4 mr-1" />
           </Button>
-          <Button size="sm" variant="destructive" onClick={reject} loading={isPending || loading} className="flex-1">
+          <Button size="sm" variant="destructive" onClick={reject} disabled={isPending || loading} className="flex-1">
             <X className="w-4 h-4 mr-1" />
           </Button>
         </div>
