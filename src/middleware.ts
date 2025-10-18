@@ -50,7 +50,7 @@ export async function middleware(request: NextRequest) {
     return NextResponse.next({
       request: { headers: requestHeaders },
     });
-  } catch (error) {
+  } catch {
     return NextResponse.json(
       {
         error: "Invalid or expired token, please login again",

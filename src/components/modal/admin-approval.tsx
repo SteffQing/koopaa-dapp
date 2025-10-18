@@ -2,7 +2,7 @@
 
 import type React from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useModal } from "@/providers/modal-provider";
+// import { useModal } from "@/providers/modal-provider";
 import { Avatar } from "../avatar";
 import { Button } from "../ui/button";
 import { Check, X, UserPlus, Search } from "lucide-react";
@@ -91,7 +91,7 @@ const UserCard: React.FC<{
 };
 
 const AdminApprovalModal: React.FC<AdminApprovalModalProps> = ({ groupName, pda, waitingRoomUsers, participants }) => {
-  const { hideModal } = useModal();
+  // const { hideModal } = useModal();
   const [query_, setQuery] = useState("");
   const [users, setUsers] = useState<string[]>(waitingRoomUsers);
 
