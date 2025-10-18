@@ -1,7 +1,7 @@
 import { type NextRequest, NextResponse } from "next/server";
 import { jwtVerify } from "jose";
 
-const publicPaths = ["/login", "/api/auth", "/api/waitlist"];
+const publicPaths = ["/login", "/api/auth", "/api/waitlist", "/init", "/invite", "/whatsapp"];
 const JWT_SECRET = new TextEncoder().encode(process.env.JWT_SECRET!);
 
 export async function middleware(request: NextRequest) {

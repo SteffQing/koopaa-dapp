@@ -121,13 +121,11 @@ export function Info({ missedRounds, nextPayout, payoutDate, slots, isParticipan
   const hasPayout = nextPayout && Boolean(payoutDate);
   const hasSlots = slots > 0;
 
-  console.log(props);
-
   if (hasMissedRounds) return <MissingRounds missedRounds={missedRounds} />;
 
   if (hasPayout) return <NextPayout payoutDate={payoutDate as Date} />;
 
-  if (props.isAdmin) return <WaitingRoom {...props} />;
+  if (props.isAdmin && hasSlots) return <WaitingRoom {...props} />;
 
   if ((isParticipant || props.isWaiting) && hasSlots) return <OpenSlotsInvite slots={slots} pda={props.pda} />;
 
