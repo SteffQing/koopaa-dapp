@@ -1,5 +1,4 @@
 import prisma from "@/lib/prisma";
-import { getSession } from "@/lib/session";
 import { NextRequest, NextResponse } from "next/server";
 import { PrismaClientInitializationError } from "../../../prisma-client/runtime/library";
 
@@ -17,9 +16,9 @@ export function getSearchParams(request: NextRequest) {
 }
 
 export function getServerSession(req: NextRequest) {
-  const session = getSession(req);
+  const session = req.headers.get("x-user-address");
 
-  if (!session) throw new Error("No session found");
+  if (!session) throw new Error("No user found");
   return session;
 }
 
