@@ -3,8 +3,8 @@ import { useQuery } from "@tanstack/react-query";
 import useGetAccociatedTokenAccountAndAddress from "./helpers/useGetATA";
 import { LAMPORTS_PER_SOL, PublicKey } from "@solana/web3.js";
 import { useAnchorProvider } from "@/providers/solana-provider";
-import { useSession } from "../useSession";
 import query from "@/lib/fetch";
+import { useWallet } from "@solana/wallet-adapter-react";
 
 const NEXT_PUBLIC_FAUCET_PUBLIC_KEY = process.env.NEXT_PUBLIC_FAUCET_PUBLIC_KEY;
 
@@ -29,9 +29,9 @@ export default function useFaucetBalance() {
 }
 
 export function useATA() {
-  const { session } = useSession();
+  const { publicKey } = useWallet();
   return useQuery({
-    queryKey: ["user-ata", session],
+    queryKey: ["user-ata", publicKey?.toBase58()],
     queryFn: () => query.patch<{ ok: boolean }>("faucet"),
     select: (data) => data.ok,
   });

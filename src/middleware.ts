@@ -34,7 +34,10 @@ export async function middleware(request: NextRequest) {
 
   try {
     const { payload } = await jwtVerify<{ address: string }>(token, JWT_SECRET);
-    request.user = payload;
+
+    const requestHeaders = new Headers(request.headers);
+    requestHeaders.delete("x-user-address");
+    requestHeaders.set("x-user-address", payload.address);
 
     if (pathname === "/login") {
       const url = request.nextUrl.clone();
@@ -44,7 +47,9 @@ export async function middleware(request: NextRequest) {
       return NextResponse.redirect(url);
     }
 
-    return NextResponse.next();
+    return NextResponse.next({
+      request: { headers: requestHeaders },
+    });
   } catch (error) {
     return NextResponse.json(
       {

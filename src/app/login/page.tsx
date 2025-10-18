@@ -1,10 +1,8 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { useEffect } from "react";
 import Image from "next/image";
 import dynamic from "next/dynamic";
-import { redirect } from "next/navigation";
 
 import SolanaCoin from "@/assets/coins/solana.png";
 import USDCoin from "@/assets/coins/usdc.png";
@@ -15,17 +13,9 @@ import PiggyBank from "@/assets/coins/piggybank.png";
 import Sol from "@/assets/coins/sol.svg";
 import Koopaa0 from "@/assets/koopaa_0.svg";
 
-import { useSession } from "@/hooks/useSession";
-
 const LoginHandler = dynamic(() => import("./login"), { ssr: false });
 
 export default function LoginPage() {
-  const { isLoaded, isSignedIn } = useSession();
-
-  useEffect(() => {
-    if (isLoaded && isSignedIn) redirect("/");
-  }, [isLoaded, isSignedIn]);
-
   return (
     <motion.div
       className="splash-bg container relative pb-4 min-h-screen"
@@ -52,13 +42,7 @@ export default function LoginPage() {
               ease: "easeInOut",
             }}
           >
-            <Image
-              src={USDCoin}
-              alt="Floating USDCoin"
-              width={60}
-              height={60}
-              className="object-contain"
-            />
+            <Image src={USDCoin} alt="Floating USDCoin" width={60} height={60} className="object-contain" />
           </motion.div>
 
           <Image
@@ -70,13 +54,7 @@ export default function LoginPage() {
           />
 
           <motion.div className="absolute top-4 right-[1%] transform translate-x-1/2">
-            <Image
-              src={SolanaCoin}
-              alt="Floating Solana Coin"
-              width={100}
-              height={100}
-              className="object-contain"
-            />
+            <Image src={SolanaCoin} alt="Floating Solana Coin" width={100} height={100} className="object-contain" />
           </motion.div>
 
           <motion.div
@@ -98,13 +76,7 @@ export default function LoginPage() {
               },
             }}
           >
-            <Image
-              src={Disc2}
-              alt="Disc 2"
-              width={70}
-              height={70}
-              className="object-contain"
-            />
+            <Image src={Disc2} alt="Disc 2" width={70} height={70} className="object-contain" />
           </motion.div>
 
           <motion.div
@@ -151,8 +123,7 @@ export default function LoginPage() {
           </h1>
 
           <p className="text-gray-600 mb-8 text-center">
-            Unlock smart, transparent and automated collective saving with your
-            circle — powered by Solana and USDC.
+            Unlock smart, transparent and automated collective saving with your circle — powered by Solana and USDC.
           </p>
         </motion.div>
 
