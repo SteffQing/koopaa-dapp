@@ -1,80 +1,77 @@
 import { NextRequest, NextResponse } from "next/server";
-import { clearSession, createSession, getSession } from "@/lib/session";
 import prisma from "@/lib/prisma";
 import { loginSchema } from "./schema";
+import { jwtVerify, SignJWT } from "jose";
 // import { PublicKey } from "@solana/web3.js";
 // import nacl from "tweetnacl";
-// import NovuWelcome from "./novu-welcome";
+
+const JWT_SECRET = new TextEncoder().encode(process.env.JWT_SECRET!);
+async function verifyJWT(token: string) {
+  try {
+    const { payload } = await jwtVerify<{ address: string }>(token, JWT_SECRET);
+    return payload;
+  } catch {
+    return null;
+  }
+}
 
 export async function DELETE() {
-  const res = NextResponse.json({ data: "Logged out" });
-  clearSession(res);
-
+  const res = NextResponse.json({ data: "Logged out successfully" });
   res.headers.set("Cache-Control", "no-store, no-cache, must-revalidate, proxy-revalidate");
-
+  res.cookies.delete("koopaa_token");
   return res;
 }
 
 export async function GET(req: NextRequest) {
-  const session = getSession(req);
+  const address = req.headers.get("x-user-address");
+  if (!address) return NextResponse.json({ error: "Missing user" }, { status: 401 });
 
-  if (!session) return NextResponse.json({ error: "No active session" }, { status: 401 });
+  const user = await prisma.user.findUnique({ where: { address } });
+  if (!user) {
+    return NextResponse.json({ error: "User not found" }, { status: 404 });
+  }
 
-  return NextResponse.json({ data: session });
+  return NextResponse.json({ data: user });
 }
 
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-
-    console.log(body, "body");
-
-    const { address /* message, signature, domain, uri */ } = loginSchema.parse(body);
-
-    // const decodedMessage = Buffer.from(message, "base64");
-    // const decodedSignature = Buffer.from(signature, "base64");
-    // const publicKey = new PublicKey(address);
-
-    // let isValid: boolean;
-    // if (domain && uri) {
-    // const statement = decodedMessage.toString();
-    // const signInMessage = Buffer.from(`${statement}\nURI: ${uri}\nDomain: ${domain}`);
-    // isValid = nacl.sign.detached.verify(signInMessage, decodedSignature, publicKey.toBytes());
-    //   const expectedMessage = Buffer.from(`Koopaa login: ${parseInt(decodedMessage.toString().split(": ")[1])}`);
-    //   isValid = nacl.sign.detached.verify(expectedMessage, decodedSignature, publicKey.toBytes());
-    // } else {
-    //   isValid = nacl.sign.detached.verify(decodedMessage, decodedSignature, publicKey.toBytes());
-    // }
-
-    // if (!isValid) {
-    //   return NextResponse.json(
-    //     { error: "The provided key and signatures are invalid and your login attempt is rejected" },
-    //     { status: 401 }
-    //   );
-    // }
+    const { address } = loginSchema.parse(body);
 
     const existingUser = await prisma.user.findUnique({
       where: { address },
     });
 
     if (!existingUser) {
-      await Promise.all([
-        prisma.user.create({
-          data: {
-            address,
-          },
-        }),
-        // NovuWelcome(address),
-      ]);
+      await prisma.user.create({
+        data: {
+          address,
+        },
+      });
     }
+
+    const token = await new SignJWT({ address })
+      .setProtectedHeader({ alg: "HS256" })
+      .setExpirationTime("7d")
+      .sign(JWT_SECRET);
 
     const res = NextResponse.json({
       message: existingUser
         ? "You have been successfully signed in. Welcome back to KooPaa!"
         : "Your account has been successfully created. Welcome to KooPaa!",
+      token,
     });
 
-    createSession(res, address);
+    res.cookies.set({
+      name: "koopaa_token",
+      value: token,
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      path: "/",
+      maxAge: 60 * 60 * 24 * 7, // 7 days
+    });
 
     return res;
   } catch (error) {

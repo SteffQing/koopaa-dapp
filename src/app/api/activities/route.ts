@@ -11,6 +11,7 @@ export const GET = withErrorHandler(async (req: NextRequest) => {
   });
   return NextResponse.json({ data: activities });
 });
+
 export const POST = withErrorHandler(async (req: NextRequest) => {
   const address = getServerSession(req);
   const body = await req.json();
@@ -27,8 +28,7 @@ export const PATCH = withErrorHandler(async (req: NextRequest) => {
   getServerSession(req);
   const body = await req.json();
 
-  const { title, type, sig, amount, group_pda, recipient } =
-    addActivitySchemaForPayout.parse(body);
+  const { title, type, sig, amount, group_pda, recipient } = addActivitySchemaForPayout.parse(body);
 
   await prisma.activity.create({
     data: { title, type, userId: recipient, sig, amount, group_pda },

@@ -2,7 +2,6 @@ import prisma from "@/lib/prisma";
 import { getServerSession, withErrorHandler } from "../utils";
 import { NextRequest, NextResponse } from "next/server";
 import { approvalJoinAjoGroupSchema, createdAjoGroupSchema, joinAjoGroupSchema } from "./schema";
-// import redis from "@/lib/redis";
 
 // Create and Join new Ajo Group
 export const POST = withErrorHandler(async (req: NextRequest) => {
@@ -10,7 +9,6 @@ export const POST = withErrorHandler(async (req: NextRequest) => {
   const { name, pda, tag, group_cover_photo, description, signature } = createdAjoGroupSchema.parse(body);
 
   const address = getServerSession(req);
-  // await redis.lpush("ajo-group-creation", JSON.stringify({ pda, tag, group_cover_photo, description }));
 
   const groupCreate = prisma.group.create({
     data: {
@@ -141,7 +139,7 @@ export const PATCH = withErrorHandler(async (req: NextRequest) => {
   await Promise.all([groupJoin, participant_activity, admin_activity]);
 
   return NextResponse.json({
-    message: `You are in the waiting room to join ${name} Ajo Group`,
+    message: `Successfully added to the ${name} Ajo Group`,
   });
 });
 

@@ -1,32 +1,58 @@
 import { type NextRequest, NextResponse } from "next/server";
-import { getSession } from "@/lib/session";
+import { jwtVerify } from "jose";
 
 const publicPaths = ["/login", "/api/auth", "/api/waitlist"];
+const JWT_SECRET = new TextEncoder().encode(process.env.JWT_SECRET!);
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
-
   const isPublicPath = publicPaths.some((path) => pathname === path || pathname.startsWith(`${path}/`));
-
   if (isPublicPath) return NextResponse.next();
-  const session = getSession(request);
 
-  if (!session && !isPublicPath) {
-    const url = request.nextUrl.clone();
-    url.pathname = "/login";
-    url.searchParams.set("redirect", pathname);
-    return NextResponse.redirect(url);
+  const headerAuth = request.headers.get("authorization");
+  const cookieAuth = request.cookies.get("koopaa_token")?.value;
+
+  let token: string | undefined;
+  if (headerAuth?.startsWith("Bearer ")) token = headerAuth.split(" ")[1];
+  else if (cookieAuth) token = cookieAuth;
+
+  if (!token) {
+    if (pathname.startsWith("/api")) {
+      return NextResponse.json(
+        {
+          error: "Unauthorized",
+        },
+        { status: 401 }
+      );
+    } else {
+      const url = request.nextUrl.clone();
+      url.pathname = "/login";
+      url.searchParams.set("redirect", pathname);
+      return NextResponse.redirect(url);
+    }
   }
 
-  if (session && pathname === "/login") {
-    const url = request.nextUrl.clone();
-    const intended = request.nextUrl.searchParams.get("redirect") || "/";
-    url.pathname = intended;
-    url.search = "";
-    return NextResponse.redirect(url);
-  }
+  try {
+    const { payload } = await jwtVerify<{ address: string }>(token, JWT_SECRET);
+    request.user = payload;
 
-  return NextResponse.next();
+    if (pathname === "/login") {
+      const url = request.nextUrl.clone();
+      const intended = request.nextUrl.searchParams.get("redirect") || "/";
+      url.pathname = intended;
+      url.search = "";
+      return NextResponse.redirect(url);
+    }
+
+    return NextResponse.next();
+  } catch (error) {
+    return NextResponse.json(
+      {
+        error: "Invalid or expired token, please login again",
+      },
+      { status: 401 }
+    );
+  }
 }
 
 export const config = {
