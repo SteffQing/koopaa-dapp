@@ -10,7 +10,7 @@ export function useAuthUser() {
   useEffect(() => {
     fetch("/api/user")
       .then((res) => res.ok && res.json())
-      .then((data) => setUser(data))
+      .then(({data}) => setUser(data))
       .catch(() => setUser(null))
       .finally(() => setLoading(false));
   }, []);
