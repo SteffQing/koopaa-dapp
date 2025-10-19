@@ -106,7 +106,7 @@ async function createAjoGroup(
     privateKey: decryptKey(privateKey),
   }));
 
-  const { transaction_signature, confirmed_at } = await gridClient.signAndSend({
+  const { transaction_signature } = await gridClient.signAndSend({
     sessionSecrets: sessionSecrets,
     transactionPayload: data,
     // session: authResult.data.authentication,
@@ -119,14 +119,18 @@ async function createAjoGroup(
     signature: transaction_signature,
     ...offchain,
   };
-  await qstash.publish({
-    url: BASE_API_URL,
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: auth,
-    },
-    body: JSON.stringify(body),
-  });
+  await qstash
+    .queue({
+      queueName: "create_ajo",
+    })
+    .enqueueJSON({
+      url: BASE_API_URL,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: auth,
+      },
+      body: JSON.stringify(body),
+    });
 
   return transaction_signature;
 }
