@@ -1,8 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getSearchParams, getServerSession, withErrorHandler } from "./utils";
 import { BASE_URL } from "@/lib/fetch";
-import redis from "@/lib/redis";
-import prisma from "@/lib/prisma";
+import { prisma, redis } from "@/lib/db";
 
 async function generateShortCode(url: string, length = 10): Promise<string> {
   const encoder = new TextEncoder();

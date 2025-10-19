@@ -1,7 +1,7 @@
 import { type NextRequest, NextResponse } from "next/server";
 import { jwtVerify } from "jose";
 
-const publicPaths = ["/login", "/api/auth", "/api/waitlist", "/init", "/invite", "/whatsapp"];
+const publicPaths = ["/login", "/api/auth", "/api/waitlist", "/whatsapp"];
 const JWT_SECRET = new TextEncoder().encode(process.env.JWT_SECRET!);
 
 export async function middleware(request: NextRequest) {
@@ -13,7 +13,15 @@ export async function middleware(request: NextRequest) {
   const cookieAuth = request.cookies.get("koopaa_token")?.value;
 
   let token: string | undefined;
-  if (headerAuth?.startsWith("Bearer ")) token = headerAuth.split(" ")[1];
+  const [type, headerToken] = headerAuth?.split(" ") || [];
+
+  if (type === "Basic") {
+    const valid = headerToken === process.env.BOT_TOKEN;
+    if (!valid) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    return NextResponse.next();
+  }
+
+  if (type === "Bearer") token = headerToken;
   else if (cookieAuth) token = cookieAuth;
 
   if (!token) {

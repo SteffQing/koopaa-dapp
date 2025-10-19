@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { withErrorHandler } from "../../utils";
-import prisma from "@/lib/prisma";
+import { prisma } from "@/lib/db";
 
 // Get an Ajo Group
 export const GET = withErrorHandler(async (_req: NextRequest, { params }: { params: Promise<{ id: string }> }) => {

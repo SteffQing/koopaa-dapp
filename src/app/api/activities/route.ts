@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession, withErrorHandler } from "../utils";
-import prisma from "@/lib/prisma";
+import { prisma } from "@/lib/db";
 import { addActivitySchema, addActivitySchemaForPayout } from "./schema";
 
 export const GET = withErrorHandler(async (req: NextRequest) => {

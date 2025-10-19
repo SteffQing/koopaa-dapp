@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import prisma from "@/lib/prisma";
+import { prisma } from "@/lib/db";
 import { loginSchema } from "./schema";
 import { SignJWT } from "jose";
 // import { PublicKey } from "@solana/web3.js";
@@ -30,6 +30,7 @@ export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
     const { address } = loginSchema.parse(body);
+    // Must add signing to prove account ownership
 
     const existingUser = await prisma.user.findUnique({
       where: { address },

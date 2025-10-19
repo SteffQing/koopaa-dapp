@@ -1,4 +1,4 @@
-import prisma from "@/lib/prisma";
+import { prisma } from "@/lib/db";
 import { getServerSession, withErrorHandler } from "../utils";
 import { NextRequest, NextResponse } from "next/server";
 import { approvalJoinAjoGroupSchema, createdAjoGroupSchema, joinAjoGroupSchema } from "./schema";

@@ -1,4 +1,5 @@
-import redis from "@/lib/redis";
+
+import { redis } from "@/lib/db";
 import { type NextRequest, NextResponse } from "next/server";
 import { getServerSession, withErrorHandler } from "../utils";
 import { PublicKey } from "@solana/web3.js";

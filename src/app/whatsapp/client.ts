@@ -4,6 +4,7 @@ const client = new WhatsAppClient({
   accessToken: process.env.WHATSAPP_ACCESS_TOKEN!,
   phoneNumberId: process.env.WHATSAPP_PHONE_NUMBER_ID!,
   webhookVerifyToken: process.env.WHATSAPP_WEBHOOK_TOKEN,
+  apiVersion: "v22.0",
 });
 
 async function verifySetup() {
