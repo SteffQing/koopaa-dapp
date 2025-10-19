@@ -106,17 +106,18 @@ async function createAjoGroup(
     privateKey: decryptKey(privateKey),
   }));
 
-  const { transaction_signature } = await gridClient.signAndSend({
+  const { transaction_signature: signature } = await gridClient.signAndSend({
     sessionSecrets: sessionSecrets,
     transactionPayload: data,
     // session: authResult.data.authentication,
     address,
   });
 
+  const pda = ajoGroupPDA.toBase58();
   const body: CreatedAjoGroup = {
     name,
-    pda: ajoGroupPDA.toBase58(),
-    signature: transaction_signature,
+    pda,
+    signature,
     ...offchain,
   };
   await qstash
@@ -132,7 +133,7 @@ async function createAjoGroup(
       body: JSON.stringify(body),
     });
 
-  return transaction_signature;
+  return { signature, pda };
 }
 
 export { createAjoGroup };
