@@ -9,7 +9,7 @@ import { isValidEmail } from "@/lib/utils";
 
 export const GET = withErrorHandler(async (req: NextRequest) => {
   const user = await getUserFromSession(req);
-  return NextResponse.json({ data: user }); // `user` should already be serializable
+  return NextResponse.json({ data: user });
 });
 
 export const POST = withErrorHandler(async (req: NextRequest) => {

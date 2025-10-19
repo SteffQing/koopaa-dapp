@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getSearchParams } from "../../utils";
-import fetchBalances from "../../balance";
+import fetchBalances from "../balance";
+import { getServerSession } from "../utils";
 
 export async function GET(req: NextRequest) {
   try {
-    const { address } = getSearchParams(req);
+    const address = getServerSession(req);
     const balances = await fetchBalances(address);
     return NextResponse.json({ data: balances });
   } catch (error) {
