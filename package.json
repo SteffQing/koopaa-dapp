@@ -37,6 +37,7 @@
     "@svgr/core": "^8.1.0",
     "@svgr/webpack": "^8.1.0",
     "@tanstack/react-query": "^5.74.7",
+    "@upstash/qstash": "^2.8.4",
     "@upstash/redis": "^1.34.9",
     "@vercel/analytics": "^1.5.0",
     "@wallet-ui/react": "^1.0.0",

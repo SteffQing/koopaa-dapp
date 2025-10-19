@@ -40,23 +40,6 @@ export function SolanaProvider({ children }: { children: ReactNode }) {
     console.error(error);
   }, []);
 
-  // const wallets = useMemo(
-  //   () => [
-  //     new SolanaMobileWalletAdapter({
-  //       addressSelector: createDefaultAddressSelector(),
-  //       appIdentity: {
-  //         name: "My app",
-  //         uri: "https://myapp.io",
-  //         icon: "relative/path/to/icon.png",
-  //       },
-  //       authorizationResultCache: createDefaultAuthorizationResultCache(),
-  //       cluster: WalletAdapterNetwork.Devnet,
-  //       onWalletNotFound: createDefaultWalletNotFoundHandler(),
-  //     }),
-  //   ],
-  //   []
-  // );
-
   return (
     <ConnectionProvider endpoint={endpoint}>
       <WalletProvider wallets={[]} onError={onError} autoConnect={true}>

@@ -8,7 +8,8 @@ import {
 } from "../schema";
 import { SignJWT } from "jose";
 import { withErrorHandler } from "../../utils";
-import { gridClient, encryptKey } from "@/lib/grid";
+import { encryptKey } from "@/lib/grid/security";
+import gridClient from "@/lib/grid/index";
 import type { GridClientUserContext } from "@sqds/grid";
 
 export const PUT = withErrorHandler(async (req: NextRequest) => {
