@@ -1,12 +1,20 @@
 import { type NextRequest, NextResponse } from "next/server";
 import { jwtVerify } from "jose";
 
-const publicPaths = ["/login", "/api/auth", "/api/waitlist", "/whatsapp"];
+const publicPaths = [
+  "/login",
+  "/api/auth",
+  "/api/waitlist",
+  "/whatsapp",
+  "/api/public",
+];
 const JWT_SECRET = new TextEncoder().encode(process.env.JWT_SECRET!);
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
-  const isPublicPath = publicPaths.some((path) => pathname === path || pathname.startsWith(`${path}/`));
+  const isPublicPath = publicPaths.some(
+    (path) => pathname === path || pathname.startsWith(`${path}/`)
+  );
   if (isPublicPath) return NextResponse.next();
 
   const headerAuth = request.headers.get("authorization");
@@ -17,7 +25,8 @@ export async function middleware(request: NextRequest) {
 
   if (type === "Basic") {
     const valid = headerToken === process.env.BOT_TOKEN;
-    if (!valid) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    if (!valid)
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     return NextResponse.next();
   }
 
