@@ -17,7 +17,7 @@ export const PUT = withErrorHandler(async (req: NextRequest) => {
   if (token !== process.env.BOT_TOKEN) {
     return NextResponse.json(
       {
-        error: "You are not authorized to access this endpoint",
+        error: "You are not authorized to access",
       },
       { status: 401 }
     );
@@ -64,7 +64,7 @@ export const PATCH = withErrorHandler(async (req: NextRequest) => {
   if (token !== process.env.BOT_TOKEN) {
     return NextResponse.json(
       {
-        error: "You are not authorized to access this endpoint",
+        error: "You are not authorized to access",
       },
       { status: 401 }
     );
@@ -138,10 +138,12 @@ export const PATCH = withErrorHandler(async (req: NextRequest) => {
 export const POST = withErrorHandler(async (req: NextRequest) => {
   const headerAuth = req.headers.get("authorization");
   const [, token] = headerAuth?.split(" ") ?? [];
+
   if (token !== process.env.BOT_TOKEN) {
+    console.log(token, process.env.BOT_TOKEN, "TOKENS");
     return NextResponse.json(
       {
-        error: "You are not authorized to access this endpoint",
+        error: "You are not authorized to access",
       },
       { status: 401 }
     );
