@@ -48,12 +48,12 @@ export const PUT = withErrorHandler(async (req: NextRequest) => {
     await redis.setex("grid-sign-up:" + email, 60 * 10, data);
 
     return NextResponse.json({
-      message: "OTP has been sent to the provided email",
+      message:
+        "OTP has been sent to the provided email. Please pass it in the next prompt",
     });
   } else {
     return NextResponse.json({
-      error: "An error occured while trying to set up your account",
-      message: error,
+      error: error,
     });
   }
 });
@@ -88,12 +88,11 @@ export const PATCH = withErrorHandler(async (req: NextRequest) => {
 
   const sessionSecrets = await gridClient.generateSessionSecrets();
 
-  const { data, success, error, ...authResult } =
-    await gridClient.completeAuthAndCreateAccount({
-      user: signupData,
-      otpCode: otp,
-      sessionSecrets,
-    });
+  const { data, error } = await gridClient.completeAuthAndCreateAccount({
+    user: signupData,
+    otpCode: otp,
+    sessionSecrets,
+  });
 
   if (!data) {
     return NextResponse.json(
@@ -105,7 +104,6 @@ export const PATCH = withErrorHandler(async (req: NextRequest) => {
     );
   }
 
-  console.log(authResult, sessionSecrets);
   const secrets = sessionSecrets.map(({ privateKey, ...rest }) => ({
     ...rest,
     privateKey: encryptKey(privateKey),
