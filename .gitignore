@@ -42,3 +42,6 @@ next-env.d.ts
 
 # Prisma client
 prisma-client
+
+# Test file
+src/test.ts

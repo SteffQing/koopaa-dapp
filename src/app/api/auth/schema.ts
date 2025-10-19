@@ -14,4 +14,21 @@ const externalLoginSchema = zod.object({
   id: zod.string(),
 });
 
-export { loginSchema, externalLoginSchema, JWT_SECRET };
+const signupSchema = zod.object({
+  email: zod.string().email(),
+});
+
+const signupOtpSchema = zod.object({
+  otp: zod.string(),
+  id: zod.string(),
+  email: zod.string().email(),
+  username: zod.string(),
+});
+
+export {
+  loginSchema,
+  externalLoginSchema,
+  signupSchema,
+  signupOtpSchema,
+  JWT_SECRET,
+};

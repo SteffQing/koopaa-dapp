@@ -12,11 +12,50 @@ datasource db {
 model User {
     address    String     @id
     externalId String?    @unique
-    username   String?    @unique
+    username   String?
     avatar     Int        @default(1)
     email      String?    @unique
     activities Activity[]
     groups     Group[]
+
+    gridAccount GridAccount?
+}
+
+model GridAccount {
+    id String @id
+
+    userAddress String @unique
+    user        User   @relation(fields: [userAddress], references: [address])
+
+    sessions SessionSecrets[]
+}
+
+model SessionSecrets {
+    publicKey  String              @id
+    privateKey String
+    provider   GridSessionProvider
+    tag        GridSessionTags
+
+    GridAccount   GridAccount? @relation(fields: [gridAccountId], references: [id])
+    gridAccountId String?
+
+    @@index([gridAccountId])
+}
+
+enum GridSessionProvider {
+    privy
+    turnkey
+    solana
+    passkey
+    pending
+    external
+}
+
+enum GridSessionTags {
+    primary
+    backup
+    solana
+    passkey
 }
 
 model Group {
