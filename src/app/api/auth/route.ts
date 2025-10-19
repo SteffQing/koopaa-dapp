@@ -1,11 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
-import { loginSchema } from "./schema";
+import { loginSchema, JWT_SECRET } from "./schema";
 import { SignJWT } from "jose";
 // import { PublicKey } from "@solana/web3.js";
 // import nacl from "tweetnacl";
-
-const JWT_SECRET = new TextEncoder().encode(process.env.JWT_SECRET!);
 
 export async function DELETE() {
   const res = NextResponse.json({ data: "Logged out successfully" });

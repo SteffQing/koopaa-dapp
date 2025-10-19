@@ -1,5 +1,7 @@
 import * as zod from "zod";
 
+const JWT_SECRET = new TextEncoder().encode(process.env.JWT_SECRET!);
+
 const loginSchema = zod.object({
   address: zod.string(),
   // message: zod.string(),
@@ -8,4 +10,8 @@ const loginSchema = zod.object({
   // uri: zod.string().optional(),
 });
 
-export { loginSchema };
+const externalLoginSchema = zod.object({
+  id: zod.string(),
+});
+
+export { loginSchema, externalLoginSchema, JWT_SECRET };

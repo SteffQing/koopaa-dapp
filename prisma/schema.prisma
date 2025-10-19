@@ -11,7 +11,8 @@ datasource db {
 
 model User {
     address    String     @id
-    username   String?
+    externalId String?    @unique
+    username   String?    @unique
     avatar     Int        @default(1)
     email      String?    @unique
     activities Activity[]
