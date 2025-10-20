@@ -1,7 +1,7 @@
 import { type Commitment, Connection } from "@solana/web3.js";
 import { prisma } from "../db";
 import { decryptKey } from "./security";
-import { AnchorProvider } from "@coral-xyz/anchor";
+import { AnchorProvider, Wallet } from "@coral-xyz/anchor";
 import { getKoopaProgram } from "../solana/koopa-exports";
 import { AuthenticationProvider } from "@sqds/grid";
 
@@ -53,7 +53,7 @@ function getProgram() {
     "confirmed" as Commitment
   );
 
-  const provider = new AnchorProvider(connection, {} as unknown, {
+  const provider = new AnchorProvider(connection, {} as unknown as Wallet, {
     commitment: "confirmed",
   });
   const program = getKoopaProgram(provider);
