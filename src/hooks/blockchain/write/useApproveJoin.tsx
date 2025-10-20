@@ -28,9 +28,16 @@ export default function useApproveJoin() {
   const queryClient = useQueryClient();
 
   const programId = getKoopaProgramId();
-  const program = useMemo(() => getKoopaProgram(provider, programId), [provider, programId]);
+  const program = useMemo(
+    () => getKoopaProgram(provider, programId),
+    [provider, programId]
+  );
   const [globalStatePDA] = useMemo(
-    () => PublicKey.findProgramAddressSync([Buffer.from("global-state")], programId),
+    () =>
+      PublicKey.findProgramAddressSync(
+        [Buffer.from("global-state")],
+        programId
+      ),
     [programId]
   );
 
@@ -67,15 +74,23 @@ export default function useApproveJoin() {
     },
   });
 
-  const { mutateAsync: dbJoin, isPending: loading } = useMutation<FetchResponse<unknown>, Error, ApprovalJoinAjoGroup>({
+  const { mutateAsync: dbJoin, isPending: loading } = useMutation<
+    FetchResponse<unknown>,
+    Error,
+    ApprovalJoinAjoGroup
+  >({
     mutationKey: ["approve-join-ajo-group-db-call"],
-    mutationFn: withRetry(async (ajoGroupdata: ApprovalJoinAjoGroup) => query.patch("group", { body: ajoGroupdata })),
+    mutationFn: withRetry(async (ajoGroupdata: ApprovalJoinAjoGroup) =>
+      query.post("group/approve-join", { body: ajoGroupdata })
+    ),
     onSuccess({ message, error }, { pda }) {
       if (message) {
         toast.success(message);
         Promise.all([
           queryClient.invalidateQueries({ queryKey: ["ajo-group", pda] }),
-          queryClient.invalidateQueries({ queryKey: ["ajo-group-members", pda] }),
+          queryClient.invalidateQueries({
+            queryKey: ["ajo-group-members", pda],
+          }),
         ]).then(() => router.replace(`/savings/ajo/${pda}`));
       } else {
         toast.error(error);

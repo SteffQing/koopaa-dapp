@@ -23,7 +23,10 @@ export default function useJoinAjoGroup() {
   const queryClient = useQueryClient();
 
   const programId = getKoopaProgramId();
-  const program = useMemo(() => getKoopaProgram(provider, programId), [provider, programId]);
+  const program = useMemo(
+    () => getKoopaProgram(provider, programId),
+    [provider, programId]
+  );
 
   // Join an existing Ajo group
   const { mutateAsync: joinOnchain, isPending } = useMutation({
@@ -57,15 +60,23 @@ export default function useJoinAjoGroup() {
     },
   });
 
-  const { mutateAsync: dbJoin, isPending: loading } = useMutation<FetchResponse<unknown>, Error, JoinAjoGroup>({
+  const { mutateAsync: dbJoin, isPending: loading } = useMutation<
+    FetchResponse<unknown>,
+    Error,
+    JoinAjoGroup
+  >({
     mutationKey: ["join-ajo-group-db-call"],
-    mutationFn: withRetry(async (ajoGroupdata: JoinAjoGroup) => query.put("group", { body: ajoGroupdata })),
+    mutationFn: withRetry(async (ajoGroupdata: JoinAjoGroup) =>
+      query.post("group/request-join", { body: ajoGroupdata })
+    ),
     onSuccess({ message, error }, { pda }) {
       if (message) {
         toast.success(message);
         Promise.all([
           queryClient.invalidateQueries({ queryKey: ["ajo-group", pda] }),
-          queryClient.invalidateQueries({ queryKey: ["ajo-group-members", pda] }),
+          queryClient.invalidateQueries({
+            queryKey: ["ajo-group-members", pda],
+          }),
         ]).then(() => router.replace(`/savings/ajo/${pda}`));
       } else {
         toast.error(error);
