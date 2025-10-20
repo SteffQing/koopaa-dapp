@@ -28,7 +28,6 @@ const LoginHandler = () => {
     try {
       const msg = `Sign this message to login to KooPaa: ${new Date().toISOString()}`;
       const encodedMessage = new TextEncoder().encode(msg);
-
       const signature = await signMessage(encodedMessage);
 
       const { error, message } = await query.post("auth", {

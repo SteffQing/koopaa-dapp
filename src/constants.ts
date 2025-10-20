@@ -9,8 +9,8 @@ const DECIMALS = 10 ** 6;
 
 const DEVELOPMENT_API_URL = "http://localhost:3000/api";
 const PRODUCTION_API_URL = "https://app.koopaa.fun/api";
-const BASE_API_URL = "https://c210932bee1d.ngrok-free.app/api"; // IS_PRODUCTION ? PRODUCTION_API_URL : DEVELOPMENT_API_URL;
-
+const BASE_API_URL = IS_PRODUCTION ? PRODUCTION_API_URL : DEVELOPMENT_API_URL;
+// const BASE_API_URL = "https://c210932bee1d.ngrok-free.app/api";
 const MAINNET_RPC_URL = "https://mainnet.helius-rpc.com";
 const DEVNET_RPC_URL = "https://devnet.helius-rpc.com";
 
