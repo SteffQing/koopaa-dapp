@@ -22,7 +22,7 @@ export async function createAjo(auth: string, body: CreatedAjoGroup) {
         "Content-Type": "application/json",
         Authorization: auth,
       },
-      body: JSON.stringify(body),
+      body,
     });
 
   return res.messageId;
@@ -39,7 +39,7 @@ export async function requestJoin(auth: string, body: JoinAjoGroup) {
         "Content-Type": "application/json",
         Authorization: auth,
       },
-      body: JSON.stringify(body),
+      body,
     });
 
   return messageId;
@@ -56,7 +56,7 @@ export async function approveJoin(auth: string, body: ApprovalJoinAjoGroup) {
         "Content-Type": "application/json",
         Authorization: auth,
       },
-      body: JSON.stringify(body),
+      body,
     });
 
   return messageId;
