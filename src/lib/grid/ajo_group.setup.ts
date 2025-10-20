@@ -44,32 +44,30 @@ async function createAjoGroup(
   );
 
   const contributionAmount = new BN(contribution_amount * DECIMALS);
-  // const instruction = await program.methods
-  //   .createAjoGroup(
-  //     name,
-  //     contributionAmount,
-  //     Number(contribution_interval),
-  //     Number(payout_interval),
-  //     max_participants
-  //   )
-  //   .accountsStrict({
-  //     ajoGroup: ajoGroupPDA,
-  //     creator: new PublicKey(address),
-  //     globalState: globalStatePDA,
-  //     tokenMint: USDC,
-  //     groupTokenVault: groupTokenVaultPda,
-  //     tokenProgram: TOKEN_PROGRAM_ID,
-  //     systemProgram: SystemProgram.programId,
-  //     rent: SYSVAR_RENT_PUBKEY,
-  //   })
-  //   .instruction();
+  const instruction = await program.methods
+    .createAjoGroup(
+      name,
+      contributionAmount,
+      Number(contribution_interval),
+      Number(payout_interval),
+      max_participants
+    )
+    .accountsStrict({
+      ajoGroup: ajoGroupPDA,
+      creator: new PublicKey(address),
+      globalState: globalStatePDA,
+      tokenMint: USDC,
+      groupTokenVault: groupTokenVaultPda,
+      tokenProgram: TOKEN_PROGRAM_ID,
+      systemProgram: SystemProgram.programId,
+      rent: SYSVAR_RENT_PUBKEY,
+    })
+    .instruction();
 
-  // const { signature } = await buildAndSendTx(instruction, address);
+  const { signature } = await buildAndSendTx(instruction, address);
 
-  // const pda = ajoGroupPDA.toBase58();
-  const signature =
-    "3j6jcUs1u9mPV1ssvBqcDvRP8k1BuhhCk3pm15DUxwe4Tt5oMGbgV4xKiv3d4U9AsvZBdTabqmhrsPW5e6GyDRPi";
-  const pda = "EP2qgX1rkM7b7AqT5k43gRCr6ec7eMuU4Cygv62SgNx5";
+  const pda = ajoGroupPDA.toBase58();
+
   const body: CreatedAjoGroup = {
     name,
     pda,
