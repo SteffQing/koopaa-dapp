@@ -101,11 +101,6 @@ export const PATCH = withErrorHandler(async (req: NextRequest) => {
       { status: 401 }
     );
   }
-  console.log(
-    data.authentication,
-    "auth to save",
-    JSON.stringify(data.authentication, null, 2)
-  );
 
   const secrets = sessionSecrets.map(({ privateKey, ...rest }) => ({
     ...rest,
@@ -133,11 +128,11 @@ export const PATCH = withErrorHandler(async (req: NextRequest) => {
 
   const jwt = await new SignJWT({ address: data.address })
     .setProtectedHeader({ alg: "HS256" })
-    .setExpirationTime("1h")
+    .setExpirationTime("7d")
     .sign(JWT_SECRET);
 
   return NextResponse.json({
     data: { token: jwt },
-    message: `Welcome back to KooPaa ${username}`,
+    message: `You have been revalidated ${username}`,
   });
 });

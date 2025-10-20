@@ -2,19 +2,23 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { loginSchema, JWT_SECRET } from "./schema";
 import { SignJWT } from "jose";
-// import { PublicKey } from "@solana/web3.js";
-// import nacl from "tweetnacl";
+import verifySignature from "./verify";
+// import verifySignature from "./verify";
 
 export async function DELETE() {
   const res = NextResponse.json({ data: "Logged out successfully" });
-  res.headers.set("Cache-Control", "no-store, no-cache, must-revalidate, proxy-revalidate");
+  res.headers.set(
+    "Cache-Control",
+    "no-store, no-cache, must-revalidate, proxy-revalidate"
+  );
   res.cookies.delete("koopaa_token");
   return res;
 }
 
 export async function GET(req: NextRequest) {
   const address = req.headers.get("x-user-address");
-  if (!address) return NextResponse.json({ error: "Missing user" }, { status: 401 });
+  if (!address)
+    return NextResponse.json({ error: "Missing user" }, { status: 401 });
 
   const user = await prisma.user.findUnique({ where: { address } });
   if (!user) {
@@ -27,8 +31,13 @@ export async function GET(req: NextRequest) {
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { address } = loginSchema.parse(body);
-    // Must add signing to prove account ownership
+    const { address, ...params } = loginSchema.parse(body);
+
+    const isValid = verifySignature({ address, ...params });
+    if (!isValid)
+      throw new Error(
+        "Invalid signature. We cannot prove you own this account! Please try again"
+      );
 
     const existingUser = await prisma.user.findUnique({
       where: { address },
@@ -69,7 +78,8 @@ export async function POST(req: NextRequest) {
     console.error("Error creating user session:", error);
     return NextResponse.json(
       {
-        error: "Failed to create a session for you on KooPaa. Please try again or reach out to support",
+        error:
+          "Failed to create a session for you on KooPaa. Please try again or reach out to support",
       },
       { status: 500 }
     );

@@ -4,10 +4,8 @@ const JWT_SECRET = new TextEncoder().encode(process.env.JWT_SECRET!);
 
 const loginSchema = zod.object({
   address: zod.string(),
-  // message: zod.string(),
-  // signature: zod.string(),
-  // domain: zod.string().optional(),
-  // uri: zod.string().optional(),
+  message: zod.string(),
+  signature: zod.string(),
 });
 
 const externalLoginSchema = zod.object({

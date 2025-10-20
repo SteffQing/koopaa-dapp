@@ -129,7 +129,7 @@ export const PATCH = withErrorHandler(async (req: NextRequest) => {
 
   const jwt = await new SignJWT({ address: data.address })
     .setProtectedHeader({ alg: "HS256" })
-    .setExpirationTime("1h")
+    .setExpirationTime("7d")
     .sign(JWT_SECRET);
 
   return NextResponse.json({
@@ -172,7 +172,7 @@ export const POST = withErrorHandler(async (req: NextRequest) => {
 
   const jwt = await new SignJWT({ address: user.address })
     .setProtectedHeader({ alg: "HS256" })
-    .setExpirationTime("1h")
+    .setExpirationTime("7d")
     .sign(JWT_SECRET);
 
   return NextResponse.json({
