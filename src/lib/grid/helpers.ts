@@ -1,4 +1,4 @@
-import { type Commitment, Connection, PublicKey } from "@solana/web3.js";
+import { type Commitment, Connection } from "@solana/web3.js";
 import { prisma } from "../db";
 import { decryptKey } from "./security";
 import { AnchorProvider } from "@coral-xyz/anchor";
@@ -53,7 +53,7 @@ function getProgram() {
     "confirmed" as Commitment
   );
 
-  const provider = new AnchorProvider(connection, {} as any, {
+  const provider = new AnchorProvider(connection, {} as unknown, {
     commitment: "confirmed",
   });
   const program = getKoopaProgram(provider);
