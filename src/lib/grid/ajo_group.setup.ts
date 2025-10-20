@@ -1,23 +1,18 @@
 import type { CreateAjoGroupFormValues } from "@/app/(mobile-ui)/savings/create-ajo/schema";
 import { KOOPAA_PROGRAM_ID } from "../solana/koopa-exports";
 import { BN } from "@coral-xyz/anchor";
-import {
-  PublicKey,
-  SystemProgram,
-  SYSVAR_RENT_PUBKEY,
-  Transaction,
-} from "@solana/web3.js";
-import gridClient from ".";
+import { PublicKey, SystemProgram, SYSVAR_RENT_PUBKEY } from "@solana/web3.js";
 import { TOKEN_PROGRAM_ID } from "@solana/spl-token";
-import { BASE_API_URL, USDC, DECIMALS } from "@/constants";
-import { prisma, qstash } from "../db";
+import { USDC, DECIMALS } from "@/constants";
 import type {
   ApprovalJoinAjoGroup,
   CreatedAjoGroup,
   GridApproveJoinAjo,
   JoinAjoGroup,
 } from "@/app/api/group/schema";
-import { getAuth, getProgram, getSecrets } from "./helpers";
+import { getProgram } from "./helpers";
+import { approveJoin, createAjo, requestJoin } from "../qstash";
+import { buildAndSendTx } from "./transaction.helper";
 
 async function createAjoGroup(
   ajo: CreateAjoGroupFormValues,
@@ -34,7 +29,6 @@ async function createAjoGroup(
   } = ajo;
 
   const program = getProgram();
-  const publicKey = new PublicKey(address);
 
   const [globalStatePDA] = PublicKey.findProgramAddressSync(
     [Buffer.from("global-state")],
@@ -60,7 +54,7 @@ async function createAjoGroup(
     )
     .accountsStrict({
       ajoGroup: ajoGroupPDA,
-      creator: publicKey,
+      creator: new PublicKey(address),
       globalState: globalStatePDA,
       tokenMint: USDC,
       groupTokenVault: groupTokenVaultPda,
@@ -70,60 +64,18 @@ async function createAjoGroup(
     })
     .instruction();
 
-  const [sessionSecrets, { blockhash }, authentication] = await Promise.all([
-    getSecrets(address),
-    program.provider.connection.getLatestBlockhash(),
-    getAuth(address),
-  ]);
-
-  const transaction = new Transaction().add(instruction);
-  transaction.feePayer = publicKey;
-  transaction.recentBlockhash = blockhash;
-  const serializedTx = transaction.serialize({ requireAllSignatures: false });
-
-  console.log("prepareArbitraryTransaction");
-
-  const { data, error } = await gridClient.prepareArbitraryTransaction(
-    address,
-    {
-      transaction: serializedTx.toString("base64"),
-      account_signers: [address],
-      fee_config: { currency: "sol", payer_address: address },
-    }
-  );
-
-  if (error) throw error;
-  if (!data) throw new Error("Data is undefined");
-
-  const { transaction_signature: signature } = await gridClient.signAndSend({
-    sessionSecrets: sessionSecrets,
-    transactionPayload: data,
-    session: authentication,
-    address,
-  });
+  const { signature } = await buildAndSendTx(instruction, address);
 
   const pda = ajoGroupPDA.toBase58();
-  console.log(signature, pda, "final checklist");
   const body: CreatedAjoGroup = {
     name,
     pda,
     signature,
     ...offchain,
   };
-  await qstash
-    .queue({
-      queueName: "create_ajo",
-    })
-    .enqueueJSON({
-      url: BASE_API_URL + "/group",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: auth,
-      },
-      body: JSON.stringify(body),
-    });
+  const messageId = await createAjo(auth, body);
 
-  return { signature, pda };
+  return { signature, pda, messageId };
 }
 
 async function requestJoinAjoGroup(
@@ -132,66 +84,32 @@ async function requestJoinAjoGroup(
   auth: string
 ) {
   const program = getProgram();
-  const publicKey = new PublicKey(address);
 
   const instruction = await program.methods
     .requestJoinAjoGroup()
     .accountsStrict({
       ajoGroup: new PublicKey(ajoPda),
-      participant: publicKey,
+      participant: new PublicKey(address),
       tokenProgram: TOKEN_PROGRAM_ID,
       systemProgram: SystemProgram.programId,
     })
     .instruction();
 
-  const transaction = new Transaction().add(instruction);
-  const serializedTx = transaction.serialize({ requireAllSignatures: false });
-
-  const { data, error, ...payload } =
-    await gridClient.prepareArbitraryTransaction(address, {
-      transaction: serializedTx.toString("base64"),
-      account_signers: [address],
-    });
-
-  console.log(payload, data, error);
-
-  if (error) throw error;
-  if (!data) throw new Error("Data is undefined");
-
-  const [sessionSecrets, ajoGroup] = await Promise.all([
-    getSecrets(address),
-    prisma.group.findUniqueOrThrow({
-      where: { pda: ajoPda },
-      select: { name: true },
-    }),
-  ]);
-
-  const { transaction_signature: signature } = await gridClient.signAndSend({
-    sessionSecrets: sessionSecrets,
-    transactionPayload: data,
-    // session: authResult.data.authentication,
+  const { signature, ajoGroup } = await buildAndSendTx(
+    instruction,
     address,
-  });
+    ajoPda
+  );
+  if (!ajoGroup) throw new Error("Ajo group is undefined");
 
   const body: JoinAjoGroup = {
     name: ajoGroup.name,
     pda: ajoPda,
     signature,
   };
-  await qstash
-    .queue({
-      queueName: "request_join_ajo",
-    })
-    .enqueueJSON({
-      url: BASE_API_URL + "/group/request-join",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: auth,
-      },
-      body: JSON.stringify(body),
-    });
+  const messageId = await requestJoin(auth, body);
 
-  return { signature, name: ajoGroup.name };
+  return { signature, name: ajoGroup.name, messageId };
 }
 
 async function approveJoinAjoGroup(
@@ -200,7 +118,6 @@ async function approveJoinAjoGroup(
   auth: string
 ) {
   const program = getProgram();
-  const publicKey = new PublicKey(address);
 
   const [globalStatePDA] = PublicKey.findProgramAddressSync(
     [Buffer.from("global-state")],
@@ -212,39 +129,17 @@ async function approveJoinAjoGroup(
     .accountsStrict({
       ajoGroup: new PublicKey(params.pda),
       participant: new PublicKey(params.participant),
-      caller: publicKey,
+      caller: new PublicKey(address),
       globalState: globalStatePDA,
     })
     .instruction();
 
-  const transaction = new Transaction().add(instruction);
-  const serializedTx = transaction.serialize({ requireAllSignatures: false });
-
-  const { data, error, ...payload } =
-    await gridClient.prepareArbitraryTransaction(address, {
-      transaction: serializedTx.toString("base64"),
-      account_signers: [address],
-    });
-
-  console.log(payload, data, error);
-
-  if (error) throw error;
-  if (!data) throw new Error("Data is undefined");
-
-  const [sessionSecrets, ajoGroup] = await Promise.all([
-    getSecrets(address),
-    prisma.group.findUniqueOrThrow({
-      where: { pda: params.pda },
-      select: { name: true },
-    }),
-  ]);
-
-  const { transaction_signature: signature } = await gridClient.signAndSend({
-    sessionSecrets: sessionSecrets,
-    transactionPayload: data,
-    // session: authResult.data.authentication,
+  const { signature, ajoGroup } = await buildAndSendTx(
+    instruction,
     address,
-  });
+    params.pda
+  );
+  if (!ajoGroup) throw new Error("Ajo group is undefined");
 
   const body: ApprovalJoinAjoGroup = {
     name: ajoGroup.name,
@@ -252,20 +147,9 @@ async function approveJoinAjoGroup(
     approval: params.approved,
     ...params,
   };
-  await qstash
-    .queue({
-      queueName: "approve_join_ajo",
-    })
-    .enqueueJSON({
-      url: BASE_API_URL + "/group/approve-join",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: auth,
-      },
-      body: JSON.stringify(body),
-    });
+  const messageId = await approveJoin(auth, body);
 
-  return { signature, name: ajoGroup.name };
+  return { signature, name: ajoGroup.name, messageId };
 }
 
 export { createAjoGroup, requestJoinAjoGroup, approveJoinAjoGroup };

@@ -45,7 +45,7 @@ async function getAuth(address: string) {
   return authentication as AuthenticationProvider[];
 }
 
-function getProgram() {
+function getConnection() {
   //   const connection = new Connection(process.env.SOLANA_RPC_URL!, "confirmed");
 
   const connection = new Connection(
@@ -53,6 +53,11 @@ function getProgram() {
     "confirmed" as Commitment
   );
 
+  return connection;
+}
+
+function getProgram() {
+  const connection = getConnection();
   const provider = new AnchorProvider(connection, {} as unknown as Wallet, {
     commitment: "confirmed",
   });
@@ -61,4 +66,4 @@ function getProgram() {
   return program;
 }
 
-export { getSecrets, getProgram, getAuth };
+export { getSecrets, getProgram, getAuth, getConnection };

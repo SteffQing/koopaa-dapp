@@ -1,17 +1,5 @@
 import { PrismaClient } from "../../prisma-client";
 import { Redis } from "@upstash/redis";
-import { Client } from "@upstash/qstash";
-
-const qstash = new Client({
-  token: process.env.QSTASH_TOKEN,
-});
-
-// await client.publish({
-//   url: "https://example.com",
-//   headers: {
-//     "Content-Type": "application/json",
-//   },
-// });
 
 const globalForPrisma = global as unknown as {
   prisma: PrismaClient;
@@ -29,4 +17,4 @@ const redis = new Redis({
   token: REDIS_KEY,
 });
 
-export { prisma, redis, qstash };
+export { prisma, redis };
