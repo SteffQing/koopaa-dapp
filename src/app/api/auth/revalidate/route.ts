@@ -1,11 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma, redis } from "@/lib/db";
-import {
-  externalLoginSchema,
-  signupSchema,
-  signupOtpSchema,
-  JWT_SECRET,
-} from "../schema";
+import { revalidateSchema, JWT_SECRET, revalidateOtpSchema } from "../schema";
 import { SignJWT } from "jose";
 import { withErrorHandler } from "../../utils";
 import { encryptKey } from "@/lib/grid/security";
@@ -25,32 +20,34 @@ export const PUT = withErrorHandler(async (req: NextRequest) => {
   }
 
   const body = await req.json();
-  const { email } = signupSchema.parse(body);
+  const { id } = revalidateSchema.parse(body);
 
   const existingUser = await prisma.user.findUnique({
-    where: { email: email.toLowerCase() },
-    select: { username: true },
+    where: { externalId: id },
+    select: { email: true },
   });
-  if (existingUser) {
+  if (!existingUser) {
     return NextResponse.json(
       {
-        error:
-          "You are already signed up with this email. Please sign in instead",
+        error: "You are not signed up. Please sign up instead",
       },
-      { status: 409 }
+      { status: 404 }
     );
   }
 
-  const { data, success, error } = await gridClient.createAccount({
+  const email = existingUser.email;
+  if (!email) throw new Error("Email not set");
+
+  const { data, success, error } = await gridClient.initAuth({
     email,
   });
 
   if (success) {
-    await redis.setex("grid-sign-up:" + email, 60 * 10, data);
+    await redis.setex("grid-revalidate:" + id, 60 * 10, data);
 
     return NextResponse.json({
       message:
-        "OTP has been sent to the provided email. Please pass it in the next prompt",
+        "OTP has been sent to your email. Please pass it in the next prompt",
     });
   } else {
     return NextResponse.json({
@@ -72,16 +69,16 @@ export const PATCH = withErrorHandler(async (req: NextRequest) => {
   }
 
   const body = await req.json();
-  const { id, otp, email, username } = signupOtpSchema.parse(body);
+  const { otp, id } = revalidateOtpSchema.parse(body);
 
   const signupData = await redis.get<GridClientUserContext>(
-    "grid-sign-up:" + email
+    "grid-revalidate:" + id
   );
   if (!signupData) {
     return NextResponse.json(
       {
         error:
-          "Sign up data for the email provided is missing or has expired! Please reintiate the sign up process again",
+          "Revalidation data is missing or has expired! Please reintiate the revalidation process again",
       },
       { status: 410 }
     );
@@ -89,7 +86,7 @@ export const PATCH = withErrorHandler(async (req: NextRequest) => {
 
   const sessionSecrets = await gridClient.generateSessionSecrets();
 
-  const { data, error } = await gridClient.completeAuthAndCreateAccount({
+  const { data, error } = await gridClient.completeAuth({
     user: signupData,
     otpCode: otp,
     sessionSecrets,
@@ -104,27 +101,34 @@ export const PATCH = withErrorHandler(async (req: NextRequest) => {
       { status: 401 }
     );
   }
+  console.log(
+    data.authentication,
+    "auth to save",
+    JSON.stringify(data.authentication, null, 2)
+  );
 
   const secrets = sessionSecrets.map(({ privateKey, ...rest }) => ({
     ...rest,
     privateKey: encryptKey(privateKey),
   }));
-
   const authentication = JSON.stringify(data.authentication, null, 2);
-  await prisma.user.create({
-    data: {
-      email: email.toLowerCase(),
+
+  const { username } = await prisma.user.update({
+    where: {
       externalId: id,
-      address: data.address,
-      username,
+    },
+    data: {
       gridAccount: {
-        create: {
-          id: data.grid_user_id,
+        update: {
           authentication,
-          sessions: { createMany: { data: secrets } },
+          sessions: {
+            deleteMany: {},
+            createMany: { data: secrets },
+          },
         },
       },
     },
+    select: { username: true },
   });
 
   const jwt = await new SignJWT({ address: data.address })
@@ -134,49 +138,6 @@ export const PATCH = withErrorHandler(async (req: NextRequest) => {
 
   return NextResponse.json({
     data: { token: jwt },
-    message: `Welcome to KooPaa ${username}`,
-  });
-});
-
-export const POST = withErrorHandler(async (req: NextRequest) => {
-  const headerAuth = req.headers.get("authorization");
-  const [, token] = headerAuth?.split(" ") ?? [];
-
-  if (token !== process.env.BOT_TOKEN) {
-    return NextResponse.json(
-      {
-        error: "You are not authorized to access",
-      },
-      { status: 401 }
-    );
-  }
-
-  const body = await req.json();
-  const { id } = externalLoginSchema.parse(body);
-  id.replace(/\D/g, "");
-
-  const user = await prisma.user.findUnique({
-    where: { externalId: id },
-    select: { address: true, username: true },
-  });
-
-  if (!user) {
-    return NextResponse.json(
-      {
-        error:
-          "We could not find any matching information for you. Please sign up and retry signing in",
-      },
-      { status: 404 }
-    );
-  }
-
-  const jwt = await new SignJWT({ address: user.address })
-    .setProtectedHeader({ alg: "HS256" })
-    .setExpirationTime("1h")
-    .sign(JWT_SECRET);
-
-  return NextResponse.json({
-    data: { token: jwt },
-    message: `Welcome back to KooPaa ${user.username}`,
+    message: `Welcome back to KooPaa ${username}`,
   });
 });

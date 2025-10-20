@@ -25,10 +25,21 @@ const signupOtpSchema = zod.object({
   username: zod.string(),
 });
 
+const revalidateOtpSchema = signupOtpSchema.omit({
+  email: true,
+  username: true,
+});
+
+const revalidateSchema = zod.object({
+  id: zod.string(),
+});
+
 export {
   loginSchema,
   externalLoginSchema,
   signupSchema,
   signupOtpSchema,
+  revalidateOtpSchema,
+  revalidateSchema,
   JWT_SECRET,
 };

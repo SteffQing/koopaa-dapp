@@ -24,6 +24,8 @@ model User {
 model GridAccount {
     id String @id
 
+    authentication String
+
     userAddress String @unique
     user        User   @relation(fields: [userAddress], references: [address])
 
