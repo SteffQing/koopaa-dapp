@@ -45,6 +45,7 @@ export function withErrorHandler<Args extends unknown[]>(
     try {
       return await handler(...args);
     } catch (error) {
+      console.error(error, "withErrorHandler");
       if (error instanceof PrismaClientInitializationError) {
         return NextResponse.json(
           {

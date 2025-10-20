@@ -5,7 +5,8 @@ import { joinAjoGroupSchema } from "../schema";
 
 export const POST = withErrorHandler(async (req: NextRequest) => {
   const body = await req.json();
-  const { name, pda, signature } = joinAjoGroupSchema.parse(body);
+  const bodyData = typeof body === "string" ? JSON.parse(body) : body;
+  const { name, pda, signature } = joinAjoGroupSchema.parse(bodyData);
 
   const address = getServerSession(req);
 

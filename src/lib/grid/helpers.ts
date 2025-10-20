@@ -1,7 +1,7 @@
 import { type Commitment, Connection } from "@solana/web3.js";
 import { prisma } from "../db";
 import { decryptKey } from "./security";
-import { AnchorProvider, Wallet } from "@coral-xyz/anchor";
+import { AnchorProvider, type Wallet } from "@coral-xyz/anchor";
 import { getKoopaProgram } from "../solana/koopa-exports";
 import { AuthenticationProvider } from "@sqds/grid";
 
@@ -46,7 +46,7 @@ async function getAuth(address: string) {
 }
 
 function getConnection() {
-  //   const connection = new Connection(process.env.SOLANA_RPC_URL!, "confirmed");
+  //   const connection = new Connection(SOLANA_RPC_URL, "confirmed");
 
   const connection = new Connection(
     "https://api.devnet.solana.com",

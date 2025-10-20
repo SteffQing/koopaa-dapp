@@ -3,6 +3,7 @@ import type {
   JoinAjoGroup,
   ApprovalJoinAjoGroup,
 } from "@/app/api/group/schema";
+import { BASE_API_URL } from "@/constants";
 
 import { Client } from "@upstash/qstash";
 
@@ -10,14 +11,6 @@ const qstash = new Client({
   token: process.env.QSTASH_TOKEN,
 });
 
-// await client.publish({
-//   url: "https://example.com",
-//   headers: {
-//     "Content-Type": "application/json",
-//   },
-// });
-
-const BASE_API_URL = "https://app.koopaa.fun/api";
 export async function createAjo(auth: string, body: CreatedAjoGroup) {
   const res = await qstash
     .queue({

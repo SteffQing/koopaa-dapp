@@ -5,8 +5,9 @@ import { approvalJoinAjoGroupSchema } from "../schema";
 
 export const POST = withErrorHandler(async (req: NextRequest) => {
   const body = await req.json();
+  const bodyData = typeof body === "string" ? JSON.parse(body) : body;
   const { name, pda, signature, approval, participant } =
-    approvalJoinAjoGroupSchema.parse(body);
+    approvalJoinAjoGroupSchema.parse(bodyData);
 
   const address = getServerSession(req);
 

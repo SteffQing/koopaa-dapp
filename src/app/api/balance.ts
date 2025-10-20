@@ -1,14 +1,14 @@
 import { Connection, PublicKey } from "@solana/web3.js";
-import { DEVNET_USDC } from "@/constants";
+import { SOLANA_RPC_URL, USDC } from "@/constants";
 
 async function fetchBalances(address: string) {
-  const connection = new Connection(process.env.SOLANA_RPC_URL!, "confirmed");
+  const connection = new Connection(SOLANA_RPC_URL, "confirmed");
   const pubkey = new PublicKey(address);
 
   const solBalanceLamports = await connection.getBalance(pubkey);
   const solBalance = solBalanceLamports / 1e9;
 
-  const usdcMint = new PublicKey(DEVNET_USDC);
+  const usdcMint = new PublicKey(USDC);
   const tokenAccounts = await connection.getParsedTokenAccountsByOwner(pubkey, {
     mint: usdcMint,
   });
