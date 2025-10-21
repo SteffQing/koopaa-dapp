@@ -8,6 +8,7 @@ export async function GET(req: NextRequest) {
     const balances = await fetchBalances(address);
     return NextResponse.json({ data: balances });
   } catch (error) {
+    console.error("error fetching server session balance", error);
     return NextResponse.json({ error: String(error) });
   }
 }

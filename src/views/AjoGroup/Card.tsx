@@ -28,12 +28,18 @@ export function Invite({ pda }: { pda: string }) {
   const invite = async () => {
     setIsInviting(true);
     try {
-      const load = toast.loading("Please wait as we generate you a unique invite link");
-      const { data, error } = await query.post<string>("", { body: { pda } });
+      const load = toast.loading(
+        "Please wait as we generate you a unique invite link"
+      );
+      const { data, error } = await query.post<string>("/invite", {
+        body: { pda },
+      });
       toast.dismiss(load);
       if (data) {
         await navigator.clipboard.writeText(data);
-        toast.success(`Invite link copied! Share with friends to join ${name} Ajo Group`);
+        toast.success(
+          `Invite link copied! Share with friends to join ${name} Ajo Group`
+        );
       } else {
         toast.error(error || "Failed to generate invite link");
       }
@@ -52,7 +58,11 @@ export function Invite({ pda }: { pda: string }) {
       whileHover={{ scale: 1.05 }}
       whileTap={{ scale: 0.95 }}
     >
-      {isInviting ? <RefreshCw size={12} className="animate-spin" /> : <Share2 size={12} />}
+      {isInviting ? (
+        <RefreshCw size={12} className="animate-spin" />
+      ) : (
+        <Share2 size={12} />
+      )}
       Invite
     </motion.button>
   );
@@ -68,7 +78,8 @@ export default function GroupSavingsCard(props: Props) {
   const { contribute, isPending, loading } = useContribute();
   const rate = useGetRate();
 
-  const handleTopUp = async () => await contribute(pda, name, contributionAmount);
+  const handleTopUp = async () =>
+    await contribute(pda, name, contributionAmount);
 
   function convert() {
     if (currency === "USDC") {
@@ -143,13 +154,20 @@ export default function GroupSavingsCard(props: Props) {
 
       {props.isParticipant && (
         <div className="flex justify-between items-center mb-4">
-          <p className="text-sm text-gray-600">Amount you saved: ${props.yourContribution}</p>
+          <p className="text-sm text-gray-600">
+            Amount you saved: ${props.yourContribution}
+          </p>
         </div>
       )}
 
       <Button
         onClick={handleTopUp}
-        disabled={!props.started || props.disabled || !props.canTopUp || !props.isParticipant}
+        disabled={
+          !props.started ||
+          props.disabled ||
+          !props.canTopUp ||
+          !props.isParticipant
+        }
         loading={isPending || loading}
       >
         Contribute

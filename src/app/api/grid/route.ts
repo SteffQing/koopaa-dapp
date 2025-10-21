@@ -20,6 +20,8 @@ export async function POST(req: NextRequest) {
     const res = await createAjoGroup(ajo, address, auth);
     return NextResponse.json({ data: res });
   } catch (error) {
+    console.log("grid post error", error);
+
     return NextResponse.json(
       { error: error instanceof Error ? error.message : String(error) },
       { status: 500 }
