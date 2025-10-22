@@ -45,33 +45,37 @@ export function useUserAjoGroups() {
         return null;
       });
 
-      const userGroup = userGroupsWithParticipant.filter((group) => group !== null);
+      const userGroup = userGroupsWithParticipant.filter(
+        (group) => group !== null
+      );
 
-      const parsedGroups: ParsedAjoGroup[] = userGroup.map(({ group, participant }) => {
-        const {
-          name,
-          contributionAmount,
-          contributionInterval,
-          payoutInterval,
-          numParticipants,
-          isClosed,
-          payoutRound,
-          startTimestamp,
-        } = group.account;
+      const parsedGroups: ParsedAjoGroup[] = userGroup.map(
+        ({ group, participant }) => {
+          const {
+            name,
+            contributionAmount,
+            contributionInterval,
+            payoutInterval,
+            numParticipants,
+            isClosed,
+            payoutRound,
+            startTimestamp,
+          } = group.account;
 
-        return {
-          pda: group.publicKey,
-          name,
-          contributionAmount: Number(contributionAmount) / DECIMALS,
-          contributionInterval,
-          payoutInterval,
-          numParticipants,
-          isClosed,
-          payoutRound,
-          contributionRound: participant.contributionRound,
-          startTimestamp: Number(startTimestamp), // assuming it's a BN or something castable
-        };
-      });
+          return {
+            pda: group.publicKey,
+            name,
+            contributionAmount: Number(contributionAmount) / DECIMALS,
+            contributionInterval,
+            payoutInterval,
+            numParticipants,
+            isClosed,
+            payoutRound,
+            contributionRound: participant.contributionRound,
+            startTimestamp: Number(startTimestamp), // assuming it's a BN or something castable
+          };
+        }
+      );
 
       return parsedGroups;
     },
@@ -83,6 +87,9 @@ export function useGetUserAjoSavings() {
   const { data } = useUserAjoGroups();
   return useMemo(() => {
     if (!data) return 0;
-    return data.reduce((acc, group) => acc + group.contributionAmount * group.contributionRound, 0);
+    return data.reduce(
+      (acc, group) => acc + group.contributionAmount * group.contributionRound,
+      0
+    );
   }, [data]);
 }
