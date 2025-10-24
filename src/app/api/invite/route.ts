@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getSearchParams, getServerSession, withErrorHandler } from "../utils";
 import { BASE_URL } from "@/lib/fetch";
 import { prisma, redis } from "@/lib/db";
-import { getAjoGroup } from "../group/[id]/helpers";
+import { getAjoGroup } from "../group/helpers";
 import { generateShortCode, TTL } from "../helpers";
 
 // For use in Dapp
@@ -30,13 +30,14 @@ export const PUT = withErrorHandler(async (req: NextRequest) => {
   const address = getServerSession(req);
   const { pda } = await req.json();
 
-  if (!pda)
+  if (!pda) {
     return NextResponse.json(
       {
         error: "Ajo group pda value is missing",
       },
       { status: 400 }
     );
+  }
 
   const url = `${pda}:${address}`;
   const code = await generateShortCode(url);

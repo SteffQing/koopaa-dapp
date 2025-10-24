@@ -4,7 +4,7 @@ import { prisma } from "@/lib/db";
 
 export const GET = withErrorHandler(async (req: NextRequest) => {
   const { q } = getSearchParams(req);
-  const query = q.trim();
+  const query = q?.trim();
 
   if (!query) return NextResponse.json({ data: [] });
 

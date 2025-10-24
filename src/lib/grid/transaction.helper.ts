@@ -7,9 +7,8 @@ import gridClient from "./index";
 import { getAuth, getConnection, getSecrets } from "./helpers";
 import { prisma } from "../db";
 
+const connection = getConnection();
 async function getExecutionContext(address: string, ajoPda?: string) {
-  const connection = getConnection();
-
   const basePromises = [
     getSecrets(address),
     connection.getLatestBlockhash(),
@@ -27,7 +26,6 @@ async function getExecutionContext(address: string, ajoPda?: string) {
     : basePromises;
 
   const [secrets, { blockhash }, auth, ajoGroup] = await Promise.all(promises);
-
   return { secrets, blockhash, auth, ajoGroup };
 }
 
@@ -59,14 +57,14 @@ async function buildAndSendTx(
   if (error) throw error;
   if (!data) throw new Error("Data is undefined");
 
-  const { transaction_signature: signature } = await gridClient.signAndSend({
+  const { transaction_signature } = await gridClient.signAndSend({
     sessionSecrets: secrets,
     transactionPayload: data,
     session: auth,
     address,
   });
 
-  return { signature, ajoGroup };
+  return { signature: transaction_signature, ajoGroup };
 }
 
 export { buildAndSendTx };

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { withErrorHandler } from "../../utils";
-import { getAjoOffchain } from "./helpers";
+import { getAjoOffchain } from "../helpers";
 
 // Get an Ajo Group
 export const GET = withErrorHandler(

@@ -61,15 +61,17 @@ enum GridSessionTags {
 }
 
 model Group {
-    pda          String   @id
+    pda          String    @id
     name         String
-    created_at   DateTime @default(now())
+    created_at   DateTime  @default(now())
     description  String
     tag          Tag
     cover_photo  Int
     admin        String
     participants User[]
     waiting_room String[]
+    started_at   DateTime?
+    closed_at    DateTime?
 }
 
 model Activity {

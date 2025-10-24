@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession, withErrorHandler } from "../../../utils";
-import { getAjoGroup } from "../helpers";
+import { getAjoGroup } from "../../helpers";
 
 // Get an Ajo Group and its onchain data
 export const GET = withErrorHandler(

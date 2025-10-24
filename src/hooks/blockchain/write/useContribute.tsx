@@ -99,7 +99,7 @@ export default function useContribute() {
   async function contribute(pda: string, name: string, amount: number) {
     const { signature } = await contributeOnchain(pda);
     const joinData: AddActivityData = {
-      title: `Send money to ${name}`,
+      title: `Made contribution to ${name}`,
       type: ActivityType.transfer,
       sig: signature,
       amount,

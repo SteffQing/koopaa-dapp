@@ -1,3 +1,4 @@
+import { AddActivityData } from "@/app/api/activities/schema";
 import type {
   CreatedAjoGroup,
   JoinAjoGroup,
@@ -52,6 +53,23 @@ export async function approveJoin(auth: string, body: ApprovalJoinAjoGroup) {
     })
     .enqueueJSON({
       url: BASE_API_URL + "/group/approve-join",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: auth,
+      },
+      body,
+    });
+
+  return messageId;
+}
+
+export async function contributeAction(auth: string, body: AddActivityData) {
+  const { messageId } = await qstash
+    .queue({
+      queueName: "contribute",
+    })
+    .enqueueJSON({
+      url: BASE_API_URL + "/activities",
       headers: {
         "Content-Type": "application/json",
         Authorization: auth,
