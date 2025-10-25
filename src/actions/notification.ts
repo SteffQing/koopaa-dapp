@@ -21,12 +21,15 @@ async function sendTelegramMessage(text: string, to: string) {
   // Need to throw response if it fails to deliver
 }
 
-async function sendWhatsappMessage(text: string, to: string) {}
+async function sendWhatsappMessage(text: string, to: string) {
+  console.log(text, to)
+}
 
 export default async function sendExternalMessage(text: string, to: string) {
   try {
     await sendTelegramMessage(text, to);
   } catch (error) {
+    console.error(error)
     await sendWhatsappMessage(text, to);
   }
 }
