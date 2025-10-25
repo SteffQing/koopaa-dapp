@@ -18,8 +18,7 @@ export const GET = withErrorHandler(async (req: NextRequest) => {
       ],
     },
     take: 20,
-    select: { address: true },
+    select: { address: true, username: true },
   });
-  const addresses = users.map((user) => user.address);
-  return NextResponse.json({ data: addresses });
+  return NextResponse.json({ data: users });
 });

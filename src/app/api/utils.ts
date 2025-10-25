@@ -3,6 +3,8 @@ import { NextRequest, NextResponse } from "next/server";
 import {
   PrismaClientInitializationError,
   PrismaClientKnownRequestError,
+  PrismaClientRustPanicError,
+  PrismaClientUnknownRequestError,
 } from "../../../prisma-client/runtime/library";
 import { ZodError } from "zod";
 
@@ -46,7 +48,12 @@ export function withErrorHandler<Args extends unknown[]>(
       return await handler(...args);
     } catch (error) {
       console.error(error, "withErrorHandler");
-      if (error instanceof PrismaClientInitializationError) {
+      if (
+        error instanceof PrismaClientInitializationError ||
+        error instanceof PrismaClientRustPanicError ||
+        error instanceof PrismaClientUnknownRequestError
+      ) {
+        console.log(error.message, error.name, error.clientVersion);
         return NextResponse.json(
           {
             error:
@@ -56,20 +63,27 @@ export function withErrorHandler<Args extends unknown[]>(
         );
       } else if (error instanceof PrismaClientKnownRequestError) {
         switch (error.code) {
+          case "P1001":
+            return NextResponse.json(
+              {
+                error: "Database temporarily unreachable. Please try again",
+              },
+              { status: 503 }
+            );
           case "P2002":
             return NextResponse.json(
               { error: `Duplicate value for ${error.meta?.target}.` },
               { status: 409 }
             );
-          case "P2025":
-            return NextResponse.json(
-              { error: "Record not found." },
-              { status: 404 }
-            );
           case "P2003":
             return NextResponse.json(
               { error: "Invalid relation or foreign key constraint." },
               { status: 400 }
+            );
+          case "P2025":
+            return NextResponse.json(
+              { error: "Record not found." },
+              { status: 404 }
             );
           default:
             return NextResponse.json(
