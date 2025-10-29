@@ -3,17 +3,19 @@ import { useWallet } from "@solana/wallet-adapter-react";
 import { useQuery } from "@tanstack/react-query";
 import { Group, User } from "../../../prisma-client";
 
-export type GroupAndParticipants = Group & { participants: User[] };
+export type GroupAndParticipants = (Group & { participants: User[] })[];
+export type GroupCategories = {
+  activeGroupsIn: GroupAndParticipants;
+  notStartedGroupsIn: GroupAndParticipants;
+  inWaitingRoomGroups: GroupAndParticipants;
+};
 
 export default function useUserGroups() {
   const { publicKey } = useWallet();
   return useQuery({
-    queryKey: ["ajo-groups", publicKey?.toBase58()],
+    queryKey: ["ajo-groups-summary", publicKey?.toBase58()],
     queryFn: async () =>
-      await query.get<{
-        avbl_groups: GroupAndParticipants[];
-        joined_groups: GroupAndParticipants[];
-      }>("group"),
+      await query.get<GroupCategories>("group/my-groups-full-summary"),
     select: (data) => data.data,
     enabled: Boolean(publicKey?.toBase58()),
   });

@@ -11,14 +11,42 @@ import GroupCardSkeleton from "@/views/Savings/group/skeleton";
 import AjoError from "@/components/error";
 import Image from "next/image";
 import Vault from "@/assets/empty-vault.png";
+import { useState } from "react";
+
+const TABS = [
+  { id: "active", label: "Active", key: "activeGroupsIn" },
+  { id: "pending", label: "Pending", key: "notStartedGroupsIn" },
+  { id: "waiting", label: "Waiting", key: "inWaitingRoomGroups" },
+] as const;
 
 export default function AjoSavingsPage() {
+  const [activeTab, setActiveTab] = useState<"active" | "pending" | "waiting">(
+    "active"
+  );
   const item = {
     hidden: { opacity: 0, y: 20 },
     show: { opacity: 1, y: 0 },
   };
   const ajoSavings = useGetUserAjoSavings();
   const { data, isLoading, error, refetch } = useUserGroups();
+
+  const groupsMap = {
+    active: data?.activeGroupsIn ?? [],
+    pending: data?.notStartedGroupsIn ?? [],
+    waiting: data?.inWaitingRoomGroups ?? [],
+  };
+
+  const hasAnyGroups =
+    groupsMap.active.length > 0 ||
+    groupsMap.pending.length > 0 ||
+    groupsMap.waiting.length > 0;
+
+  const currentGroups = groupsMap[activeTab];
+  const emptyMessages = {
+    active: "No groups in progress",
+    pending: "No pending groups",
+    waiting: "You are not waiting to join any groups",
+  };
 
   return (
     <Container>
@@ -30,54 +58,63 @@ export default function AjoSavingsPage() {
         <AjoError message={error.message} onRetry={refetch} />
       ) : (
         <>
-          <motion.div variants={item} className="mb-6 mt-3 flex flex-col gap-4">
-            <h2 className="font-medium text-sm text-[#333333] mb-1">Your Active Groups</h2>
-
-            {isLoading ? (
-              <GroupCardSkeleton />
-            ) : data && data.joined_groups.length > 0 ? (
-              <div className="flex flex-col gap-3">
-                {data.joined_groups.map((group) => (
-                  <GroupCard group={group} key={group.pda} />
-                ))}
-              </div>
-            ) : (
-              <motion.div
-                className="flex justify-between flex-col-reverse items-center"
-                whileHover={{ y: -2, boxShadow: "0 4px 10px rgba(0,0,0,0.05)" }}
-                whileTap={{ y: 0, boxShadow: "none" }}
-              >
-                <div className="py-2">
-                  <p className="text-gray-500 text-center">No active Ajo Group found</p>
-                </div>
-                <div className="flex-2 pt-[108px] w-[100px] relative">
-                  <Image
-                    src={Vault}
-                    alt="You have not joined any groups"
-                    className="object-contain mix-blend-luminosity"
-                    fill
-                  />
-                </div>
-              </motion.div>
-            )}
+          <motion.div variants={item} className="mt-6 mb-6">
+            <div className="flex gap-2 bg-white rounded-lg p-1">
+              {TABS.map((tab) => (
+                <motion.button
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab.id)}
+                  className={`flex-1 px-4 py-2 rounded-md font-medium text-sm transition-all ${
+                    activeTab === tab.id
+                      ? "bg-[#ff6600] text-white"
+                      : "text-gray-600 hover:text-gray-900"
+                  }`}
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                >
+                  {tab.label}
+                </motion.button>
+              ))}
+            </div>
           </motion.div>
 
           <motion.div variants={item} className="mb-6 flex flex-col gap-4">
-            <h2 className="font-medium text-sm text-[#333333] mb-1">Public Groups Available</h2>
             {isLoading ? (
               <GroupCardSkeleton />
-            ) : data && data.avbl_groups.length > 0 ? (
+            ) : currentGroups.length > 0 ? (
               <div className="flex flex-col gap-3">
-                {data.avbl_groups.map((group) => (
+                {currentGroups.map((group) => (
                   <GroupCard group={group} key={group.pda} />
                 ))}
               </div>
             ) : (
               <div className="bg-white rounded-xl p-8 flex flex-col items-center justify-center">
-                <p className="text-gray-500 text-center">No public groups available right now!</p>
+                <p className="text-gray-500 text-center">
+                  {emptyMessages[activeTab]}
+                </p>
               </div>
             )}
           </motion.div>
+
+          {!isLoading && !hasAnyGroups && (
+            <motion.div
+              className="flex justify-between flex-col-reverse items-center"
+              whileHover={{ y: -2 }}
+              whileTap={{ y: 0, boxShadow: "none" }}
+            >
+              <div className="py-2">
+                <p className="text-gray-500 text-center">No Ajo groups found</p>
+              </div>
+              <div className="flex-2 pt-[108px] w-[100px] relative">
+                <Image
+                  src={Vault}
+                  alt="You have not joined any groups"
+                  className="object-contain mix-blend-luminosity"
+                  fill
+                />
+              </div>
+            </motion.div>
+          )}
         </>
       )}
     </Container>

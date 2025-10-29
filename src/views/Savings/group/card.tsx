@@ -3,10 +3,14 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import { formatDate } from "@/lib/date";
 import { Avatar } from "@/components/avatar";
-import { GroupAndParticipants } from "@/hooks/db/useUserGroups";
+import type { GroupAndParticipants } from "@/hooks/db/useUserGroups";
 import { tagOptions } from "@/lib/static";
 
-export default function GroupCard({ group }: { group: GroupAndParticipants }) {
+export default function GroupCard({
+  group,
+}: {
+  group: GroupAndParticipants[0];
+}) {
   const tag = tagOptions.find((t) => t.value === group.tag)!;
   return (
     <Link key={group.pda} href={`/savings/ajo/${group.pda}`}>
