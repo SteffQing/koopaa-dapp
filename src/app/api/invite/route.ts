@@ -4,7 +4,6 @@ import { BASE_URL } from "@/lib/fetch";
 import { prisma, redis } from "@/lib/db";
 import { getAjoGroup } from "../group/helpers";
 import { generateShortCode, TTL } from "../helpers";
-import { error } from "console";
 
 // For use in Dapp
 export const POST = withErrorHandler(async (req: NextRequest) => {
