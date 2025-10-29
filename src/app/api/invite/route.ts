@@ -4,6 +4,7 @@ import { BASE_URL } from "@/lib/fetch";
 import { prisma, redis } from "@/lib/db";
 import { getAjoGroup } from "../group/helpers";
 import { generateShortCode, TTL } from "../helpers";
+import { error } from "console";
 
 // For use in Dapp
 export const POST = withErrorHandler(async (req: NextRequest) => {
@@ -50,10 +51,10 @@ export const PUT = withErrorHandler(async (req: NextRequest) => {
   });
 });
 
-// For use in Telegram/Whatsapp
+// For use everywhere
 export const GET = withErrorHandler(async (req: NextRequest) => {
   const address = getServerSession(req);
-  const { code } = getSearchParams(req);
+  let { code } = getSearchParams(req);
 
   if (!code)
     return NextResponse.json(
@@ -63,6 +64,18 @@ export const GET = withErrorHandler(async (req: NextRequest) => {
       { status: 404 }
     );
 
+  // Handle Dapp invite links
+  const isUrl = /^https?:\/\/[^\s/$.?#].[^\s]*$/i.test(code);
+  if (isUrl) {
+    const decoded = decodeURIComponent(code).split("/").pop();
+    if (!decoded)
+      return NextResponse.json(
+        { error: "Unable to decode the invite code in URL. Please try again" },
+        { status: 400 }
+      );
+    code = decoded;
+  }
+
   const content = await redis.get<string>(code);
   if (!content)
     return NextResponse.json(
@@ -70,7 +83,25 @@ export const GET = withErrorHandler(async (req: NextRequest) => {
       { status: 400 }
     );
 
-  const [pda, inviter] = content.split(":");
+  console.log(content);
+  let pda: string, inviter: string;
+
+  if (content.includes("/savings")) {
+    const url = new URL("https://app.koopaa.fun" + content);
+    const _pda = url.pathname.split("/").pop();
+    const _inviter = url.searchParams.get("inviter");
+
+    if (!_pda || !_inviter)
+      return NextResponse.json(
+        {
+          error:
+            "Deconstructed invite code is invalid! Please reach out to the team to report this issue",
+        },
+        { status: 400 }
+      );
+
+    [pda, inviter] = [_pda, _inviter];
+  } else [pda, inviter] = content.split(":");
 
   const [group, invite] = await Promise.all([
     getAjoGroup(pda),

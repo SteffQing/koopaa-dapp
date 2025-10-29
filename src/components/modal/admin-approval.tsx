@@ -59,17 +59,25 @@ const UserCard: React.FC<{
   const params = { ajoGroup, participant: user, approved: true };
 
   const approve = async () => approveJoinAjoGroup(params, groupName);
-  const reject = async () => approveJoinAjoGroup({ ...params, approved: false }, groupName);
+  const reject = async () =>
+    approveJoinAjoGroup({ ...params, approved: false }, groupName);
 
   return (
-    <motion.div variants={itemVariants} className="bg-card border border-border rounded-lg p-4 space-y-3">
+    <motion.div
+      variants={itemVariants}
+      className="bg-card border border-border rounded-lg p-4 space-y-3"
+    >
       <div className="flex items-center gap-3">
         <Avatar size={48} number={data?.data?.avatar} />
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2">
-            <p className="font-medium text-foreground truncate">@{data?.data?.username || "No Username"}</p>
+            <p className="font-medium text-foreground truncate">
+              @{data?.data?.username || "Anon"}
+            </p>
           </div>
-          <p className="text-sm text-muted-foreground truncate">{ellipsify(data?.data?.address)}</p>{" "}
+          <p className="text-sm text-muted-foreground truncate">
+            {ellipsify(data?.data?.address)}
+          </p>{" "}
         </div>
 
         <div className="flex gap-2">
@@ -81,7 +89,13 @@ const UserCard: React.FC<{
           >
             <Check className="w-4 h-4 mr-1" />
           </Button>
-          <Button size="sm" variant="destructive" onClick={reject} disabled={isPending || loading} className="flex-1">
+          <Button
+            size="sm"
+            variant="destructive"
+            onClick={reject}
+            disabled={isPending || loading}
+            className="flex-1"
+          >
             <X className="w-4 h-4 mr-1" />
           </Button>
         </div>
@@ -90,7 +104,12 @@ const UserCard: React.FC<{
   );
 };
 
-const AdminApprovalModal: React.FC<AdminApprovalModalProps> = ({ groupName, pda, waitingRoomUsers, participants }) => {
+const AdminApprovalModal: React.FC<AdminApprovalModalProps> = ({
+  groupName,
+  pda,
+  waitingRoomUsers,
+  participants,
+}) => {
   // const { hideModal } = useModal();
   const [query_, setQuery] = useState("");
   const [users, setUsers] = useState<string[]>(waitingRoomUsers);
@@ -102,7 +121,9 @@ const AdminApprovalModal: React.FC<AdminApprovalModalProps> = ({ groupName, pda,
     mutationFn: () => query.get<string[]>("", { params: { q } }),
     onSuccess: (data) => {
       const users_ = data.data || [];
-      const participants_ = users_.filter((user) => !participants.includes(user));
+      const participants_ = users_.filter(
+        (user) => !participants.includes(user)
+      );
       setUsers(participants_);
     },
   });
@@ -123,9 +144,12 @@ const AdminApprovalModal: React.FC<AdminApprovalModalProps> = ({ groupName, pda,
       >
         {/* Header */}
         <motion.div variants={itemVariants} className="mb-6">
-          <h2 className="text-xl font-semibold text-foreground mb-2">Manage Join Requests</h2>
+          <h2 className="text-xl font-semibold text-foreground mb-2">
+            Manage Join Requests
+          </h2>
           <p className="text-sm text-muted-foreground">
-            Add or approve users waiting to join <span className="font-medium text-[#ff6b00]">{groupName}</span>
+            Add or approve users waiting to join{" "}
+            <span className="font-medium text-[#ff6b00]">{groupName}</span>
           </p>
         </motion.div>
 
@@ -143,12 +167,17 @@ const AdminApprovalModal: React.FC<AdminApprovalModalProps> = ({ groupName, pda,
 
         <div className="flex-1 overflow-y-auto">
           {users.length === 0 ? (
-            <motion.div variants={itemVariants} className="text-center py-12 text-muted-foreground">
+            <motion.div
+              variants={itemVariants}
+              className="text-center py-12 text-muted-foreground"
+            >
               {waitingRoomUsers.length === 0 ? (
                 <>
                   <UserPlus className="w-12 h-12 mx-auto mb-4 opacity-50" />
                   <p>No users in the waiting room</p>
-                  <p className="text-sm mt-1">Users will appear here when they request to join</p>
+                  <p className="text-sm mt-1">
+                    Users will appear here when they request to join
+                  </p>
                 </>
               ) : (
                 <p>No users match your search</p>
@@ -157,7 +186,12 @@ const AdminApprovalModal: React.FC<AdminApprovalModalProps> = ({ groupName, pda,
           ) : (
             <motion.div variants={itemVariants} className="space-y-3">
               {users.map((user) => (
-                <UserCard key={user} user={user} ajoGroup={pda} groupName={groupName} />
+                <UserCard
+                  key={user}
+                  user={user}
+                  ajoGroup={pda}
+                  groupName={groupName}
+                />
               ))}
             </motion.div>
           )}

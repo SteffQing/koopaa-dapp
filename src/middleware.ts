@@ -38,6 +38,7 @@ export async function middleware(request: NextRequest) {
       return NextResponse.json(
         {
           error: "Unauthorized",
+          message: "You are not authorized to view the requested resource. Please revalidate or reauthenticate"
         },
         { status: 401 }
       );

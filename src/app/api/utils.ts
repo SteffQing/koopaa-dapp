@@ -48,6 +48,9 @@ export function withErrorHandler<Args extends unknown[]>(
       return await handler(...args);
     } catch (error) {
       console.error(error, "withErrorHandler");
+      const isPrismaError =
+        error instanceof PrismaClientKnownRequestError ||
+        (error as Error).name === "PrismaClientKnownRequestError";
       if (
         error instanceof PrismaClientInitializationError ||
         error instanceof PrismaClientRustPanicError ||
@@ -61,8 +64,8 @@ export function withErrorHandler<Args extends unknown[]>(
           },
           { status: 503 }
         );
-      } else if (error instanceof PrismaClientKnownRequestError) {
-        switch (error.code) {
+      } else if (isPrismaError) {
+        switch ((error as PrismaClientKnownRequestError).code) {
           case "P1001":
             return NextResponse.json(
               {
@@ -72,7 +75,9 @@ export function withErrorHandler<Args extends unknown[]>(
             );
           case "P2002":
             return NextResponse.json(
-              { error: `Duplicate value for ${error.meta?.target}.` },
+              {
+                error: `Duplicate value for ${(error as PrismaClientKnownRequestError).meta?.target}.`,
+              },
               { status: 409 }
             );
           case "P2003":

@@ -6,10 +6,6 @@ import { PrismaClientKnownRequestError } from "../../../../prisma-client/runtime
 import sendExternalMessage from "@/actions/notification";
 
 const pingSchema = z.object({
-  address: z.string({
-    required_error: "The Solana address of the user to be pinged is required",
-    invalid_type_error: "Address type given is invalid",
-  }),
   pda: z.string({
     required_error:
       "The Solana address of the Ajo group is required to construct a ping message",
@@ -20,24 +16,24 @@ const pingSchema = z.object({
 export async function POST(req: NextRequest) {
   try {
     const params = await req.json();
-    const { address, pda } = pingSchema.parse(params);
+    const { pda } = pingSchema.parse(params);
     const session = getServerSession(req);
 
     const select = { username: true, email: true, externalId: true } as const;
-    const [ping, pong, ajo] = await Promise.all([
-      prisma.user.findUnique({
-        where: { address },
-        select,
-      }),
+    const [pong, ajo] = await Promise.all([
       prisma.user.findUnique({
         where: { address: session },
         select,
       }),
       prisma.group.findUniqueOrThrow({
         where: { pda },
-        select: { name: true },
+        select: { name: true, admin: true },
       }),
     ]);
+    const ping = await prisma.user.findUnique({
+      where: { address: ajo.admin },
+      select,
+    });
 
     if (!ping)
       return NextResponse.json({
