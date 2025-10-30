@@ -36,11 +36,6 @@ export default function AjoSavingsPage() {
     waiting: data?.inWaitingRoomGroups ?? [],
   };
 
-  const hasAnyGroups =
-    groupsMap.active.length > 0 ||
-    groupsMap.pending.length > 0 ||
-    groupsMap.waiting.length > 0;
-
   const currentGroups = groupsMap[activeTab];
   const emptyMessages = {
     active: "No groups in progress",
@@ -88,33 +83,27 @@ export default function AjoSavingsPage() {
                 ))}
               </div>
             ) : (
-              <div className="bg-white rounded-xl p-8 flex flex-col items-center justify-center">
-                <p className="text-gray-500 text-center">
-                  {emptyMessages[activeTab]}
-                </p>
-              </div>
+              <motion.div
+                className="flex justify-between flex-col-reverse items-center"
+                whileHover={{ y: -2 }}
+                whileTap={{ y: 0, boxShadow: "none" }}
+              >
+                <div className="py-2">
+                  <p className="text-gray-500 text-center">
+                    {emptyMessages[activeTab]}
+                  </p>
+                </div>
+                <div className="flex-2 pt-[108px] w-[100px] relative">
+                  <Image
+                    src={Vault}
+                    alt="You have not joined any groups"
+                    className="object-contain mix-blend-luminosity"
+                    fill
+                  />
+                </div>
+              </motion.div>
             )}
           </motion.div>
-
-          {!isLoading && !hasAnyGroups && (
-            <motion.div
-              className="flex justify-between flex-col-reverse items-center"
-              whileHover={{ y: -2 }}
-              whileTap={{ y: 0, boxShadow: "none" }}
-            >
-              <div className="py-2">
-                <p className="text-gray-500 text-center">No Ajo groups found</p>
-              </div>
-              <div className="flex-2 pt-[108px] w-[100px] relative">
-                <Image
-                  src={Vault}
-                  alt="You have not joined any groups"
-                  className="object-contain mix-blend-luminosity"
-                  fill
-                />
-              </div>
-            </motion.div>
-          )}
         </>
       )}
     </Container>
