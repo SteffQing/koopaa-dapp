@@ -96,7 +96,7 @@ export default function AjoSavingsPage() {
                 <div className="flex-2 pt-[108px] w-[100px] relative">
                   <Image
                     src={Vault}
-                    alt="You have not joined any groups"
+                    alt={emptyMessages[activeTab]}
                     className="object-contain mix-blend-luminosity"
                     fill
                   />
